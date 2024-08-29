@@ -1,4 +1,3 @@
-import { router } from 'expo-router'
 import { View, Text, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -8,7 +7,7 @@ export default function CreateAccountConfirmation() {
         <SafeAreaView className='flex-1 p-2 bg-slate-200'>
             <View className='flex'>
                 <View className='absolute h-full justify-center left-1'>
-                    <TouchableOpacity className='z-10' onPress={() => router.back()}>
+                    <TouchableOpacity className='z-10'>
                         <Text>voltar</Text>
                     </TouchableOpacity>
                 </View>
@@ -30,7 +29,6 @@ export default function CreateAccountConfirmation() {
             </View>
             <View className='flex-1 justify-end items-end m-3'>
                 <TouchableOpacity onPress={() => {
-                    router.push('/createAccount/password')
                 }} className='bg-indigo-600 p-3 px-6 w-full items-center rounded-md'>
                     <Text className='text-white'>Definir senha</Text>
                 </TouchableOpacity>

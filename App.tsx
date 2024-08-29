@@ -5,7 +5,7 @@ export default function App() {
 
 	return (
 		<View>
-			<StatusBar style="auto" />
+			<StatusBar style='auto' />
 		</View>
 	)
 }

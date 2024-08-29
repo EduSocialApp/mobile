@@ -10,7 +10,7 @@ configure({
 	axios: apiAxios
 })
 
-export default function App() { 
+export default function App() {
 
 	useEffect(() => {
 		redirect()
@@ -18,7 +18,7 @@ export default function App() {
 
 	const redirect = async () => {
 		const { value } = await readCache(CacheKey.sawPresentation)
-		
+
 		if (value) {
 			router.replace('/login')
 		} else {
