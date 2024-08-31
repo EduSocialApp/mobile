@@ -22,18 +22,20 @@ export default function CreateAccount() {
 
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#f8fafc' }}>
-            <View style={{ marginTop: 10 }}>
+        <SafeAreaView className='flex-1 bg-background'>
+            <View className='mt-3'>
                 <TitleBlack />
             </View>
-            <View style={{ margin: 4, padding: 8, flex: 1 }}>
-                <Text style={{ fontSize: 24, marginTop: 18 }}>Definir sua senha</Text>
-                <Text style={{ marginTop: 4 }}>{userName}, chegamos à última etapa do seu cadastro. Agora, basta escolher uma senha. Capriche!</Text>
 
-                <View style={{ marginTop: 12 }}>
-                    <Text>Senha</Text>
+            <View className='m-1 p-2 flex-1' style={{ gap: 24 }}>
+                <View>
+                    <Text className='text-xl mt-6'>Definir sua senha</Text>
+                    <Text className='mt-2'>{userName}, chegamos à última etapa do seu cadastro. Agora, basta escolher uma senha. Capriche!</Text>
+                </View>
+
+                <View style={{ gap: 18 }}>
                     <TextInput
-                        style={{ borderWidth: 1, borderRadius: 6, borderColor: '#475569', padding: 12, marginTop: 4 }}
+                        className='bg-primary-300/30 p-3 px-6 rounded-lg'
                         onChangeText={setPassword}
                         value={password}
                         placeholder='Min. 8 caracteres'
@@ -42,12 +44,11 @@ export default function CreateAccount() {
                     />
                 </View>
             </View>
-            <View style={{ padding: 8, borderTopWidth: 1, borderColor: '#e2e8f0' }}>
-                <TouchableOpacity onPress={async () => {
 
-                    // </View>router.push('/createAccount/password')
-                }} style={{ backgroundColor: '#16a34a', padding: 16, paddingHorizontal: 24, borderRadius: 12, width: '100%', alignItems: 'center' }}>
-                    <Text style={{ color: '#ffffff' }}>Completar cadastro</Text>
+            <View className='p-2'>
+                <TouchableOpacity onPress={async () => {
+                }} className='bg-green-700 p-4 px-6 rounded-lg items-center'>
+                    <Text className='text-white'>Completar cadastro</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

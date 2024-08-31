@@ -43,22 +43,22 @@ export default function CreateAccountTerms() {
     const Permission = ({ id, title, description }: IPermission) => (
         <TouchableOpacity
             onPress={() => setPermissionStatus(id, !permissions[id])}
-            style={{ marginVertical: 4, flexDirection: 'row', backgroundColor: '#ffffff', borderWidth: 1, borderColor: '#e2e8f0', padding: 8, borderRadius: 6 }}
+            className='my-1 flex-row bg-white p-2 rounded-lg'
         >
-            <View style={{ height: '100%', width: 8, backgroundColor: permissions[id] ? '#16a34a' : '#e11d48', borderRadius: 999 }} />
+            <View className='h-full w-2 rounded-full' style={{ backgroundColor: permissions[id] ? '#16a34a' : '#e11d48' }} />
             <View style={{ flex: 1, marginLeft: 8 }}>
-                <Text style={{ fontWeight: '600' }}>{title}</Text>
+                <Text className='font-bold'>{title}</Text>
                 <Text>{description}</Text>
             </View>
         </TouchableOpacity>
     )
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#f8fafc' }}>
-            <View style={{ marginTop: 10 }}>
-                <View style={{ position: 'absolute', height: '100%', justifyContent: 'center', left: 12 }}>
-                    <TouchableOpacity style={{ zIndex: 10 }} onPress={() => router.back()}>
-                        <Text>voltar</Text>
+        <SafeAreaView className='flex-1 bg-background'>
+            <View className='mt-3'>
+                <View className='absolute h-full justify-center left-3'>
+                    <TouchableOpacity className='z-10' onPress={() => router.back()}>
+                        <Text>cancelar</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -66,11 +66,13 @@ export default function CreateAccountTerms() {
             </View>
 
             <ScrollView contentContainerStyle={{ paddingBottom: 12 }}>
-                <View style={{ margin: 4, padding: 8 }}>
-                    <Text style={{ fontSize: 24, marginTop: 24 }}>Customizar sua experiência</Text>
-                    <Text style={{ marginTop: 4 }}>Recomendamos manter todas as permissões ativadas para aproveitar ao máximo o aplicativo</Text>
+                <View className='m-1 p-2' style={{ gap: 24 }}>
+                    <View>
+                        <Text className='text-xl mt-6'>Customizar sua experiência</Text>
+                        <Text className='mt-2'>Recomendamos manter todas as permissões ativadas para aproveitar ao máximo o aplicativo</Text>
+                    </View>
 
-                    <View style={{ marginTop: 24 }}>
+                    <View style={{ gap: 4 }}>
                         <Permission
                             id='receiveEmails'
                             title='Receber emails'
@@ -101,7 +103,7 @@ export default function CreateAccountTerms() {
                     </View>
                 </View>
             </ScrollView>
-            <View style={{ padding: 8, borderTopWidth: 1, borderColor: '#e2e8f0' }}>
+            <View className='p-2'>
                 <TouchableOpacity onPress={async () => {
                     const user = await getRegisterCache()
                     if (!user) return
@@ -109,8 +111,8 @@ export default function CreateAccountTerms() {
                     saveRegisterCache({ ...user, permissions })
 
                     router.push('/createAccount/password')
-                }} style={{ backgroundColor: '#2563eb', padding: 16, paddingHorizontal: 24, borderRadius: 12, width: '100%', alignItems: 'center' }}>
-                    <Text style={{ color: '#ffffff' }}>Confirmar conta</Text>
+                }} className='bg-primary p-4 px-6 rounded-lg items-center'>
+                    <Text className='text-white'>Confirmar conta</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

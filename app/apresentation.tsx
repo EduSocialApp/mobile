@@ -46,17 +46,18 @@ export default function Apresentation() {
     const barWidth = useRef<number>(0)
 
     const Slide = ({ key, image, title, description }: IParamsSlide) => (
-        <View key={key} style={{ flex: 1 }}>
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View key={key} className='flex-1'>
+            <View className='flex-1 items-center justify-center'>
                 <Image
                     source={image}
-                    style={{ width: '100%', height: '100%', maxWidth: 500, padding: 8 }}
+                    className='w-full h-full p-2'
+                    style={{ maxWidth: 500 }}
                     contentFit='contain'
                 />
             </View>
-            <View style={{ padding: 12, margin: 12, borderRadius: 6 }}>
-                <Text style={{ fontWeight: '600', fontSize: 18, color: '#ffffff' }}>{title}</Text>
-                <Text style={{ marginTop: 4, color: '#ffffff' }}>{description}</Text>
+            <View className='m-3 rounded-md mb-6'>
+                <Text className='font-bold text-xl text-white'>{title}</Text>
+                <Text className='mt-2 text-base text-white'>{description}</Text>
             </View>
         </View>
     )
@@ -69,7 +70,7 @@ export default function Apresentation() {
 
     return (
         <View className='flex-1'>
-            <LinearGradient colors={['#3b82f6', '#6366f1']} className='absolute flex-1 z-0 w-full h-full' />
+            <LinearGradient colors={['#445263', '#2C3E50']} className='absolute flex-1 z-0 w-full h-full' />
 
             <View className='flex-1' style={{ paddingTop: constants.statusBarHeight + 10 }}>
                 <Title />
@@ -86,7 +87,7 @@ export default function Apresentation() {
                     }
                 </PagerView>
                 <View>
-                    <View className='h-2 mx-3 opacity-80 rounded-full' style={{ backgroundColor: '#4f46e5' }}>
+                    <View className='h-2 mx-3 opacity-80 rounded-full' style={{ backgroundColor: '#5b7085' }}>
                         <Animated.View onLayout={({ nativeEvent: { layout: { width } } }) => {
                             barWidth.current = width
                         }}
