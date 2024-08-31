@@ -58,7 +58,7 @@ export default function CreateAccount() {
                     <View style={{ gap: 18 }}>
                         <View>
                             <TextInput
-                                className='bg-primary-300/30 p-3 px-6 rounded-lg'
+                                className='bg-primary-300/30 p-5 px-6 rounded-lg'
                                 placeholderTextColor={'#64748b'}
                                 onChangeText={setName}
                                 value={name}
@@ -71,7 +71,7 @@ export default function CreateAccount() {
 
                         <View>
                             <TextInput
-                                className='bg-primary-300/30 p-3 px-6 rounded-lg'
+                                className='bg-primary-300/30 p-5 px-6 rounded-lg'
                                 placeholderTextColor={'#64748b'}
                                 onChangeText={setEmail}
                                 value={email}
@@ -85,7 +85,7 @@ export default function CreateAccount() {
 
                         <View>
                             <TouchableOpacity
-                                className='bg-primary-300/30 p-4 px-6 rounded-lg'
+                                className='bg-primary-300/30 p-5 px-6 rounded-lg'
                                 onPress={() => setDatePickerVisibility(true)}
                             >
                                 <Text>{birthdayDate ? birthdayDate.toLocaleDateString('pt-BR') : <Text className='text-slate-500'>Seu aniversário</Text>}</Text>
@@ -132,7 +132,7 @@ export default function CreateAccount() {
                     })
 
                     router.push('/createAccount/terms')
-                }} className='bg-primary p-4 px-6 rounded-lg items-center'>
+                }} className='bg-primary p-6 rounded-lg items-center'>
                     <Text className='text-white'>Próxima etapa</Text>
                 </TouchableOpacity>
             </View>

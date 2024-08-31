@@ -35,7 +35,7 @@ export default function CreateAccount() {
 
                 <View style={{ gap: 18 }}>
                     <TextInput
-                        className='bg-primary-300/30 p-3 px-6 rounded-lg'
+                        className='bg-primary-300/30 p-5 px-6 rounded-lg'
                         onChangeText={setPassword}
                         value={password}
                         placeholder='Min. 8 caracteres'
@@ -47,7 +47,7 @@ export default function CreateAccount() {
 
             <View className='p-2'>
                 <TouchableOpacity onPress={async () => {
-                }} className='bg-green-700 p-4 px-6 rounded-lg items-center'>
+                }} className='bg-green-700 p-6 rounded-lg items-center'>
                     <Text className='text-white'>Completar cadastro</Text>
                 </TouchableOpacity>
             </View>

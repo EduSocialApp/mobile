@@ -111,7 +111,7 @@ export default function CreateAccountTerms() {
                     saveRegisterCache({ ...user, permissions })
 
                     router.push('/createAccount/password')
-                }} className='bg-primary p-4 px-6 rounded-lg items-center'>
+                }} className='bg-primary p-6 rounded-lg items-center'>
                     <Text className='text-white'>Confirmar conta</Text>
                 </TouchableOpacity>
             </View>

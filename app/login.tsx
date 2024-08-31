@@ -56,7 +56,7 @@ export default function Login() {
 			<View className='m-3'>
 				<View style={{ gap: 24 }}>
 					<TextInput
-						className='bg-primary-300/30 p-3 px-6 rounded-lg'
+						className='bg-primary-300/30 p-5 px-6 rounded-lg'
 						placeholderTextColor={'#64748b'}
 						onChangeText={setEmail}
 						value={email}
@@ -67,7 +67,7 @@ export default function Login() {
 					/>
 
 					<TextInput
-						className='bg-primary-300/30 p-3 px-6 rounded-lg'
+						className='bg-primary-300/30 p-5 px-6 rounded-lg'
 						placeholderTextColor={'#64748b'}
 						onChangeText={setPassword}
 						value={password}
