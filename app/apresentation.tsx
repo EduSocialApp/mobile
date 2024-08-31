@@ -1,4 +1,5 @@
 import { View, Text, TouchableOpacity } from 'react-native'
+import { useRef } from 'react'
 import PagerView from 'react-native-pager-view'
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import constants from 'expo-constants'
@@ -42,6 +43,8 @@ const pages = [
 export default function Apresentation() {
     const currentPageTranslateX = useSharedValue(0)
 
+    const barWidth = useRef<number>(0)
+
     const Slide = ({ key, image, title, description }: IParamsSlide) => (
         <View key={key} style={{ flex: 1 }}>
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -65,13 +68,13 @@ export default function Apresentation() {
     }))
 
     return (
-        <View style={{ flex: 1, backgroundColor: '#f8fafc' }}>
-            <LinearGradient colors={['#3b82f6', '#6366f1']} style={{ flex: 1, position: 'absolute', zIndex: 0, width: '100%', height: '100%' }} />
+        <View className='flex-1'>
+            <LinearGradient colors={['#3b82f6', '#6366f1']} className='absolute flex-1 z-0 w-full h-full' />
 
-            <View style={{ paddingTop: constants.statusBarHeight + 10, flex: 1 }}>
+            <View className='flex-1' style={{ paddingTop: constants.statusBarHeight + 10 }}>
                 <Title />
-                <PagerView style={{ flex: 1 }} initialPage={0} onPageSelected={({ nativeEvent: { position } }) => {
-                    currentPageTranslateX.value = 123 * position
+                <PagerView className='flex-1' initialPage={0} onPageSelected={({ nativeEvent: { position } }) => {
+                    currentPageTranslateX.value = barWidth.current * position
                 }}>
                     {
                         pages.map((slideParams, i) => (
@@ -83,26 +86,24 @@ export default function Apresentation() {
                     }
                 </PagerView>
                 <View>
-                    <View style={{ height: 8, marginHorizontal: 12, opacity: 0.8, borderRadius: 100, backgroundColor: '#4f46e5' }}>
-                        <Animated.View
-                            style={[{
-                                height: '100%',
-                                width: 123,
-                                backgroundColor: '#ffffff',
-                                borderRadius: 100,
-                            }, animatedStyle]}
+                    <View className='h-2 mx-3 opacity-80 rounded-full' style={{ backgroundColor: '#4f46e5' }}>
+                        <Animated.View onLayout={({ nativeEvent: { layout: { width } } }) => {
+                            barWidth.current = width
+                        }}
+                            className='h-full w-1/3 bg-white rounded-full'
+                            style={animatedStyle}
                         />
                     </View>
                 </View>
-                <View style={{ padding: 12, marginBottom: 24 }}>
+                <View className='p-3 mb-6'>
                     <TouchableOpacity onPress={() => {
                         saveCache(CacheKey.sawPresentation, true)
                         router.replace('/login')
-                    }} style={{ backgroundColor: '#ffffff', alignItems: 'center', justifyContent: 'center', borderRadius: 6, marginBottom: 4 }}>
-                        <Text style={{ fontSize: 18, padding: 12 }}>Entrar agora</Text>
+                    }} className='bg-white items-center justify-center rounded-md mb-1'>
+                        <Text className='p-4 text-xl'>Entrar agora</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{ marginTop: 8 }} onPress={() => router.push('/createAccount')}>
-                        <Text style={{ textAlign: 'center', color: '#ffffff' }}>Não tem uma conta? <Text style={{ fontWeight: '600' }}>Criar agora</Text></Text>
+                        <Text className='text-white text-center mt-1'>Não tem uma conta? <Text className='font-bold'>Criar agora</Text></Text>
                     </TouchableOpacity>
                 </View>
             </View>
