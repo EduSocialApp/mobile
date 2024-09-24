@@ -7,26 +7,25 @@ import { CacheKey, readCache } from '../functions/cache'
 import { apiAxios } from '../functions/api'
 
 configure({
-	axios: apiAxios
+    axios: apiAxios,
 })
 
 export default function App() {
+    useEffect(() => {
+        redirect()
+    }, [])
 
-	useEffect(() => {
-		redirect()
-	}, [])
+    const redirect = async () => {
+        const { value } = await readCache(CacheKey.sawPresentation)
 
-	const redirect = async () => {
-		const { value } = await readCache(CacheKey.sawPresentation)
+        router.replace('/apresentation')
 
-		if (value) {
-			router.replace('/login')
-		} else {
-			router.replace('/apresentation')
-		}
-	}
+        // if (value) {
+        // 	router.replace('/login')
+        // } else {
+        // 	router.replace('/apresentation')
+        // }
+    }
 
-	return (
-		<Text>carregando...</Text>
-	)
+    return <Text>carregando...</Text>
 }

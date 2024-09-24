@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, TouchableOpacity, TextInput, Platform, ScrollView } from 'react-native'
+import { View, Text, TouchableOpacity, Platform, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
 
-import { TitleBlack } from '../../components/title'
+import { TextInput, TitleBlack, DateInput, Button } from '../../components'
 
 import { getRegisterCache, saveRegisterCache } from './functions/cache'
 
@@ -29,18 +29,16 @@ export default function CreateAccount() {
     }
 
     const Error = ({ message }: { message: string }) => {
-        if (!showErrors) return (<></>)
+        if (!showErrors) return <></>
 
-        return (
-            <Text className='mt-2 text-accent-200'>{message}</Text>
-        )
+        return <Text className="mt-2 text-accent-200">{message}</Text>
     }
 
     return (
-        <SafeAreaView className='flex-1 bg-background'>
-            <View className='mt-3'>
-                <View className='absolute h-full justify-center left-3'>
-                    <TouchableOpacity className='z-10' onPress={() => router.back()}>
+        <SafeAreaView className="flex-1 bg-background">
+            <View className="mt-3">
+                <View className="absolute h-full justify-center left-3">
+                    <TouchableOpacity className="z-10" onPress={() => router.back()}>
                         <Text>cancelar</Text>
                     </TouchableOpacity>
                 </View>
@@ -49,94 +47,70 @@ export default function CreateAccount() {
             </View>
 
             <ScrollView contentContainerStyle={{ paddingBottom: 12 }}>
-                <View className='m-1 p-2' style={{ gap: 24 }}>
+                <View className="m-1 p-2" style={{ gap: 24 }}>
                     <View>
-                        <Text className='text-xl mt-6'>Criar conta</Text>
-                        <Text className='mt-2'>Olá! Ficamos felizes com seu interesse no aplicativo. Antes de começar, precisamos de algumas informações</Text>
+                        <Text className="text-xl mt-6">Criar conta</Text>
+                        <Text className="mt-2">
+                            Olá! Ficamos felizes com seu interesse no aplicativo. Antes de começar, precisamos de algumas informações
+                        </Text>
                     </View>
 
                     <View style={{ gap: 18 }}>
-                        <View>
-                            <TextInput
-                                className='bg-primary-300/30 p-5 px-6 rounded-lg'
-                                placeholderTextColor={'#64748b'}
-                                onChangeText={setName}
-                                value={name}
-                                placeholder='Seu nome completo'
-                                autoCapitalize='words'
-                                textContentType='name'
-                            />
-                            {!name && <Error message='Informar o seu nome completo é importante para gente te conhecer melhor' />}
-                        </View>
+                        <TextInput
+                            onChangeText={setName}
+                            value={name}
+                            placeholder="Seu nome completo"
+                            autoCapitalize="words"
+                            textContentType="name"
+                            // error="Informar o seu nome completo é importante para gente te conhecer melhor"
+                        />
 
-                        <View>
-                            <TextInput
-                                className='bg-primary-300/30 p-5 px-6 rounded-lg'
-                                placeholderTextColor={'#64748b'}
-                                onChangeText={setEmail}
-                                value={email}
-                                placeholder='Seu e-mail principal'
-                                autoCapitalize='none'
-                                textContentType='emailAddress'
-                                keyboardType='email-address'
-                            />
-                            {!email && <Error message='Precisamos do seu email para termos nosso primeiro contato' />}
-                        </View>
+                        <TextInput
+                            onChangeText={setEmail}
+                            value={email}
+                            placeholder="Seu e-mail principal"
+                            autoCapitalize="none"
+                            textContentType="emailAddress"
+                            keyboardType="email-address"
+                            // error="Precisamos do seu email para termos nosso primeiro contato"
+                        />
 
-                        <View>
-                            <TouchableOpacity
-                                className='bg-primary-300/30 p-5 px-6 rounded-lg'
-                                onPress={() => setDatePickerVisibility(true)}
-                            >
-                                <Text>{birthdayDate ? birthdayDate.toLocaleDateString('pt-BR') : <Text className='text-slate-500'>Seu aniversário</Text>}</Text>
-                            </TouchableOpacity>
-                            {!birthdayDate && <Error message='Precisamos saber sua idade para adequar a melhor experiência a você' />}
-                            <DateTimePickerModal
-                                isVisible={isDatePickerVisible}
-                                mode='date'
-                                date={birthdayDate}
-                                onConfirm={(date) => {
-                                    setBirthdayDate(date)
-                                    setDatePickerVisibility(false)
-                                }}
-                                display={Platform.OS === 'ios' ? 'inline' : 'default'}
-                                onCancel={() => setDatePickerVisibility(false)}
-                                locale='pt-BR'
-                                cancelTextIOS='Fechar'
-                                confirmTextIOS='Confirmar'
-                            />
-                        </View>
+                        <DateInput
+                            onChange={setBirthdayDate}
+                            value={birthdayDate}
+                            // error="Precisamos saber sua idade para adequar a melhor experiência a você"
+                        />
                     </View>
                 </View>
             </ScrollView>
 
-            <View className='p-2'>
-                <TouchableOpacity onPress={() => {
-                    if (!name || !email || !birthdayDate) {
-                        return setShowErrors(true)
-                    }
-
-                    saveRegisterCache({
-                        fullname: name,
-                        email: email,
-                        date: birthdayDate,
-                        confirmationCode: '',
-                        password: '',
-                        permissions: {
-                            receiveEmails: true,
-                            connectWithNeighbors: true,
-                            receiveNotifications: true,
-                            termsOfUse: true,
-                            privacyPolicy: true
+            <View className="p-2">
+                <Button
+                    text="Próxima etapa"
+                    onPress={() => {
+                        if (!name || !email || !birthdayDate) {
+                            return setShowErrors(true)
                         }
-                    })
 
-                    router.push('/createAccount/terms')
-                }} className='bg-primary p-6 rounded-lg items-center'>
-                    <Text className='text-white'>Próxima etapa</Text>
-                </TouchableOpacity>
+                        saveRegisterCache({
+                            fullname: name,
+                            email: email,
+                            date: birthdayDate,
+                            confirmationCode: '',
+                            password: '',
+                            permissions: {
+                                receiveEmails: true,
+                                connectWithNeighbors: true,
+                                receiveNotifications: true,
+                                termsOfUse: true,
+                                privacyPolicy: true,
+                            },
+                        })
+
+                        router.push('/createAccount/terms')
+                    }}
+                />
             </View>
-
         </SafeAreaView>
     )
 }
