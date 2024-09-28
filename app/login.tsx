@@ -3,7 +3,7 @@ import { Text, View, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
 
-import { apiAxios } from '../functions/api'
+import { apiAxios } from '../api/route'
 
 import Message, { IMessageRef, MessageStatus } from '../components/message'
 
@@ -61,19 +61,19 @@ export default function Login() {
                     <TextInput onChangeText={setPassword} value={password} placeholder="Senha" textContentType="password" secureTextEntry />
                 </View>
 
-                <TouchableOpacity>
-                    <Text className="text-primary text-right mt-2">Esqueceu sua senha?</Text>
-                </TouchableOpacity>
+                <View className="items-end mt-2">
+                    <Button onPress={() => {}} text="Esqueceu sua senha?" variant="link" />
+                </View>
 
                 <View className="mt-6">
                     <Button onPress={login} text="Entrar" />
                 </View>
 
-                <TouchableOpacity className="items-center justify-center mt-2" onPress={() => router.push('/createAccount')}>
+                <Button onPress={() => router.push('/createAccount')} variant="link" className="mt-4">
                     <Text>
                         Não tem uma conta? <Text className="font-bold text-primary-200">Criar agora</Text>
                     </Text>
-                </TouchableOpacity>
+                </Button>
             </View>
         </SafeAreaView>
     )

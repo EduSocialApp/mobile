@@ -1,23 +1,23 @@
 import { router } from 'expo-router'
 import { useEffect, useState } from 'react'
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { TitleBlack } from '../../components/title'
 import { getRegisterCache, saveRegisterCache } from './functions/cache'
 
-import { IPermissions } from './types'
+import { Permissions } from './types'
 import { Button } from '../../components'
 
 interface IPermission {
-    id: keyof IPermissions
+    id: keyof Permissions
     title: string
     description: string
     link?: string
 }
 
 export default function CreateAccountTerms() {
-    const [permissions, setPermissions] = useState<IPermissions>({
+    const [permissions, setPermissions] = useState<Permissions>({
         connectWithNeighbors: true,
         privacyPolicy: true,
         receiveEmails: true,
@@ -36,20 +36,22 @@ export default function CreateAccountTerms() {
         setPermissions({ ...user.permissions })
     }
 
-    const setPermissionStatus = (id: keyof IPermissions, status: boolean) => {
+    const setPermissionStatus = (id: keyof Permissions, status: boolean) => {
         permissions[id] = status
         setPermissions({ ...permissions })
     }
 
     const Permission = ({ id, title, description }: IPermission) => (
-        <TouchableOpacity onPress={() => setPermissionStatus(id, !permissions[id])} className="my-1 flex-row bg-white p-2 rounded-lg">
+        <TouchableOpacity
+            onPress={() => setPermissionStatus(id, !permissions[id])}
+            className="my-1 flex-row bg-white p-2 rounded-lg border border-stone-200">
             <View
                 className="h-full w-2 rounded-full"
                 style={{
                     backgroundColor: permissions[id] ? '#16a34a' : '#e11d48',
                 }}
             />
-            <View className="flex-1 ml-2 p-2">
+            <View className="flex-1 p-2">
                 <Text className="font-bold">{title}</Text>
                 <Text>{description}</Text>
             </View>
@@ -59,10 +61,8 @@ export default function CreateAccountTerms() {
     return (
         <SafeAreaView className="flex-1 bg-background">
             <View className="mt-3">
-                <View className="absolute h-full justify-center left-3">
-                    <TouchableOpacity className="z-10" onPress={() => router.back()}>
-                        <Text>cancelar</Text>
-                    </TouchableOpacity>
+                <View className="absolute h-full justify-center left-3 z-10">
+                    <Button text="voltar" onPress={() => router.back()} variant="link" />
                 </View>
 
                 <TitleBlack />
@@ -107,6 +107,16 @@ export default function CreateAccountTerms() {
                     onPress={async () => {
                         const user = await getRegisterCache()
                         if (!user) return
+
+                        if (!permissions.termsOfUse) {
+                            Alert.alert('Termos de uso', 'Você precisa aceitar os termos de uso para continuar')
+                            return
+                        }
+
+                        if (!permissions.privacyPolicy) {
+                            Alert.alert('Política de privacidade', 'Você precisa aceitar a política de privacidade para continuar')
+                            return
+                        }
 
                         saveRegisterCache({ ...user, permissions })
 

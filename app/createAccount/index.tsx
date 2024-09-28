@@ -12,7 +12,6 @@ export default function CreateAccount() {
     const [name, setName] = useState<string>('')
     const [email, setEmail] = useState<string>('')
     const [birthdayDate, setBirthdayDate] = useState<Date>()
-    const [isDatePickerVisible, setDatePickerVisibility] = useState<boolean>(false)
     const [showErrors, setShowErrors] = useState(false)
 
     useEffect(() => {
@@ -34,13 +33,17 @@ export default function CreateAccount() {
         return <Text className="mt-2 text-accent-200">{message}</Text>
     }
 
+    const errorMessage = (message: string, valid: boolean) => {
+        if (!showErrors || valid) return ''
+
+        return message
+    }
+
     return (
         <SafeAreaView className="flex-1 bg-background">
             <View className="mt-3">
-                <View className="absolute h-full justify-center left-3">
-                    <TouchableOpacity className="z-10" onPress={() => router.back()}>
-                        <Text>cancelar</Text>
-                    </TouchableOpacity>
+                <View className="absolute h-full justify-center left-3 z-10">
+                    <Button text="cancelar" onPress={() => router.back()} variant="link" />
                 </View>
 
                 <TitleBlack />
@@ -62,7 +65,7 @@ export default function CreateAccount() {
                             placeholder="Seu nome completo"
                             autoCapitalize="words"
                             textContentType="name"
-                            // error="Informar o seu nome completo é importante para gente te conhecer melhor"
+                            error={errorMessage('Informar o seu nome completo é importante para gente te conhecer melhor', !!name)}
                         />
 
                         <TextInput
@@ -72,13 +75,13 @@ export default function CreateAccount() {
                             autoCapitalize="none"
                             textContentType="emailAddress"
                             keyboardType="email-address"
-                            // error="Precisamos do seu email para termos nosso primeiro contato"
+                            error={errorMessage('Precisamos do seu email para termos nosso primeiro contato', !!email)}
                         />
 
                         <DateInput
                             onChange={setBirthdayDate}
                             value={birthdayDate}
-                            // error="Precisamos saber sua idade para adequar a melhor experiência a você"
+                            error={errorMessage('Precisamos saber sua idade para adequar a melhor experiência a você', !!birthdayDate)}
                         />
                     </View>
                 </View>
@@ -102,8 +105,8 @@ export default function CreateAccount() {
                                 receiveEmails: true,
                                 connectWithNeighbors: true,
                                 receiveNotifications: true,
-                                termsOfUse: true,
-                                privacyPolicy: true,
+                                termsOfUse: false,
+                                privacyPolicy: false,
                             },
                         })
 

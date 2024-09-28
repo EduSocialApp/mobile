@@ -83,7 +83,7 @@ export default function Apresentation() {
                     ))}
                 </PagerView>
                 <View>
-                    <View className="h-2 mx-3 opacity-80 rounded-full" style={{ backgroundColor: '#272343' }}>
+                    <View className="h-2 mx-3 opacity-80 rounded-full" style={{ backgroundColor: '#e3f6f530' }}>
                         <Animated.View
                             onLayout={({
                                 nativeEvent: {

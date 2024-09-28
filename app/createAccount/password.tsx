@@ -8,6 +8,7 @@ import { TitleBlack, TextInput, Button } from '../../components'
 export default function CreateAccount() {
     const [password, setPassword] = useState<string>('')
     const [userName, setUserName] = useState<string>('')
+    const [loading, setLoading] = useState<string>()
 
     useEffect(() => {
         getCacheValues()
@@ -18,6 +19,11 @@ export default function CreateAccount() {
         if (!user) return
 
         setUserName(user.fullname.split(' ')[0])
+    }
+
+    const handleRegister = async () => {
+        const user = await getRegisterCache()
+        if (!user) return
     }
 
     return (
@@ -44,7 +50,7 @@ export default function CreateAccount() {
             </View>
 
             <View className="p-2">
-                <Button text="Completar cadastro" onPress={() => {}} variant="primary" />
+                <Button text="Completar cadastro" onPress={() => {}} variant="primary" loading={loading === 'register'} />
             </View>
         </SafeAreaView>
     )

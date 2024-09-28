@@ -1,13 +1,13 @@
-export interface IRegisterUser {
+export interface RegisterUser {
     fullname: string
     email: string
     date: Date
     confirmationCode: string
     password: string
-    permissions: IPermissions
+    permissions: Permissions
 }
 
-export interface IPermissions {
+export interface Permissions {
     receiveEmails: boolean
     connectWithNeighbors: boolean
     receiveNotifications: boolean
