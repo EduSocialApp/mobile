@@ -1,5 +1,7 @@
-import { TextInput as TextInputRc, TextInputProps, View, Text } from 'react-native'
+import { TextInput as TextInputRc, TextInputProps, View, Text, TouchableOpacity } from 'react-native'
 import { cn } from '../../functions/utils'
+import { Feather } from '@expo/vector-icons'
+import { useState } from 'react'
 
 interface Params {
     onChangeText: (text: string) => void
@@ -9,6 +11,8 @@ interface Params {
     textContentType?: TextInputProps['textContentType']
     keyboardType?: TextInputProps['keyboardType']
     secureTextEntry?: TextInputProps['secureTextEntry']
+    PrefixChild?: React.ReactNode
+    SuffixChild?: React.ReactNode
     error?: string
 }
 
@@ -16,21 +20,55 @@ function Error({ message }: { message: string }) {
     return <Text className="mt-1 text-red-500 font-bold ">{message}</Text>
 }
 
-export function TextInput({ onChangeText, keyboardType, value, placeholder, autoCapitalize, textContentType, error, secureTextEntry }: Params) {
+export function TextInput({
+    onChangeText,
+    keyboardType,
+    value,
+    placeholder,
+    autoCapitalize,
+    textContentType,
+    error,
+    secureTextEntry,
+    PrefixChild,
+    SuffixChild,
+}: Params) {
     return (
         <View>
-            <TextInputRc
-                className={cn('bg-stone-100 h-16 px-6 rounded-lg', !!error && 'bg-red-50 text-red-500')}
-                placeholderTextColor={'#78716c'}
-                onChangeText={onChangeText}
-                value={value}
-                placeholder={placeholder}
-                autoCapitalize={autoCapitalize}
-                keyboardType={keyboardType}
-                textContentType={textContentType}
-                secureTextEntry={secureTextEntry}
-            />
+            <View
+                className={cn('flex-row justify-between items-center bg-stone-100 h-16 px-6 rounded-lg', !!error && 'bg-red-50 text-red-500')}
+                style={{ gap: 16 }}>
+                {PrefixChild}
+                <TextInputRc
+                    className="flex-1"
+                    placeholderTextColor={'#78716c'}
+                    onChangeText={onChangeText}
+                    value={value}
+                    placeholder={placeholder}
+                    autoCapitalize={autoCapitalize}
+                    keyboardType={keyboardType}
+                    textContentType={textContentType}
+                    secureTextEntry={secureTextEntry}
+                />
+                {SuffixChild}
+            </View>
+
             {!!error && <Error message={error} />}
         </View>
+    )
+}
+
+export function PasswordInput(params: Params) {
+    const [showPassword, setShowPassword] = useState(false)
+
+    return (
+        <TextInput
+            {...params}
+            secureTextEntry={!showPassword}
+            SuffixChild={
+                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                    <Feather name={showPassword ? 'eye' : 'eye-off'} size={18} color="black" />
+                </TouchableOpacity>
+            }
+        />
     )
 }

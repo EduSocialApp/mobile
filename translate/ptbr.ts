@@ -1,0 +1,20 @@
+export const ptbr: { [key: string]: string } = {
+    'Token missing': 'Token faltando!',
+    'User not found': 'Usuário não encontrado!',
+    'Permission denied': 'Permissão negada!',
+    'Organization not found': 'Organização não encontrada!',
+    'Invalid body': 'Corpo inválido',
+    'User is not linked to this organization': 'Usuário não está vinculado a esta organização',
+    'Required fields are missing': 'Campos obrigatórios estão faltando',
+    'Invalid refresh token': 'Token de atualização inválido',
+    'Refresh token expired': 'Token de atualização expirado',
+    'Refresh token is required': 'Token de atualização é obrigatório',
+    'Email and password are required': 'Email e senha são obrigatórios',
+    'Invalid email or password': 'Email ou senha inválidos',
+    'You must accept the terms of use': 'Você deve aceitar os termos de uso',
+    'You must accept the privacy policy': 'Você deve aceitar a política de privacidade',
+    'Email already exists': 'Email já existe',
+    'Password entered is too weak. Please choose a stronger password with at least 8 characters, including uppercase and lowercase letters, and numbers':
+        'A senha inserida é muito fraca. Por favor, escolha uma senha mais forte com pelo menos 8 caracteres, incluindo letras maiúsculas e minúsculas, e números',
+    unknown: 'Erro desconhecido',
+}

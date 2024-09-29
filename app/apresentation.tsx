@@ -11,7 +11,7 @@ import imgNetwork from '../assets/apresentation/network.png'
 import imgClassroom from '../assets/apresentation/classroom.png'
 import imgSchool from '../assets/apresentation/school.png'
 
-import { CacheKey, saveCache } from '../functions/cache'
+import { saveCache } from '../functions/cache'
 
 import Title from '../components/title'
 
@@ -100,7 +100,7 @@ export default function Apresentation() {
                 <View className="p-3 mb-6">
                     <TouchableOpacity
                         onPress={() => {
-                            saveCache(CacheKey.sawPresentation, true)
+                            saveCache('SAW_PRESENTATION', true)
                             router.replace('/login')
                         }}
                         className="bg-tertiary items-center justify-center rounded-md mb-1">

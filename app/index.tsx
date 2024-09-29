@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Text } from 'react-native'
 import { router } from 'expo-router'
 
-import { CacheKey, readCache } from '../functions/cache'
+import { readCache } from '../functions/cache'
 
 export default function App() {
     useEffect(() => {
@@ -10,7 +10,7 @@ export default function App() {
     }, [])
 
     const redirect = async () => {
-        const { value } = await readCache(CacheKey.sawPresentation)
+        const { value } = await readCache('SAW_PRESENTATION')
 
         router.replace('/apresentation')
 

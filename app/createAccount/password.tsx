@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
-import { getRegisterCache } from './functions/cache'
-import { TitleBlack, TextInput, Button } from '../../components'
+import { destroyRegisterCache, getRegisterCache } from './functions/cache'
+import { TitleBlack, Button, PasswordInput } from '../../components'
+import { apiUserRegister } from '../../api/user/register'
+import { AxiosError } from 'axios'
+import { translateMessage } from '../../translate/translateMessage'
 
 export default function CreateAccount() {
     const [password, setPassword] = useState<string>('')
@@ -22,13 +25,36 @@ export default function CreateAccount() {
     }
 
     const handleRegister = async () => {
+        setLoading('register')
+
         const user = await getRegisterCache()
         if (!user) return
+
+        try {
+            const requisicao = await apiUserRegister({ ...user, password })
+            setLoading(undefined)
+
+            if (requisicao.status === 201) {
+                router.replace('login')
+                destroyRegisterCache()
+            } else {
+                Alert.alert('Erro', 'Erro ao cadastrar usuário')
+            }
+        } catch (e) {
+            setLoading(undefined)
+            if (e instanceof AxiosError) {
+                Alert.alert('Erro', translateMessage(e.response?.data?.message))
+                return
+            }
+        }
     }
 
     return (
         <SafeAreaView className="flex-1 bg-background">
             <View className="mt-3">
+                <View className="absolute h-full justify-center left-3 z-10">
+                    <Button text="voltar" onPress={() => router.back()} variant="link" />
+                </View>
                 <TitleBlack />
             </View>
 
@@ -39,7 +65,7 @@ export default function CreateAccount() {
                 </View>
 
                 <View style={{ gap: 18 }}>
-                    <TextInput
+                    <PasswordInput
                         onChangeText={setPassword}
                         value={password}
                         placeholder="Min. 8 caracteres"
@@ -50,7 +76,7 @@ export default function CreateAccount() {
             </View>
 
             <View className="p-2">
-                <Button text="Completar cadastro" onPress={() => {}} variant="primary" loading={loading === 'register'} />
+                <Button text="Completar cadastro" onPress={handleRegister} variant="primary" loading={loading === 'register'} />
             </View>
         </SafeAreaView>
     )

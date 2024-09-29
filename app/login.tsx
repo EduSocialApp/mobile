@@ -1,47 +1,44 @@
-import { useRef, useState } from 'react'
-import { Text, View, TouchableOpacity } from 'react-native'
+import { useState } from 'react'
+import { Text, View, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
 
-import { apiAxios } from '../api/route'
-
-import Message, { IMessageRef, MessageStatus } from '../components/message'
-
 import { destroySession, saveSession } from '../functions/session'
 
-import { TitleBlack, TextInput, Button } from '../components'
+import { TitleBlack, TextInput, Button, PasswordInput } from '../components'
+import { apiUserLogin } from '../api'
 
 export default function Login() {
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
-    const [messageVisible, setMessageVisible] = useState<boolean>(false)
+    const [loading, setLoading] = useState<string>()
 
-    const message = useRef<IMessageRef>(null)
+    const handleLogin = async () => {
+        try {
+            setLoading('login')
+            const requisicao = await apiUserLogin({ email, password })
+            setLoading(undefined)
 
-    const login = () => {
-        apiAxios
-            .post('/user/authenticate', { email, password })
-            .then(({ data: { message, accessToken, refreshToken } }) => {
-                if (message) {
-                    return userIncorrect()
-                }
+            if (requisicao.status === 200) {
+                saveSession(requisicao.data.accessToken, requisicao.data.refreshToken)
 
-                saveSession(accessToken, refreshToken)
-            })
-            .catch((err) => {
-                userIncorrect()
-            })
+                router.replace('authenticated/home')
+            } else {
+                Alert.alert('Erro', 'Usuário ou senha incorretos')
+            }
+        } catch {
+            setLoading(undefined)
+            Alert.alert('Erro', 'Usuário ou senha incorretos')
+        }
     }
 
     const userIncorrect = () => {
         destroySession()
-        message.current?.updateMessage('Usuário ou senha incorretos', MessageStatus.Error)
+        // message.current?.updateMessage('Usuário ou senha incorretos', MessageStatus.Error)
     }
 
     return (
         <SafeAreaView className="flex-1 justify-center p-2 bg-background">
-            <Message ref={message} isVisible={messageVisible} onClose={() => setMessageVisible(false)} onVisible={() => setMessageVisible(true)} />
-
             <View className="my-2">
                 <TitleBlack />
                 <Text className="text-center">Criar slogan</Text>
@@ -58,7 +55,7 @@ export default function Login() {
                         keyboardType="email-address"
                     />
 
-                    <TextInput onChangeText={setPassword} value={password} placeholder="Senha" textContentType="password" secureTextEntry />
+                    <PasswordInput onChangeText={setPassword} value={password} placeholder="Senha" textContentType="password" secureTextEntry />
                 </View>
 
                 <View className="items-end mt-2">
@@ -66,7 +63,7 @@ export default function Login() {
                 </View>
 
                 <View className="mt-6">
-                    <Button onPress={login} text="Entrar" />
+                    <Button onPress={handleLogin} text="Entrar" loading={loading === 'login'} />
                 </View>
 
                 <Button onPress={() => router.push('/createAccount')} variant="link" className="mt-4">
