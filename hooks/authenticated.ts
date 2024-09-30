@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { destroyAuthenticatedUser, destroyCredentialsInSecureStore, getAuthenticatedUser } from '../functions/authentication'
+import { destroyAuthenticatedUser, destroyCredentialsInSecureStore, getAuthenticatedUser, saveAuthenticatedUser } from '../functions/authentication'
+import { apiGetUserById } from '../api/user/get'
 
 export type Session = {
     user: User
@@ -38,17 +39,26 @@ export function loadAuthenticated(): [boolean, Session] {
     const [session, setSession] = useState<Session>(null)
 
     useEffect(() => {
-        getAuthenticatedUser()
-            .then((user) => {
-                if (!user) throw new Error('User not found')
-
-                setSession({ user })
-                setLoading(false)
-            })
-            .catch(() => {
-                setLoading(false)
-            })
+        getUser()
     }, [])
+
+    const getUser = async () => {
+        setLoading(true)
+        try {
+            const userDataRequest = await apiGetUserById()
+            if (!userDataRequest.data) throw new Error('User not found')
+
+            await saveAuthenticatedUser(userDataRequest.data)
+
+            setSession({ user: userDataRequest.data })
+
+            setLoading(false)
+        } catch {
+            destroyAuthenticatedUser()
+            destroyCredentialsInSecureStore()
+            setLoading(false)
+        }
+    }
 
     return [loading, session]
 }

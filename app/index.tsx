@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Text } from 'react-native'
 import { router } from 'expo-router'
 
-import { readCache } from '../functions/cache'
+import { getCredentialsFromSecureStore } from '../functions/authentication'
 
 export default function App() {
     useEffect(() => {
@@ -10,15 +10,14 @@ export default function App() {
     }, [])
 
     const redirect = async () => {
-        const { value } = await readCache('SAW_PRESENTATION')
+        const credentials = await getCredentialsFromSecureStore()
+
+        if (credentials) {
+            router.replace('/authenticated')
+            return
+        }
 
         router.replace('/apresentation')
-
-        // if (value) {
-        // 	router.replace('/login')
-        // } else {
-        // 	router.replace('/apresentation')
-        // }
     }
 
     return <Text>carregando...</Text>

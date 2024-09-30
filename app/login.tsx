@@ -3,7 +3,7 @@ import { Text, View, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
 
-import { destroySession, saveSession } from '../functions/session'
+import { saveSession } from '../functions/session'
 
 import { TitleBlack, TextInput, Button, PasswordInput } from '../components'
 import { apiUserLogin } from '../api'
@@ -22,7 +22,7 @@ export default function Login() {
             if (requisicao.status === 200) {
                 saveSession(requisicao.data.accessToken, requisicao.data.refreshToken)
 
-                router.replace('authenticated/home')
+                router.replace('authenticated')
             } else {
                 Alert.alert('Erro', 'Usuário ou senha incorretos')
             }
@@ -30,11 +30,6 @@ export default function Login() {
             setLoading(undefined)
             Alert.alert('Erro', 'Usuário ou senha incorretos')
         }
-    }
-
-    const userIncorrect = () => {
-        destroySession()
-        // message.current?.updateMessage('Usuário ou senha incorretos', MessageStatus.Error)
     }
 
     return (
