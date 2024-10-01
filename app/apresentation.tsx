@@ -14,6 +14,7 @@ import imgSchool from '../assets/apresentation/school.png'
 import { saveCache } from '../functions/cache'
 
 import Title from '../components/title'
+import { StatusBar } from 'expo-status-bar'
 
 interface IParamsSlide {
     key: string
@@ -68,6 +69,7 @@ export default function Apresentation() {
 
     return (
         <View className="flex-1">
+            <StatusBar style="light" />
             <LinearGradient colors={['#39335e', '#272343']} className="absolute flex-1 z-0 w-full h-full" />
 
             <View className="flex-1" style={{ paddingTop: constants.statusBarHeight + 10 }}>

@@ -14,6 +14,9 @@ interface Params {
     PrefixChild?: React.ReactNode
     SuffixChild?: React.ReactNode
     error?: string
+    help?: string
+    className?: string
+    editable?: boolean
 }
 
 function Error({ message }: { message: string }) {
@@ -31,11 +34,18 @@ export function TextInput({
     secureTextEntry,
     PrefixChild,
     SuffixChild,
+    className,
+    editable = true,
+    help,
 }: Params) {
     return (
         <View>
             <View
-                className={cn('flex-row justify-between items-center bg-stone-100 h-16 px-6 rounded-lg', !!error && 'bg-red-50 text-red-500')}
+                className={cn(
+                    'flex-row justify-between items-center bg-stone-100 h-16 px-6 rounded-lg',
+                    !!error && 'bg-red-50 text-red-500',
+                    className
+                )}
                 style={{ gap: 16 }}>
                 {PrefixChild}
                 <TextInputRc
@@ -48,11 +58,14 @@ export function TextInput({
                     keyboardType={keyboardType}
                     textContentType={textContentType}
                     secureTextEntry={secureTextEntry}
+                    editable={editable}
+                    style={{ color: editable ? 'black' : '#555555' }}
                 />
                 {SuffixChild}
             </View>
 
             {!!error && <Error message={error} />}
+            {!!help && <Text className="mt-1 text-gray-500">{help}</Text>}
         </View>
     )
 }

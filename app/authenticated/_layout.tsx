@@ -20,8 +20,8 @@ export default function UsuarioLayout() {
 
     return (
         <AuthContext.Provider value={session}>
-            <Stack>
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="(tabs)" />
             </Stack>
         </AuthContext.Provider>
     )
