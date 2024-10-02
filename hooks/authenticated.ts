@@ -3,18 +3,10 @@ import { destroyAuthenticatedUser, destroyCredentialsInSecureStore, getAuthentic
 import { apiGetUserById } from '../api/user/get'
 
 export type Session = {
-    user: User
-} | null
+    user?: User
+}
 
-export const AuthContext = createContext<Session>({
-    user: {
-        name: '',
-        email: '',
-        pictureUrl: '',
-        phone: '',
-        id: '',
-    },
-})
+export const AuthContext = createContext<Session>({})
 
 /**
  * Cria contexto com o usuario autenticado
@@ -36,7 +28,7 @@ export async function logout() {
  */
 export function loadAuthenticated(): [boolean, Session] {
     const [loading, setLoading] = useState(true)
-    const [session, setSession] = useState<Session>(null)
+    const [session, setSession] = useState<Session>({})
 
     useEffect(() => {
         getUser()

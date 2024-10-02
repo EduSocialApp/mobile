@@ -1,8 +1,11 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { Tabs } from 'expo-router'
+import { useUserAuthenticated } from '../../../hooks/authenticated'
 
 export default function TabLayout() {
+    const session = useUserAuthenticated()
+
     return (
         <Tabs screenOptions={{ tabBarActiveTintColor: 'black', headerShown: false, tabBarShowLabel: false }}>
             <Tabs.Screen
@@ -31,6 +34,16 @@ export default function TabLayout() {
                 options={{
                     title: 'Account',
                     tabBarIcon: ({ color }) => <FontAwesome name="user" size={32} color={color} />,
+                }}
+            />
+            <Tabs.Screen
+                name="admin"
+                options={{
+                    tabBarStyle: {
+                        display: session.user?.role === 'ADMIN' ? 'flex' : 'none',
+                    },
+                    title: 'Administration',
+                    tabBarIcon: ({ color }) => <MaterialCommunityIcons name="cog" size={32} color={color} />,
                 }}
             />
         </Tabs>
