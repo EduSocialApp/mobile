@@ -4,7 +4,7 @@ import { cn } from '../functions/utils'
 interface Params {
     onPress: () => void
     text?: string
-    variant?: 'default' | 'primary' | 'secondary' | 'link'
+    variant?: 'default' | 'primary' | 'secondary' | 'link' | 'outline'
     children?: React.ReactNode
     className?: string
     loading?: boolean
@@ -12,7 +12,13 @@ interface Params {
 
 export function Button({ onPress, text, variant = 'default', children, className, loading }: Params) {
     const Content = children || (
-        <Text className={cn('text-white font-semibold', variant === 'primary' && 'text-headline', variant === 'link' && 'text-headline')}>
+        <Text
+            className={cn(
+                'text-white font-semibold px-2',
+                variant === 'primary' && 'text-headline',
+                variant === 'link' && 'text-headline',
+                variant === 'outline' && 'text-headline'
+            )}>
             {text}
         </Text>
     )
@@ -27,11 +33,12 @@ export function Button({ onPress, text, variant = 'default', children, className
         <TouchableOpacity
             onPress={onPress}
             className={cn(
-                'bg-headline p-4 rounded-lg items-center',
+                'bg-headline min-h-[50] min-w-[50] rounded-lg flex-row items-center justify-center',
+                className,
                 variant === 'primary' && 'bg-primary',
-                variant === 'link' && 'p-0 bg-inherit',
-                loading && 'bg-stone-200',
-                className
+                variant === 'link' && 'p-0 min-h-0 min-w-0 bg-inherit',
+                variant === 'outline' && 'bg-white border-2 border-headline',
+                loading && 'bg-stone-200'
             )}
             disabled={loading}>
             {loading ? LoadingContent : Content}

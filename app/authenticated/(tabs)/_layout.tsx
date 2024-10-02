@@ -36,16 +36,6 @@ export default function TabLayout() {
                     tabBarIcon: ({ color }) => <FontAwesome name="user" size={32} color={color} />,
                 }}
             />
-            <Tabs.Screen
-                name="admin"
-                options={{
-                    tabBarStyle: {
-                        display: session.user?.role === 'ADMIN' ? 'flex' : 'none',
-                    },
-                    title: 'Administration',
-                    tabBarIcon: ({ color }) => <MaterialCommunityIcons name="cog" size={32} color={color} />,
-                }}
-            />
         </Tabs>
     )
 }

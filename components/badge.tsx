@@ -3,7 +3,7 @@ import { cn } from '../functions/utils'
 
 interface Props {
     title: string
-    variant?: 'primary' | 'secondary' | 'inactive' | 'danger'
+    variant?: 'primary' | 'secondary' | 'inactive' | 'danger' | 'success'
 }
 
 export function Badge({ title, variant = 'primary' }: Props) {
@@ -12,8 +12,9 @@ export function Badge({ title, variant = 'primary' }: Props) {
             className={cn(
                 'rounded-md px-4 p-1',
                 variant === 'primary' && 'bg-black',
-                variant === 'inactive' && 'bg-stone-300',
-                variant === 'danger' && 'bg-red-500'
+                variant === 'inactive' && 'bg-stone-100',
+                variant === 'danger' && 'bg-red-500',
+                variant === 'success' && 'bg-green-600'
             )}>
             <Text className={cn('text-white font-bold px-2', variant === 'inactive' && 'text-stone-500')} style={{ fontSize: 12 }}>
                 {title}

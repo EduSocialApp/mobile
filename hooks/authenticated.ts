@@ -4,9 +4,12 @@ import { apiGetUserById } from '../api/user/get'
 
 export type Session = {
     user?: User
+    logout: () => void
 }
 
-export const AuthContext = createContext<Session>({})
+export const AuthContext = createContext<Session>({
+    logout: () => { }
+})
 
 /**
  * Cria contexto com o usuario autenticado
@@ -26,9 +29,9 @@ export async function logout() {
 /**
  * Carrega o usuario autenticado
  */
-export function loadAuthenticated(): [boolean, Session] {
+export function loadUser(): [boolean, User | undefined] {
     const [loading, setLoading] = useState(true)
-    const [session, setSession] = useState<Session>({})
+    const [user, setUser] = useState<User>()
 
     useEffect(() => {
         getUser()
@@ -42,7 +45,7 @@ export function loadAuthenticated(): [boolean, Session] {
 
             await saveAuthenticatedUser(userDataRequest.data)
 
-            setSession({ user: userDataRequest.data })
+            setUser(userDataRequest.data)
 
             setLoading(false)
         } catch {
@@ -52,5 +55,5 @@ export function loadAuthenticated(): [boolean, Session] {
         }
     }
 
-    return [loading, session]
+    return [loading, user]
 }

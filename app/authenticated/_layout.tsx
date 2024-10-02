@@ -1,10 +1,10 @@
 import { ActivityIndicator, View } from 'react-native'
 import { Stack, router } from 'expo-router'
 
-import { AuthContext, loadAuthenticated } from '../../hooks/authenticated'
+import { AuthContext, loadUser, logout } from '../../hooks/authenticated'
 
 export default function UsuarioLayout() {
-    const [isLoading, session] = loadAuthenticated()
+    const [isLoading, user] = loadUser()
 
     if (isLoading) {
         return (
@@ -14,12 +14,19 @@ export default function UsuarioLayout() {
         )
     }
 
-    if (!session?.user) {
+    if (!user) {
         return router.replace('/login')
     }
 
     return (
-        <AuthContext.Provider value={session}>
+        <AuthContext.Provider
+            value={{
+                user,
+                logout: async () => {
+                    await logout()
+                    router.replace('/login')
+                },
+            }}>
             <Stack screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="(tabs)" />
             </Stack>

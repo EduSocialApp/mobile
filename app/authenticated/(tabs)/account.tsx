@@ -1,5 +1,6 @@
 import { Text } from 'react-native'
+import { Profile } from '../../../components/profile'
 
 export default function Account() {
-    return <Text>olá, testando</Text>
+    return <Profile id="me" />
 }

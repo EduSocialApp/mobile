@@ -1,9 +1,9 @@
 import { View, Text } from 'react-native'
 
-export default function Admin() {
+export function OrganizationMembers() {
     return (
         <View>
-            <Text>admin</Text>
+            <Text>OrganizationMembers</Text>
         </View>
     )
 }
