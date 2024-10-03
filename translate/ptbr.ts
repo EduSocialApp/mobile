@@ -16,5 +16,10 @@ export const ptbr: { [key: string]: string } = {
     'Email already exists': 'Email já existe',
     'Password entered is too weak. Please choose a stronger password with at least 8 characters, including uppercase and lowercase letters, and numbers':
         'A senha inserida é muito fraca. Por favor, escolha uma senha mais forte com pelo menos 8 caracteres, incluindo letras maiúsculas e minúsculas, e números',
+    'Invalid email': 'Email inválido',
+    'IBGE code is required': 'Código do IBGE é obrigatório',
+    'Address is required': 'Endereço é obrigatório',
+    'Display name must have a maximum of 20 characters': 'Nome de exibição deve ter no máximo 20 caracteres',
+    'Biography must have a maximum of 80 characters': 'Biografia deve ter no máximo 80 caracteres',
     unknown: 'Erro desconhecido',
 }

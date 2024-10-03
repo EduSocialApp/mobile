@@ -48,6 +48,7 @@
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/plugin-transform-private-methods": "^7.25.4",
+    "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
     "@types/axios": "^0.14.0",
     "@types/lodash": "^4.17.9",
     "@types/react": "~18.2.79",

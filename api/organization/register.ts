@@ -2,6 +2,7 @@ import { api, apiAuthenticated } from '../route'
 
 interface RegisterOrganization {
     name: string
+    displayName: string
     email: string
     document: string
     phone: string

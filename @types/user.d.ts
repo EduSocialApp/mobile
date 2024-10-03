@@ -1,6 +1,8 @@
 interface User {
     id: string
     name: string
+    displayName: string
+    biography: string
     email: string
     emailVerified: boolean
     document: string

@@ -8,15 +8,15 @@ import { maskCnpj } from '../../../../functions/masks'
 import { Image } from 'expo-image'
 import { router } from 'expo-router'
 
-function OrganizationCell({ item: { id, name, document, pictureUrl } }: { item: OrganizationWaitingAnalysis }) {
+function OrganizationCell({ item: { id, displayName, document, pictureUrl } }: { item: OrganizationWaitingAnalysis }) {
     return (
         <TouchableOpacity
             onPress={() => router.push('/authenticated/organization/' + id)}
             className="flex-row p-2 items-center bg-white border rounded-md border-stone-200"
             style={{ gap: 8 }}>
             <Image source={{ uri: pictureUrl }} className="h-12 w-12 rounded-md" />
-            <View style={{ gap: 2 }}>
-                <Text className="font-bold">{name}</Text>
+            <View className="flex-1" style={{ gap: 2 }}>
+                <Text className="font-bold">{displayName}</Text>
                 <Text className="text-stone-500">{maskCnpj(document)}</Text>
             </View>
         </TouchableOpacity>

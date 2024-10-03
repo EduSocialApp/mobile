@@ -17,6 +17,7 @@ interface Params {
     help?: string
     className?: string
     editable?: boolean
+    size?: 'sm' | 'md' | 'lg'
 }
 
 function Error({ message }: { message: string }) {
@@ -37,6 +38,7 @@ export function TextInput({
     className,
     editable = true,
     help,
+    size = 'md',
 }: Params) {
     return (
         <View>
@@ -44,9 +46,10 @@ export function TextInput({
                 className={cn(
                     'flex-row justify-between items-center bg-stone-100 h-16 px-6 rounded-lg',
                     !!error && 'bg-red-50 text-red-500',
+                    size === 'sm' && 'h-10 px-4',
                     className
                 )}
-                style={{ gap: 16 }}>
+                style={{ gap: { sm: 8, md: 16, lg: 18 }[size] }}>
                 {PrefixChild}
                 <TextInputRc
                     className="flex-1"
@@ -65,7 +68,7 @@ export function TextInput({
             </View>
 
             {!!error && <Error message={error} />}
-            {!!help && <Text className="mt-1 text-gray-500">{help}</Text>}
+            {!!help && <Text className="mt-1 text-gray-500 text-xs">{help}</Text>}
         </View>
     )
 }

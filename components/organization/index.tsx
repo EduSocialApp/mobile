@@ -22,7 +22,7 @@ interface Params {
 const Tab = createMaterialTopTabNavigator()
 
 export function Organization({ id, header }: Params) {
-    const session = useUserAuthenticated()
+    const { user } = useUserAuthenticated()
 
     const [loading, setLoading] = useState<string | undefined>('organization')
     const [organization, setOrganization] = useState<OrganizationSimple>()
@@ -37,15 +37,16 @@ export function Organization({ id, header }: Params) {
     }
 
     const fetchOrganization = async () => {
-        setLoading('user')
+        setLoading('organization')
         try {
             const { data } = await apiOrganizationFindById(id)
             setOrganization(data)
         } catch (error) {
             setOrganization(undefined)
-        } finally {
-            setLoading(undefined)
         }
+
+        // Espera 1 segundo para remover o loading (para evitar flickering)
+        setLoading(undefined)
     }
 
     if (loading === 'organization') {
@@ -59,7 +60,7 @@ export function Organization({ id, header }: Params) {
     if (!organization) {
         return (
             <View className="flex-1 items-center justify-center">
-                <Text>Usuário não encontrado</Text>
+                <Text>Organização não encontrada</Text>
             </View>
         )
     }
@@ -68,22 +69,22 @@ export function Organization({ id, header }: Params) {
         <ScrollView className="flex-1" stickyHeaderIndices={[1]} showsVerticalScrollIndicator={false}>
             <View style={{ gap: 20 }} className="mb-2">
                 <Text className="font-semibold" style={{ fontSize: 24 }}>
-                    {organization.name}
+                    {organization.displayName}
                 </Text>
 
-                <View className="flex-row items-center" style={{ gap: 20 }}>
-                    <Image source={organization.pictureUrl} className="h-20 w-20 rounded-full" />
+                <View className="flex-row items-center" style={{ gap: 18 }}>
+                    <Image source={organization.pictureUrl} className="h-20 w-20 rounded-lg border border-stone-200" />
                     <View className="flex-1">
-                        <View className="flex-row justify-center items-center flex-1" style={{ gap: 14 }}>
+                        <View className="flex-row justify-between mx-2 items-center flex-1" style={{ gap: 14 }}>
                             <Counter title="Membros" value={0} />
                             <Counter title="Prêmios" value={0} />
                             <Counter title="Curtidas" value={0} />
                         </View>
-                        <Text className="text-stone-500 mt-1 text-sm" numberOfLines={2}>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur unde suscipit, quam beatae rerum
-                            inventore consectetur, neque doloribus, cupiditate numquam dignissimos laborum fugiat deleniti? Eum quasi quidem
-                            quibusdam.
-                        </Text>
+                        {organization.biography && (
+                            <Text className="text-stone-500 mt-1 text-sm" numberOfLines={2}>
+                                {organization.biography}
+                            </Text>
+                        )}
                     </View>
                 </View>
 
@@ -91,7 +92,7 @@ export function Organization({ id, header }: Params) {
                     <View className="flex-1">
                         <Button onPress={() => {}} text="Conectar" className="flex-1" />
                     </View>
-                    {(session.user?.role === 'ADMIN' || session.user?.role === 'MODERATOR') && (
+                    {(user?.role === 'ADMIN' || user?.role === 'MODERATOR') && (
                         <View className="flex-1">
                             <Button onPress={() => {}} text="Editar perfil" variant="outline" className="flex-1" />
                         </View>
@@ -107,7 +108,9 @@ export function Organization({ id, header }: Params) {
                         tabBarIndicatorStyle: { backgroundColor: '#000000' },
                         tabBarStyle: {},
                     }}>
-                    <Tab.Screen name="resume" component={OrganizationResume} options={{ tabBarLabel: 'Resumo' }} />
+                    {(user?.role === 'ADMIN' || user?.role === 'MODERATOR') && (
+                        <Tab.Screen name="resume" component={OrganizationResume} options={{ tabBarLabel: 'Resumo' }} />
+                    )}
                     <Tab.Screen name="posts" component={OrganizationPosts} options={{ tabBarLabel: 'Postagens' }} />
                     <Tab.Screen name="members" component={OrganizationMembers} options={{ tabBarLabel: 'Membros' }} />
                 </Tab.Navigator>

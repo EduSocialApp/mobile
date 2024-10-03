@@ -12,6 +12,7 @@ import { Administration } from './administration'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import { Header } from '../header'
+import { ProfileOrganizations } from './organizations'
 
 interface Params {
     id: string
@@ -65,22 +66,25 @@ export function Profile({ id, header }: Params) {
         <View className="flex-1">
             <View style={{ gap: 20 }} className="mb-2">
                 <Text className="font-semibold" style={{ fontSize: 24 }}>
-                    {user.name}
+                    {user.displayName}
                 </Text>
 
-                <View className="flex-row items-center" style={{ gap: 20 }}>
-                    <Image source={user.pictureUrl} className="h-20 w-20 rounded-full" />
+                <View className="flex-row items-center" style={{ gap: 18 }}>
+                    <Image source={user.pictureUrl} className="h-20 w-20 rounded-full border-2 border-stone-200" />
                     <View className="flex-1">
-                        <View className="flex-row justify-center items-center flex-1" style={{ gap: 14 }}>
-                            <Counter title="Instituições" value={user.organizations.length} />
-                            <Counter title="Prêmios" value={0} />
-                            <Counter title="Curtidas" value={0} />
+                        <View className="flex-row justify-between items-center flex-1 px-2" style={{ gap: 14 }}>
+                            <Counter title="instituições" value={user.organizations.length} />
+                            <Counter title="prêmios" value={0} />
+                            <Counter title="curtidas" value={0} />
                         </View>
-                        <Text className="text-stone-500 mt-1 text-sm" numberOfLines={2}>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur unde suscipit, quam beatae rerum
-                            inventore consectetur, neque doloribus, cupiditate numquam dignissimos laborum fugiat deleniti? Eum quasi quidem
-                            quibusdam.
-                        </Text>
+                        {user.biography && (
+                            <Text className="text-stone-500 mt-1 text-sm" numberOfLines={2}>
+                                {user.biography}
+                            </Text>
+                        )}
+                        {!user.biography && id === 'me' && (
+                            <Text className="text-stone-500 mt-1 text-sm italic">Você pode adicionar uma biografia editando seu perfil</Text>
+                        )}
                     </View>
                 </View>
 
@@ -116,6 +120,7 @@ export function Profile({ id, header }: Params) {
                     tabBarStyle: {},
                 }}>
                 <Tab.Screen name="posts" component={ProfilePosts} options={{ tabBarLabel: 'Postagens' }} />
+                <Tab.Screen name="organizations" component={ProfileOrganizations} options={{ tabBarLabel: 'Instituições' }} />
                 {(user?.role === 'ADMIN' || user?.role === 'MODERATOR') && (
                     <Tab.Screen name="administration" component={Administration} options={{ tabBarLabel: 'Administração' }} />
                 )}

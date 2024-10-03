@@ -1,5 +1,6 @@
 export interface RegisterUser {
     fullname: string
+    displayName: string
     email: string
     date: Date
     confirmationCode: string

@@ -3,6 +3,8 @@ import { apiAuthenticated } from '../route'
 export interface OrganizationSimple {
     id: string
     name: string
+    displayName: string
+    biography: string
     email: string
     phone: string
     verified: boolean

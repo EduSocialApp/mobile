@@ -1,4 +1,4 @@
-import { Text, View, ScrollView, RefreshControl } from 'react-native'
+import { Text, View, ScrollView, RefreshControl, TouchableOpacity, SafeAreaView } from 'react-native'
 import { Image } from 'expo-image'
 import { Header } from '../../../components/header'
 import { Button } from '../../../components'
@@ -9,30 +9,26 @@ import { apiMyOrganizations, MyOrganization } from '../../../api/organization/my
 import debounce from 'lodash/debounce'
 import { Badge } from '../../../components/badge'
 
-function RenderOrganization({ organization: { id, name, pictureUrl, verified, rejectedVerificationMessage }, role }: MyOrganization) {
-    if (role === 'OWNER') {
-        return (
-            <View key={id} className="p-2 rounded-md" style={{ gap: 8 }}>
-                <View className="flex-row" style={{ gap: 8 }}>
-                    <Image source={pictureUrl} className="h-10 w-10 rounded-md" />
-                    <View className="flex-1">
-                        <Text className="font-semibold">{name}</Text>
-                        <Text className="text-stone-500">9000 membros</Text>
+function RenderOrganization({ organization: { id, displayName, pictureUrl, verified, biography }, role }: MyOrganization) {
+    return (
+        <TouchableOpacity key={id} onPress={() => router.push('/authenticated/organization/' + id)}>
+            <View className="flex-row items-center">
+                <Image source={{ uri: pictureUrl }} className="h-10 w-10 rounded-lg" />
+                <View className="flex-1 ml-2">
+                    <View className="flex-row flex-1 items-center" style={{ gap: 4 }}>
+                        <Text className="font-semibold" numberOfLines={1} style={{ fontSize: 16 }}>
+                            {displayName}
+                        </Text>
+                        {verified && <MaterialCommunityIcons name="check-decagram" size={20} color="#2d334a" />}
                     </View>
-                </View>
-                <View className="flex-row items-center" style={{ gap: 8 }}>
-                    <Badge title="Administrador" />
-                    {!verified && !rejectedVerificationMessage && <Badge title="Em análise" variant="inactive" />}
-                    {rejectedVerificationMessage && <Badge title="Rejeitado" variant="danger" />}
+                    {!!biography && (
+                        <Text numberOfLines={1} className="text-stone-500">
+                            {biography}
+                        </Text>
+                    )}
                 </View>
             </View>
-        )
-    }
-
-    return (
-        <View key={id}>
-            <Text>{name}</Text>
-        </View>
+        </TouchableOpacity>
     )
 }
 
@@ -67,14 +63,13 @@ export default function Organizations() {
     }
 
     return (
-        <View className="flex-1 bg-white">
-            <Header title="Instituições" />
+        <SafeAreaView className="flex-1 bg-white">
             <ScrollView
-                contentContainerStyle={{ gap: 18, padding: 16 }}
+                contentContainerStyle={{ gap: 18, padding: 8 }}
                 refreshControl={<RefreshControl refreshing={loading === 'loading'} onRefresh={handleOrganizations} />}>
                 <View>
-                    <Text className="text-lg font-bold">Minhas intituições</Text>
-                    <Text>Todas as instituições com as quais estou conectado, em um só lugar</Text>
+                    <Text className="text-lg font-bold">Instituições conectadas</Text>
+                    <Text>Todas as instituições com as quais você está conectado, em um só lugar</Text>
                 </View>
 
                 <View className="bg-stone-100 p-4 items-center rounded-md flex-row" style={{ gap: 12 }}>
@@ -93,8 +88,8 @@ export default function Organizations() {
                     </Button>
                 </View>
 
-                <View>{organizations.map(RenderOrganization)}</View>
+                <View style={{ gap: 18 }}>{organizations.map(RenderOrganization)}</View>
             </ScrollView>
-        </View>
+        </SafeAreaView>
     )
 }

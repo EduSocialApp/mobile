@@ -14,6 +14,7 @@ const gap = 18
 
 interface FormNewOrganization {
     name: string
+    displayName: string
     email: string
     document: string
     cep: string
@@ -44,11 +45,13 @@ export default function CreateOrganization() {
                     logradouro,
                     numero,
                     complemento,
+                    nome_fantasia,
                 },
                 razao_social,
             } = await cnpjScan(cnpj)
 
             setValue('name', razao_social)
+            setValue('displayName', nome_fantasia || '')
             setValue('email', email)
 
             setValue('cep', maskCep(cep))
@@ -83,9 +86,9 @@ export default function CreateOrganization() {
     }
 
     const handleFormSubmit = async () => {
-        const { cep, city, complement, document, email, ibgeCode, name, neighborhood, number, state, street } = getValues()
+        const { cep, city, complement, document, email, ibgeCode, name, neighborhood, number, state, street, displayName } = getValues()
 
-        if (!cep || !city || !document || !email || !ibgeCode || !name || !neighborhood || !number || !state || !street) {
+        if (!cep || !city || !document || !email || !ibgeCode || !name || !neighborhood || !number || !state || !street || !displayName) {
             return Alert.alert('Erro', 'Campos obrigatórios não preenchidos')
         }
 
@@ -106,6 +109,7 @@ export default function CreateOrganization() {
                 document,
                 email,
                 name,
+                displayName,
                 phone: '',
                 pictureUrl: '',
             })
@@ -124,7 +128,7 @@ export default function CreateOrganization() {
     }[loading || '']
 
     return (
-        <KeyboardAvoidingView behavior="padding" className="flex-1 bg-stone-50">
+        <KeyboardAvoidingView behavior="padding" className="flex-1 bg-white">
             <ModalLoading open={!!loadingText} text={loadingText} />
             <Header title="Nova instituição" backButton />
 
@@ -158,8 +162,28 @@ export default function CreateOrganization() {
                     />
                     <Controller
                         control={control}
+                        name="displayName"
+                        render={({ field: { value, onChange } }) => (
+                            <TextInput
+                                onChangeText={onChange}
+                                value={value}
+                                placeholder="Nome de exibição"
+                                help="Esse nome será exibido para os outros usuários. (Máximo de 20 caracteres)"
+                            />
+                        )}
+                    />
+                    <Controller
+                        control={control}
                         name="email"
-                        render={({ field: { value, onChange } }) => <TextInput onChangeText={onChange} value={value} placeholder="E-mail" />}
+                        render={({ field: { value, onChange } }) => (
+                            <TextInput
+                                onChangeText={onChange}
+                                value={value}
+                                placeholder="E-mail"
+                                keyboardType="email-address"
+                                autoCapitalize="none"
+                            />
+                        )}
                     />
                     <Text>Endereço</Text>
                     <Controller

@@ -3,6 +3,7 @@ import { apiAuthenticated } from '../route'
 export interface OrganizationWaitingAnalysis {
     id: string
     name: string
+    displayName: string
     email: string
     phone: string
     verified: boolean

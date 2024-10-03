@@ -21,7 +21,7 @@ export default function CreateAccount() {
         const user = await getRegisterCache()
         if (!user) return
 
-        setUserName(user.fullname.split(' ')[0])
+        setUserName(user.displayName)
     }
 
     const handleRegister = async () => {

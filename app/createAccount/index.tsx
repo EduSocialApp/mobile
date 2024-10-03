@@ -10,6 +10,7 @@ import { getRegisterCache, saveRegisterCache } from './functions/cache'
 
 export default function CreateAccount() {
     const [name, setName] = useState<string>('')
+    const [displayName, setDisplayName] = useState<string>('')
     const [email, setEmail] = useState<string>('')
     const [birthdayDate, setBirthdayDate] = useState<Date>()
     const [showErrors, setShowErrors] = useState(false)
@@ -22,6 +23,7 @@ export default function CreateAccount() {
         const user = await getRegisterCache()
         if (user) {
             setName(user.fullname)
+            setDisplayName(user.displayName)
             setEmail(user.email)
             setBirthdayDate(new Date(user.date))
         }
@@ -69,6 +71,16 @@ export default function CreateAccount() {
                         />
 
                         <TextInput
+                            onChangeText={setDisplayName}
+                            value={displayName}
+                            placeholder="Como gostaria de ser chamado?"
+                            autoCapitalize="words"
+                            textContentType="name"
+                            error={errorMessage('Esse campo é obrigatório', !!displayName)}
+                            help="Esse nome será exibido para os outros usuários. (Máximo de 20 caracteres)"
+                        />
+
+                        <TextInput
                             onChangeText={setEmail}
                             value={email}
                             placeholder="Seu e-mail principal"
@@ -91,12 +103,13 @@ export default function CreateAccount() {
                 <Button
                     text="Próxima etapa"
                     onPress={() => {
-                        if (!name || !email || !birthdayDate) {
+                        if (!name || !email || !birthdayDate || !displayName) {
                             return setShowErrors(true)
                         }
 
                         saveRegisterCache({
                             fullname: name,
+                            displayName: displayName,
                             email: email,
                             date: birthdayDate,
                             confirmationCode: '',

@@ -4,6 +4,8 @@ export interface MyOrganization {
     organization: {
         id: string
         name: string
+        displayName: string
+        biography: string
         email: string
         phone: string
         verified: boolean

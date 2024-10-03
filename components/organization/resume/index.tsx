@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Alert } from 'react-native'
+import { View, Text, ScrollView, Alert, KeyboardAvoidingView } from 'react-native'
 import { useOrganization } from '../../../hooks/organization'
 import { maskCnpj } from '../../../functions/masks'
 import { ReactNode, useEffect, useState } from 'react'
@@ -65,78 +65,75 @@ export function OrganizationResume() {
     if (!owners) owners = []
 
     return (
-        <ScrollView className="bg-white" contentContainerStyle={{ gap: 18, paddingVertical: 20 }}>
-            <Container title="Status">
-                <View className="mb-2 items-start">
-                    {!verified && !rejectedVerificationMessage && <Badge title="Aguardando análise" variant="inactive" />}
-                    {!verified && rejectedVerificationMessage && <Badge title="Rejeitado" variant="danger" />}
-                    {verified && <Badge title="Ativo" variant="success" />}
-                </View>
-
-                {!!rejectedVerificationMessage && (
-                    <View className="bg-stone-100 mb-2 p-2 rounded-md">
-                        <Text className="text-stone-600">{rejectedVerificationMessage}</Text>
-                    </View>
-                )}
-
-                <Text>CNPJ: {maskCnpj(document)}</Text>
-                <Text>Criado em: {createdAt}</Text>
-                <Text>Atualizado em: {updatedAt}</Text>
-            </Container>
-
-            <Container title="Contato da instituição">
-                <Text>E-mail: {organization.email}</Text>
-                <Text>Telefone: {organization.phone || 'Não informado'}</Text>
-            </Container>
-
-            <Container title={addresses.length > 1 ? 'Endereços' : 'Endereço'}>
-                <View style={{ gap: 4 }}>
-                    {addresses.map(({ address: { id, street, number, state, city, zipCode } }) => (
-                        <View key={id}>
-                            <Text>
-                                {street}, {number}
-                            </Text>
-                            <Text>
-                                {city} - {state}
-                            </Text>
-                            <Text>CEP: {zipCode}</Text>
-                        </View>
-                    ))}
-                </View>
-            </Container>
-
-            <Container title={owners.length > 1 ? 'Responsáveis' : 'Responsável'}>
-                <View style={{ gap: 8 }}>
-                    {owners.map(({ id, user: { id: userId, name, email, pictureUrl } }) => (
-                        <View key={id} className="flex-row justify-between items-center" style={{ gap: 8 }}>
-                            <View className="flex-row items-center" style={{ gap: 8 }}>
-                                <Image source={pictureUrl} className="h-10 w-10 rounded-full" />
-                                <View>
-                                    <Text className="font-semibold">{name}</Text>
-                                    <Text className="text-stone-600">{email}</Text>
-                                </View>
+        <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+            <ScrollView className="bg-white" contentContainerStyle={{ gap: 18, paddingVertical: 20 }}>
+                <Container title="Avaliação">
+                    <View style={{ gap: 8 }}>
+                        <Checkbox value={statusVerifications} onChange={setStatusVerifications} label="Verificada" />
+                        {!statusVerifications && (
+                            <View>
+                                <TextInput value={avaliation} placeholder="Motivo da rejeição" onChangeText={setAvaliation} />
+                                <Text className="text-xs text-stone-500 mt-2">
+                                    Se a instituição for rejeitada e um motivo tiver sido informado, o CNPJ será liberado, permitindo que outro
+                                    usuário possa se tornar responsável
+                                </Text>
                             </View>
-                            <Button text="Ver perfil" onPress={() => router.push('/authenticated/profile/' + userId)} variant="link" />
-                        </View>
-                    ))}
-                </View>
-            </Container>
+                        )}
+                    </View>
+                </Container>
 
-            <Container title="Avaliação">
-                <View style={{ gap: 8 }}>
-                    <Checkbox value={statusVerifications} onChange={setStatusVerifications} label="Verificada" />
-                    {!statusVerifications && (
-                        <View>
-                            <TextInput value={avaliation} placeholder="Motivo da rejeição" onChangeText={setAvaliation} />
-                            <Text className="text-xs text-stone-500 mt-2">
-                                Se a instituição for rejeitada e um motivo tiver sido informado, o CNPJ será liberado, permitindo que outro usuário
-                                possa se tornar responsável
-                            </Text>
-                        </View>
-                    )}
-                    <Button onPress={handleAvaliation} text="Enviar avaliação" variant="primary" loading={loading === 'avaliation'} />
-                </View>
-            </Container>
-        </ScrollView>
+                <Container title="Status atual">
+                    <View className="mb-2 items-start">
+                        {!verified && !rejectedVerificationMessage && <Badge title="Aguardando análise" variant="inactive" />}
+                        {!verified && rejectedVerificationMessage && <Badge title="Rejeitado" variant="danger" />}
+                        {verified && <Badge title="Ativo" variant="success" />}
+                    </View>
+
+                    <Text>CNPJ: {maskCnpj(document)}</Text>
+                    <Text>Criado em: {createdAt}</Text>
+                    <Text>Atualizado em: {updatedAt}</Text>
+                </Container>
+
+                <Container title="Contato da instituição">
+                    <Text>E-mail: {organization.email}</Text>
+                    <Text>Telefone: {organization.phone || 'Não informado'}</Text>
+                </Container>
+
+                <Container title={addresses.length > 1 ? 'Endereços' : 'Endereço'}>
+                    <View style={{ gap: 4 }}>
+                        {addresses.map(({ address: { id, street, number, state, city, zipCode } }) => (
+                            <View key={id}>
+                                <Text>
+                                    {street}, {number}
+                                </Text>
+                                <Text>
+                                    {city} - {state}
+                                </Text>
+                                <Text>CEP: {zipCode}</Text>
+                            </View>
+                        ))}
+                    </View>
+                </Container>
+
+                <Container title={owners.length > 1 ? 'Responsáveis' : 'Responsável'}>
+                    <View style={{ gap: 8 }}>
+                        {owners.map(({ id, user: { id: userId, name, email, pictureUrl } }) => (
+                            <View key={id} className="flex-row justify-between items-center" style={{ gap: 8 }}>
+                                <View className="flex-row items-center" style={{ gap: 8 }}>
+                                    <Image source={pictureUrl} className="h-10 w-10 rounded-full" />
+                                    <View>
+                                        <Text className="font-semibold">{name}</Text>
+                                        <Text className="text-stone-600">{email}</Text>
+                                    </View>
+                                </View>
+                                <Button text="Ver perfil" onPress={() => router.push('/authenticated/profile/' + userId)} variant="link" />
+                            </View>
+                        ))}
+                    </View>
+                </Container>
+
+                <Button onPress={handleAvaliation} text="Enviar avaliação" variant="primary" loading={loading === 'avaliation'} />
+            </ScrollView>
+        </KeyboardAvoidingView>
     )
 }
