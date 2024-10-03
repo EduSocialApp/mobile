@@ -4,5 +4,5 @@ import { Profile } from '../../../components/profile'
 export default function ProfileView() {
     const { id } = useLocalSearchParams()
 
-    return <Profile id={id as string} />
+    return <Profile id={id as string} header />
 }

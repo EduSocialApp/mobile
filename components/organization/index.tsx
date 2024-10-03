@@ -1,6 +1,6 @@
 import debounce from 'lodash/debounce'
 import { useEffect, useState } from 'react'
-import { View, Text, ActivityIndicator } from 'react-native'
+import { View, Text, ActivityIndicator, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Image } from 'expo-image'
 import { Button } from '../button'
@@ -65,7 +65,7 @@ export function Organization({ id, header }: Params) {
     }
 
     const OrganizationCell = (
-        <View className="flex-1">
+        <ScrollView className="flex-1" stickyHeaderIndices={[1]} showsVerticalScrollIndicator={false}>
             <View style={{ gap: 20 }} className="mb-2">
                 <Text className="font-semibold" style={{ fontSize: 24 }}>
                     {organization.name}
@@ -99,18 +99,20 @@ export function Organization({ id, header }: Params) {
                 </View>
             </View>
 
-            <Tab.Navigator
-                screenOptions={{
-                    tabBarActiveTintColor: '#000000',
-                    tabBarLabelStyle: { fontSize: 14, textTransform: 'none' },
-                    tabBarIndicatorStyle: { backgroundColor: '#000000' },
-                    tabBarStyle: {},
-                }}>
-                <Tab.Screen name="resume" component={OrganizationResume} options={{ tabBarLabel: 'Resumo' }} />
-                <Tab.Screen name="posts" component={OrganizationPosts} options={{ tabBarLabel: 'Postagens' }} />
-                <Tab.Screen name="members" component={OrganizationMembers} options={{ tabBarLabel: 'Membros' }} />
-            </Tab.Navigator>
-        </View>
+            <View className="flex-1 min-h-screen">
+                <Tab.Navigator
+                    screenOptions={{
+                        tabBarActiveTintColor: '#000000',
+                        tabBarLabelStyle: { fontSize: 14, textTransform: 'none' },
+                        tabBarIndicatorStyle: { backgroundColor: '#000000' },
+                        tabBarStyle: {},
+                    }}>
+                    <Tab.Screen name="resume" component={OrganizationResume} options={{ tabBarLabel: 'Resumo' }} />
+                    <Tab.Screen name="posts" component={OrganizationPosts} options={{ tabBarLabel: 'Postagens' }} />
+                    <Tab.Screen name="members" component={OrganizationMembers} options={{ tabBarLabel: 'Membros' }} />
+                </Tab.Navigator>
+            </View>
+        </ScrollView>
     )
 
     if (header) {

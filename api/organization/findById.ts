@@ -29,6 +29,16 @@ export interface OrganizationSimple {
             updatedAt: string
         }
     }[]
+    owners?: {
+        id: string
+        updatedAt: string
+        user: {
+            id: string
+            name: string
+            email: string
+            pictureUrl: string
+        }
+    }[]
 }
 
 export async function apiOrganizationFindById(id: string) {
