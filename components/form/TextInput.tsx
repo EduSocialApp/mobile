@@ -40,16 +40,20 @@ export function TextInput({
     help,
     size = 'md',
 }: Params) {
+    const sizes = (sm: number, md: number, lg: number) => {
+        return { sm, md, lg }[size]
+    }
+
     return (
         <View>
             <View
                 className={cn(
-                    'flex-row justify-between items-center bg-stone-100 h-16 px-6 rounded-lg',
+                    'flex-row justify-between items-center bg-stone-100 px-6 rounded-lg',
                     !!error && 'bg-red-50 text-red-500',
-                    size === 'sm' && 'h-10 px-4',
+                    size === 'sm' && 'px-4',
                     className
                 )}
-                style={{ gap: { sm: 8, md: 16, lg: 18 }[size] }}>
+                style={{ gap: sizes(8, 16, 18) }}>
                 {PrefixChild}
                 <TextInputRc
                     className="flex-1"
@@ -62,7 +66,7 @@ export function TextInput({
                     textContentType={textContentType}
                     secureTextEntry={secureTextEntry}
                     editable={editable}
-                    style={{ color: editable ? 'black' : '#555555' }}
+                    style={{ color: editable ? 'black' : '#555555', height: sizes(40, 64, 64) }}
                 />
                 {SuffixChild}
             </View>

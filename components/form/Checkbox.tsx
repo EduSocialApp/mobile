@@ -15,7 +15,7 @@ export function Checkbox({ label, onChange, value, disabled }: Props) {
                 <View
                     className={cn(
                         'p-1 bg-stone-200 w-[50] rounded-full flex-row justify-start',
-                        value && 'bg-green-500 justify-end',
+                        value && 'bg-green-600 justify-end',
                         disabled && 'bg-stone-200'
                     )}>
                     <View className={cn('h-4 w-4 bg-stone-800 rounded-full', value && 'bg-white', disabled && 'bg-stone-400')} />

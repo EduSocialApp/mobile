@@ -98,9 +98,9 @@ export default function Search() {
     }
 
     const Header = !search ? (
-        <View className="p-4 m-2 bg-secondary rounded-lg">
-            <Text className="font-bold text-lg text-headline">Contas sugeridas</Text>
-            <Text className="text-paragraph">Siga mais perfis que combinam com seus interesses e faça sua rede crescer!</Text>
+        <View className="m-2 my-4">
+            <Text className="text-lg font-bold">Contas sugeridas</Text>
+            <Text>Siga mais perfis que combinam com seus interesses e faça sua rede crescer!</Text>
         </View>
     ) : null
 

@@ -8,6 +8,7 @@ import { useCallback, useState } from 'react'
 import { apiMyOrganizations, MyOrganization } from '../../../api/organization/myOrganizations'
 import debounce from 'lodash/debounce'
 import { Badge } from '../../../components/badge'
+import { ModalUserQrCode } from '../../../components/modals/userQrcode'
 
 function RenderOrganization({ organization: { id, displayName, pictureUrl, verified, biography }, role }: MyOrganization) {
     return (
@@ -35,6 +36,7 @@ function RenderOrganization({ organization: { id, displayName, pictureUrl, verif
 export default function Organizations() {
     const [loading, setLoading] = useState<string>()
     const [organizations, setOrganizations] = useState<MyOrganization[]>([])
+    const [openUserLinkShareable, setOpenUserLinkShareable] = useState<boolean>(false)
 
     // Executa a função fetchOrganizations sempre que a tela é focada
     useFocusEffect(
@@ -64,12 +66,18 @@ export default function Organizations() {
 
     return (
         <SafeAreaView className="flex-1 bg-white">
+            <ModalUserQrCode onClose={() => setOpenUserLinkShareable(false)} visible={openUserLinkShareable} />
             <ScrollView
                 contentContainerStyle={{ gap: 18, padding: 8 }}
                 refreshControl={<RefreshControl refreshing={loading === 'loading'} onRefresh={handleOrganizations} />}>
-                <View>
-                    <Text className="text-lg font-bold">Instituições conectadas</Text>
-                    <Text>Todas as instituições com as quais você está conectado, em um só lugar</Text>
+                <View className="flex-row items-center" style={{ gap: 8 }}>
+                    <View className="flex-1">
+                        <Text className="text-lg font-bold">Instituições conectadas</Text>
+                        <Text>Todas as instituições com as quais você está conectado, em um só lugar</Text>
+                    </View>
+                    <Button onPress={() => setOpenUserLinkShareable(true)} variant="link">
+                        <MaterialCommunityIcons name="qrcode" size={42} color="#272343" />
+                    </Button>
                 </View>
 
                 <View className="bg-stone-100 p-4 items-center rounded-md flex-row" style={{ gap: 12 }}>
