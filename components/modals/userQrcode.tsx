@@ -48,7 +48,9 @@ export function ModalUserQrCode({ visible, onClose }: Params) {
                         <QRCode value={`userLinkId=${idLink}`} size={128} />
                     </View>
 
-                    <Text className="text-lg font-bold">{idLink}</Text>
+                    <Text className="font-bold" style={{ fontSize: 32 }}>
+                        {idLink}
+                    </Text>
 
                     <View className="mx-2" style={{ gap: 8 }}>
                         <Text className="text-center">

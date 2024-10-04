@@ -33,10 +33,10 @@ export default function Login() {
     }
 
     return (
-        <SafeAreaView className="flex-1 justify-center p-2 bg-background">
+        <SafeAreaView className="flex-1 justify-center p-2 bg-background" style={{ gap: 24 }}>
             <View className="my-2">
                 <TitleBlack />
-                <Text className="text-center">Criar slogan</Text>
+                <Text className="text-center">Aprendizado conectado e compartilhado</Text>
             </View>
 
             <View className="m-3">
