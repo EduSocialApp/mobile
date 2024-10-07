@@ -23,11 +23,14 @@ function Container({ title, children }: { children: ReactNode; title: string }) 
 }
 
 export function OrganizationResume() {
+    const org = useOrganization()
+    if (!org) return null
+
+    const organization = org.organization
+
     const [avaliation, setAvaliation] = useState<string>('')
     const [statusVerifications, setStatusVerifications] = useState<boolean>(false)
     const [loading, setLoading] = useState<string>()
-
-    const organization = useOrganization()
 
     useEffect(() => {
         if (organization) {
