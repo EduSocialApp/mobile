@@ -3,10 +3,10 @@ import { Text, View, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
 
-import { saveSession } from '../functions/session'
-
 import { TitleBlack, TextInput, Button, PasswordInput } from '../components'
 import { apiUserLogin } from '../api'
+import { notificationDevice } from '../functions/notification'
+import { saveCredentialsInSecureStore } from '../functions/authentication'
 
 export default function Login() {
     const [email, setEmail] = useState<string>('')
@@ -16,11 +16,13 @@ export default function Login() {
     const handleLogin = async () => {
         try {
             setLoading('login')
-            const requisicao = await apiUserLogin({ email, password })
+
+            const { deviceName, notificationToken } = await notificationDevice()
+            const requisicao = await apiUserLogin({ email, password, notificationToken, deviceName })
             setLoading(undefined)
 
             if (requisicao.status === 200) {
-                saveSession(requisicao.data.accessToken, requisicao.data.refreshToken)
+                saveCredentialsInSecureStore(requisicao.data.accessToken, requisicao.data.refreshToken, requisicao.data.expirationDate)
 
                 router.replace('authenticated')
             } else {

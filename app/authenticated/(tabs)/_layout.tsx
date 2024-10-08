@@ -30,6 +30,15 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
+                name="messages"
+                options={{
+                    title: 'Messages',
+                    tabBarIcon: ({ color, focused, size }) => (
+                        <MaterialCommunityIcons name={focused ? 'message-text' : 'message-text-outline'} size={32} color={color} />
+                    ),
+                }}
+            />
+            <Tabs.Screen
                 name="organizations"
                 options={{
                     title: 'Organizations',

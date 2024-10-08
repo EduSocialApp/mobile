@@ -5,12 +5,13 @@ interface Params {
     onPress: () => void
     text?: string
     variant?: 'default' | 'primary' | 'secondary' | 'link' | 'outline'
+    size?: 'sm' | 'md' | 'lg'
     children?: React.ReactNode
     className?: string
     loading?: boolean
 }
 
-export function Button({ onPress, text, variant = 'default', children, className, loading }: Params) {
+export function Button({ onPress, text, variant = 'default', children, className, loading, size = 'md' }: Params) {
     const Content = children || (
         <Text
             className={cn(
@@ -35,11 +36,15 @@ export function Button({ onPress, text, variant = 'default', children, className
             className={cn(
                 'bg-headline min-h-[50] min-w-[50] rounded-lg flex-row items-center justify-center',
                 className,
+                size === 'sm' && 'min-h-[40] min-w-[40]',
+                size === 'md' && 'min-h-[50] min-w-[50]',
+                size === 'lg' && 'min-h-[60] min-w-[60]',
                 variant === 'primary' && 'bg-primary',
                 variant === 'link' && 'p-0 min-h-0 min-w-0 bg-inherit',
                 variant === 'outline' && 'bg-white border-2 border-headline',
                 loading && 'bg-stone-200'
             )}
+            style={{ gap: 10 }}
             disabled={loading}>
             {loading ? LoadingContent : Content}
         </TouchableOpacity>

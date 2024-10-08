@@ -27,7 +27,7 @@ interface FindAllParams {
     }
 }
 
-export async function apiFindAll({ query, take, cursor }: FindAllParams) {
+export async function apiFindAll({ query, take = { users: true, organizations: true }, cursor }: FindAllParams) {
     try {
         const result = await (
             await apiAuthenticated()
@@ -36,6 +36,8 @@ export async function apiFindAll({ query, take, cursor }: FindAllParams) {
                 query,
                 lastUserId: cursor?.userId,
                 lastOrgId: cursor?.organizationId,
+                organizations: take.organizations,
+                users: take.users,
             },
         })
 

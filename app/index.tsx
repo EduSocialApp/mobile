@@ -1,8 +1,17 @@
 import { useEffect } from 'react'
 import { Text } from 'react-native'
 import { router } from 'expo-router'
+import * as Notifications from 'expo-notifications'
 
 import { getCredentialsFromSecureStore } from '../functions/authentication'
+
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
+    }),
+})
 
 export default function App() {
     useEffect(() => {

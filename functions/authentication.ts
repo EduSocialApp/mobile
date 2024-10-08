@@ -6,10 +6,11 @@ const SESSION_AUTH = 'SessionAuthStorage'
 /**
  * Salvando as credenciais no SecureStore
  */
-export function saveCredentialsInSecureStore(accessToken: string, refreshToken: string) {
+export function saveCredentialsInSecureStore(accessToken: string, refreshToken: string, expirationDate: Date) {
     const credentials = JSON.stringify({
         accessToken,
         refreshToken,
+        expirationDate,
     })
 
     return SecureStore.setItemAsync(SESSION_AUTH, credentials)
@@ -29,7 +30,7 @@ export async function getCredentialsFromSecureStore() {
     const credentialsString = await SecureStore.getItemAsync(SESSION_AUTH)
 
     if (credentialsString) {
-        return JSON.parse(credentialsString) as { accessToken: string; refreshToken: string }
+        return JSON.parse(credentialsString) as { accessToken: string; refreshToken: string; expirationDate: Date }
     }
 }
 

@@ -62,11 +62,11 @@ export function OrganizationMembers() {
     }
 
     const fetchMembers = async (loadedItems: OrganizationMember[] = []) => {
-        const result = await apiOrganizationMembers(org.organization.id)
+        const result = await apiOrganizationMembers(org.organization.id, lastOrgMemberId.current)
 
         lastOrgMemberId.current = result.lastOrganizationMemberId
 
-        if (result.itens.length === 1) {
+        if (result.itens.length === 0) {
             isEndReached.current = true
         }
 
@@ -80,14 +80,16 @@ export function OrganizationMembers() {
     const id = org.organization.id
 
     const Header = (
-        <ScrollView horizontal contentContainerStyle={{ paddingVertical: 10 }}>
-            {viewAddMember && (
-                <Button
-                    onPress={() => router.push(`/authenticated/organization/adm/${id}/manageMembers`)}
-                    text="Gerenciar membros"
-                    variant="outline"
-                />
-            )}
+        <ScrollView horizontal className="pt-2 pb-4 mb-2 border-b border-stone-100">
+            <View className="flex-row flex-1" style={{ gap: 10 }}>
+                {viewAddMember && (
+                    <Button
+                        onPress={() => router.push(`/authenticated/organization/adm/${id}/manageMembers`)}
+                        text="Gerenciar membros"
+                        variant="outline"
+                    />
+                )}
+            </View>
         </ScrollView>
     )
 
