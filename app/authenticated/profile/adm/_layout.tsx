@@ -1,6 +1,5 @@
-import { View, Text } from 'react-native'
 import { router, Stack } from 'expo-router'
-import { useUserAuthenticated } from '../../../hooks/authenticated'
+import { useUserAuthenticated } from '../../../../hooks/authenticated'
 
 export default function Layout() {
     const session = useUserAuthenticated()

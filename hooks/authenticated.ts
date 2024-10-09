@@ -8,7 +8,7 @@ export type Session = {
 }
 
 export const AuthContext = createContext<Session>({
-    logout: () => { }
+    logout: () => {},
 })
 
 /**

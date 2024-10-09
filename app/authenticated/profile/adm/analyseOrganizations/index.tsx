@@ -1,10 +1,10 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import { Header } from '../../../../components/header'
+import { Header } from '../../../../../components/header'
 import { useEffect, useState } from 'react'
-import { apiWaitingAnalysis, OrganizationWaitingAnalysis } from '../../../../api/organization/waitingAnalysis'
+import { apiWaitingAnalysis, OrganizationWaitingAnalysis } from '../../../../../api/organization/waitingAnalysis'
 import debounce from 'lodash/debounce'
 import { FlashList } from '@shopify/flash-list'
-import { maskCnpj } from '../../../../functions/masks'
+import { maskCnpj } from '../../../../../functions/masks'
 import { Image } from 'expo-image'
 import { router } from 'expo-router'
 
@@ -12,7 +12,7 @@ function OrganizationCell({ item: { id, displayName, document, pictureUrl } }: {
     return (
         <TouchableOpacity
             onPress={() => router.push('/authenticated/organization/' + id)}
-            className="flex-row p-2 items-center bg-white border rounded-md border-stone-200"
+            className="flex-row p-2 mb-2 items-center bg-white border rounded-md border-stone-200"
             style={{ gap: 8 }}>
             <Image source={{ uri: pictureUrl }} className="h-12 w-12 rounded-md" />
             <View className="flex-1" style={{ gap: 2 }}>
@@ -33,7 +33,7 @@ export default function AnalyseOrganizations() {
 
     const handleOrganizations = () => {
         setLoading('organizations')
-        debounce(fetchOrganizations, 500)()
+        debounce(fetchOrganizations, 100)()
     }
 
     const fetchOrganizations = async () => {

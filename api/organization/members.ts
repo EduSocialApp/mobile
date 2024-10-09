@@ -4,6 +4,7 @@ export interface OrganizationMember {
     user: {
         id: string
         name: string
+        displayName: string
         pictureUrl: string
     }
     role: string

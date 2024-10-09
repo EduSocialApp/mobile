@@ -24,7 +24,7 @@ export default function Login() {
             if (requisicao.status === 200) {
                 saveCredentialsInSecureStore(requisicao.data.accessToken, requisicao.data.refreshToken, requisicao.data.expirationDate)
 
-                router.replace('authenticated')
+                router.replace('/authenticated')
             } else {
                 Alert.alert('Erro', 'Usuário ou senha incorretos')
             }

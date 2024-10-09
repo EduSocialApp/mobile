@@ -1,6 +1,6 @@
 import { apiAuthenticated } from '../route'
 
-export interface MyOrganization {
+export interface UserOrganization {
     organization: {
         id: string
         name: string
@@ -18,8 +18,9 @@ export interface MyOrganization {
     }
     createdAt: Date
     role: string
+    id: true
 }
 
-export async function apiMyOrganizations() {
-    return (await apiAuthenticated()).get<MyOrganization[]>('/org/my')
+export async function apiUserOrganizations(id: string) {
+    return (await apiAuthenticated()).get<UserOrganization[]>('/org/user/' + id)
 }

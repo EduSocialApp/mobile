@@ -10,7 +10,7 @@ import { useUserAuthenticated } from '../../../hooks/authenticated'
 
 function MemberCell({
     item: {
-        user: { id, name, pictureUrl },
+        user: { id, name, pictureUrl, displayName },
     },
 }: {
     item: OrganizationMember
@@ -21,7 +21,7 @@ function MemberCell({
                 <Image source={{ uri: pictureUrl }} className="h-10 w-10 rounded-full" />
                 <View className="flex-1 ml-2">
                     <Text className="font-semibold" style={{ fontSize: 16 }}>
-                        {name}
+                        {displayName}
                     </Text>
                 </View>
             </View>
@@ -86,7 +86,7 @@ export function OrganizationMembers() {
                     <Button
                         onPress={() => router.push(`/authenticated/organization/adm/${id}/manageMembers`)}
                         text="Gerenciar membros"
-                        variant="outline"
+                        variant="ghost"
                     />
                 )}
             </View>

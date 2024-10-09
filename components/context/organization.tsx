@@ -24,7 +24,7 @@ export function OrganizationProvider({ id, children }: Params) {
 
     const handleOrganization = () => {
         setLoading('organization')
-        debounce(fetchOrganization, 1000)()
+        debounce(fetchOrganization, 100)()
     }
 
     const fetchOrganization = async () => {
@@ -77,6 +77,9 @@ export function OrganizationProvider({ id, children }: Params) {
     return (
         <OrganizationContext.Provider
             value={{
+                reload: () => {
+                    handleOrganization()
+                },
                 organization,
                 userLoggedRole,
                 permissons: {

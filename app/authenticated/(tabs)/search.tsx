@@ -6,6 +6,7 @@ import { apiFindAll, FindItem } from '../../../api/find/get'
 import { FlashList } from '@shopify/flash-list'
 import { Image } from 'expo-image'
 import { router } from 'expo-router'
+import { VerifiedBadge } from '../../../components/verifiedBadge'
 
 function ContentCell({ item: { title, type, id, info, urlPicture, verified } }: { item: FindItem }) {
     if (type === 'ORG') {
@@ -18,7 +19,7 @@ function ContentCell({ item: { title, type, id, info, urlPicture, verified } }: 
                             <Text className="font-semibold" numberOfLines={1} style={{ fontSize: 16 }}>
                                 {title}
                             </Text>
-                            {verified && <MaterialCommunityIcons name="check-decagram" size={20} color="#2d334a" />}
+                            {verified && <VerifiedBadge type="organization" />}
                         </View>
                         {!!info && (
                             <Text numberOfLines={1} className="text-stone-500">

@@ -1,11 +1,7 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { Tabs } from 'expo-router'
-import { useUserAuthenticated } from '../../../hooks/authenticated'
 
 export default function TabLayout() {
-    const session = useUserAuthenticated()
-
     return (
         <Tabs
             screenOptions={{
@@ -35,15 +31,6 @@ export default function TabLayout() {
                     title: 'Messages',
                     tabBarIcon: ({ color, focused, size }) => (
                         <MaterialCommunityIcons name={focused ? 'message-text' : 'message-text-outline'} size={32} color={color} />
-                    ),
-                }}
-            />
-            <Tabs.Screen
-                name="organizations"
-                options={{
-                    title: 'Organizations',
-                    tabBarIcon: ({ color, focused, size }) => (
-                        <MaterialCommunityIcons name={focused ? 'account-group' : 'account-group-outline'} size={32} color={color} />
                     ),
                 }}
             />

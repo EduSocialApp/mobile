@@ -1,6 +1,9 @@
-import { Text } from 'react-native'
 import { Profile } from '../../../components/profile'
+import { useUserAuthenticated } from '../../../hooks/authenticated'
 
 export default function Account() {
-    return <Profile id="me" />
+    const user = useUserAuthenticated().user
+    if (!user) return null
+
+    return <Profile id={user.id} withConfig />
 }
