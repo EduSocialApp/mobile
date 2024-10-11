@@ -4,7 +4,7 @@ import { cn } from '../functions/utils'
 interface Params {
     onPress: () => void
     text?: string
-    variant?: 'default' | 'primary' | 'secondary' | 'link' | 'outline' | 'ghost'
+    variant?: 'default' | 'primary' | 'secondary' | 'link' | 'outline' | 'ghost' | 'white'
     size?: 'sm' | 'md' | 'lg'
     children?: React.ReactNode
     className?: string
@@ -19,7 +19,8 @@ export function Button({ onPress, text, variant = 'default', children, className
                 variant === 'primary' && 'text-headline',
                 variant === 'link' && 'text-headline',
                 variant === 'outline' && 'text-headline',
-                variant === 'ghost' && 'text-stone-900'
+                variant === 'ghost' && 'text-stone-900',
+                variant === 'white' && 'text-black'
             )}>
             {text}
         </Text>
@@ -44,6 +45,7 @@ export function Button({ onPress, text, variant = 'default', children, className
                 variant === 'link' && 'p-0 min-h-0 min-w-0 bg-inherit',
                 variant === 'outline' && 'bg-white border-2 border-headline',
                 variant === 'ghost' && 'bg-stone-50',
+                variant === 'white' && 'bg-white',
                 loading && 'bg-stone-200'
             )}
             style={{ gap: 10 }}

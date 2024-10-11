@@ -26,6 +26,8 @@ export default function UsuarioLayout() {
                     await logout()
                     router.replace('/login')
                 },
+                isAdmin: user.role === 'ADMIN',
+                isModerator: user.role === 'MODERATOR' || user.role === 'ADMIN',
             }}>
             <Stack screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="(tabs)" />

@@ -77,9 +77,14 @@ export function OrganizationResume() {
 
     return (
         <>
-            <Button onPress={() => setVisible(true)} size="sm" variant="link">
-                <MaterialCommunityIcons name="shield-outline" size={28} color="#272343" />
-            </Button>
+            <View className="relative">
+                <Button onPress={() => setVisible(true)} size="sm" variant="link">
+                    <View className="absolute z-10">
+                        <MaterialCommunityIcons name="shield-outline" size={28} color="#ff2600" />
+                    </View>
+                    <MaterialCommunityIcons name="shield" size={28} color="#ffdbd4" />
+                </Button>
+            </View>
             <Modal isVisible={visible} close={onClose} title="Resumo">
                 <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
                     <ScrollView className="bg-white" contentContainerStyle={{ gap: 18, padding: 10 }}>

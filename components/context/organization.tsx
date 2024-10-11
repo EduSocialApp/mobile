@@ -32,11 +32,15 @@ export function OrganizationProvider({ id, children }: Params) {
         try {
             const { data } = await apiOrganizationFindById(id)
             setOrganization(data)
-
-            const { data: dataRole } = await apiOrganizationRole(id)
-            setUserLoggedRole(dataRole?.role || '')
         } catch (error) {
             setOrganization(undefined)
+        }
+
+        try {
+            const { data: dataRole } = await apiOrganizationRole(id)
+            setUserLoggedRole(dataRole?.role || '')
+        } catch {
+            setUserLoggedRole('')
         }
 
         // Espera 1 segundo para remover o loading (para evitar flickering)
@@ -70,10 +74,6 @@ export function OrganizationProvider({ id, children }: Params) {
         )
     }
 
-    const userIsModerator = user?.role === 'ADMIN' || user?.role === 'MODERATOR'
-    const userIsMemberModerator = userLoggedRole === 'OWNER' || userLoggedRole === 'MODERATOR'
-    const userIsMember = userLoggedRole === 'OWNER' || userLoggedRole === 'MODERATOR' || userLoggedRole === 'USER'
-
     return (
         <OrganizationContext.Provider
             value={{
@@ -82,11 +82,9 @@ export function OrganizationProvider({ id, children }: Params) {
                 },
                 organization,
                 userLoggedRole,
-                permissons: {
-                    viewResume: userIsModerator,
-                    viewMembers: userIsMember,
-                    editProfile: userIsModerator || userIsMemberModerator,
-                },
+                isMember: userLoggedRole === 'OWNER' || userLoggedRole === 'MODERATOR' || userLoggedRole === 'USER',
+                isMemberModerator: userLoggedRole === 'OWNER' || userLoggedRole === 'MODERATOR',
+                isOwner: userLoggedRole === 'OWNER',
             }}>
             {children}
         </OrganizationContext.Provider>

@@ -5,11 +5,9 @@ export const OrganizationContext = createContext<{
     organization: OrganizationSimple
     userLoggedRole: string
     reload: () => void
-    permissons: {
-        viewResume: boolean
-        viewMembers: boolean
-        editProfile: boolean
-    }
+    isMemberModerator: boolean
+    isOwner: boolean
+    isMember: boolean
 } | null>(null)
 
 export function useOrganization() {

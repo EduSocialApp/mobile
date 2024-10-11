@@ -33,7 +33,7 @@ export default function Feed() {
                 <View className="absolute t-0 w-full h-full items-end justify-center">
                     <TouchableOpacity onPress={() => router.push('/authenticated/notifications')} className="px-2 relative">
                         {hasNewNotifications && <View className="absolute top-0 right-2 w-2 h-2 bg-red-500 rounded-full z-10" />}
-                        <MaterialCommunityIcons name={hasNewNotifications ? 'bell' : 'bell-outline'} size={28} color="black" />
+                        <MaterialCommunityIcons name={'bell-outline'} size={28} color="black" />
                     </TouchableOpacity>
                 </View>
             </View>

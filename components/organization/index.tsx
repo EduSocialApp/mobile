@@ -9,10 +9,9 @@ import { Header } from '../header'
 import { OrganizationMembers } from './members'
 import { useOrganization } from '../../hooks/organization'
 import { OrganizationProvider } from '../context/organization'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { OrganizationResume } from './modals/OrganizationResume'
-import { orgVerification } from '../../functions/colors'
 import { VerifiedBadge } from '../verifiedBadge'
+import { useUserAuthenticated } from '../../hooks/authenticated'
 
 interface Params {
     id: string
@@ -22,11 +21,11 @@ interface Params {
 const Tab = createMaterialTopTabNavigator()
 
 function OrganizationRender() {
+    const user = useUserAuthenticated()
     const org = useOrganization()
     if (!org) return null
 
     const { displayName, pictureUrl, biography, verified } = org.organization
-    const { editProfile, viewMembers, viewResume } = org.permissons
 
     return (
         <ScrollView className="flex-1" stickyHeaderIndices={[1]} showsVerticalScrollIndicator={false}>
@@ -38,7 +37,7 @@ function OrganizationRender() {
                         </Text>
                         {verified && <VerifiedBadge type="organization" size="lg" />}
                     </View>
-                    {viewResume && (
+                    {user.isModerator && (
                         <View className="absolute right-0 top-0">
                             <OrganizationResume />
                         </View>
@@ -65,7 +64,7 @@ function OrganizationRender() {
                     <View className="flex-1">
                         <Button onPress={() => {}} text="Conectar" className="flex-1" />
                     </View>
-                    {editProfile && (
+                    {(org.isOwner || user.isAdmin) && (
                         <View className="flex-1">
                             <Button onPress={() => {}} text="Editar perfil" variant="outline" className="flex-1" />
                         </View>
@@ -82,7 +81,9 @@ function OrganizationRender() {
                         tabBarStyle: {},
                     }}>
                     <Tab.Screen name="posts" component={OrganizationPosts} options={{ tabBarLabel: 'Postagens' }} />
-                    {viewMembers && <Tab.Screen name="members" component={OrganizationMembers} options={{ tabBarLabel: 'Membros' }} />}
+                    {(org.isMember || user.isModerator) && (
+                        <Tab.Screen name="members" component={OrganizationMembers} options={{ tabBarLabel: 'Membros' }} />
+                    )}
                 </Tab.Navigator>
             </View>
         </ScrollView>

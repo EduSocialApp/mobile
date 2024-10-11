@@ -4,11 +4,15 @@ import { apiGetUserById } from '../api/user/get'
 
 export type Session = {
     user?: User
+    isModerator: boolean
+    isAdmin: boolean
     logout: () => void
 }
 
 export const AuthContext = createContext<Session>({
     logout: () => {},
+    isModerator: false,
+    isAdmin: false,
 })
 
 /**

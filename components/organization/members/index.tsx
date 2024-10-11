@@ -7,34 +7,16 @@ import { router } from 'expo-router'
 import { Image } from 'expo-image'
 import { Button } from '../../button'
 import { useUserAuthenticated } from '../../../hooks/authenticated'
-
-function MemberCell({
-    item: {
-        user: { id, name, pictureUrl, displayName },
-    },
-}: {
-    item: OrganizationMember
-}) {
-    return (
-        <TouchableOpacity className="p-2" onPress={() => router.push('/authenticated/profile/' + id)}>
-            <View className="flex-row items-center">
-                <Image source={{ uri: pictureUrl }} className="h-10 w-10 rounded-full" />
-                <View className="flex-1 ml-2">
-                    <Text className="font-semibold" style={{ fontSize: 16 }}>
-                        {displayName}
-                    </Text>
-                </View>
-            </View>
-        </TouchableOpacity>
-    )
-}
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { MemberOptions } from '../modals/MemberOptions'
 
 export function OrganizationMembers() {
-    const user = useUserAuthenticated()?.user
+    const user = useUserAuthenticated()
     const org = useOrganization()
-    if (!org || !user) return null
+    if (!org) return null
 
     const [members, setMembers] = useState<OrganizationMember[]>([])
+    const [memberSelected, setMemberSelected] = useState<OrganizationMember>()
     const [loading, setLoading] = useState(true)
 
     const lastOrgMemberId = useRef<string>()
@@ -74,15 +56,12 @@ export function OrganizationMembers() {
         setLoading(false)
     }
 
-    const viewHeader = user?.role === 'ADMIN' || user?.role === 'MODERATOR' || org.userLoggedRole === 'OWNER' || org.userLoggedRole === 'MODERATOR'
-    const viewAddMember = viewHeader
-
     const id = org.organization.id
 
     const Header = (
         <ScrollView horizontal className="pt-2 pb-4 mb-2 border-b border-stone-100">
             <View className="flex-row flex-1" style={{ gap: 10 }}>
-                {viewAddMember && (
+                {(org.isMemberModerator || user.isModerator) && (
                     <Button
                         onPress={() => router.push(`/authenticated/organization/adm/${id}/manageMembers`)}
                         text="Gerenciar membros"
@@ -93,12 +72,39 @@ export function OrganizationMembers() {
         </ScrollView>
     )
 
+    const MemberCell = ({ item }: { item: OrganizationMember }) => {
+        const {
+            user: { id, name, pictureUrl, displayName },
+        } = item
+
+        return (
+            <TouchableOpacity className="p-2" onPress={() => router.push('/authenticated/profile/' + id)}>
+                <View className="flex-row items-center">
+                    <Image source={{ uri: pictureUrl }} className="h-10 w-10 rounded-full" />
+                    <View className="flex-1 ml-2">
+                        <Text className="font-semibold" style={{ fontSize: 16 }}>
+                            {displayName}
+                        </Text>
+                    </View>
+                    {org.isMemberModerator && (
+                        <Button onPress={() => setMemberSelected(item)} variant="link">
+                            <View className="p-2">
+                                <MaterialCommunityIcons name="dots-horizontal" size={24} color="black" />
+                            </View>
+                        </Button>
+                    )}
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
     return (
         <View className="flex-1 bg-white">
+            <MemberOptions member={memberSelected} close={() => setMemberSelected(undefined)} onConfirmEvent={() => {}} />
             <FlashList
                 data={members}
                 renderItem={MemberCell}
-                ListHeaderComponent={viewHeader ? Header : null}
+                ListHeaderComponent={org.isMemberModerator || user.isModerator ? Header : null}
                 estimatedItemSize={100}
                 contentContainerStyle={{ paddingVertical: 10 }}
                 ItemSeparatorComponent={() => <View className="h-[1] bg-stone-100" />}
