@@ -6,36 +6,18 @@ import debounce from 'lodash/debounce'
 import { useUser } from '../../../hooks/user'
 import { FlashList } from '@shopify/flash-list'
 import { Image } from 'expo-image'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Button } from '../../button'
 import { VerifiedBadge } from '../../verifiedBadge'
-
-const ButtonCreateOrganization = (
-    <View className="bg-stone-100 p-2 mb-4 items-center rounded-md flex-row" style={{ gap: 12 }}>
-        <View className="flex-1 relative" style={{ gap: 2 }}>
-            <Text className="font-semibold text-stone-700">Responsável por uma instituição?</Text>
-            <Text className="text-stone-600">Junte-se ao EduSocial e crie uma comunidade conectada</Text>
-        </View>
-        <Button
-            onPress={() => {
-                router.push('/authenticated/organization/create')
-            }}
-            variant="primary">
-            <View className="p-5">
-                <MaterialCommunityIcons name="web-plus" size={24} color="#272343" />
-            </View>
-        </Button>
-    </View>
-)
+import { useUserAuthenticated } from '../../../hooks/authenticated'
 
 export function ProfileOrganizations() {
+    const userLogged = useUserAuthenticated()
     const userHook = useUser()
     if (!userHook) return null
 
     const {
         user: { id },
         myProfile,
-        isModerator,
     } = userHook
 
     const [loading, setLoading] = useState<string>()
@@ -73,12 +55,7 @@ export function ProfileOrganizations() {
         </ScrollView>
     )
 
-    const Header = () => (
-        <>
-            {isModerator && ModeratorActions}
-            {myProfile && ButtonCreateOrganization}
-        </>
-    )
+    const Header = () => <>{userLogged.isAdmin && myProfile && ModeratorActions}</>
 
     const OrganizationRender = ({
         item: {

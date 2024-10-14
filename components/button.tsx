@@ -2,7 +2,7 @@ import { TouchableOpacity, Text, ActivityIndicator, View } from 'react-native'
 import { cn } from '../functions/utils'
 
 interface Params {
-    onPress: () => void
+    onPress?: () => void
     text?: string
     variant?: 'default' | 'primary' | 'secondary' | 'link' | 'outline' | 'ghost' | 'white'
     size?: 'sm' | 'md' | 'lg'
@@ -11,7 +11,7 @@ interface Params {
     loading?: boolean
 }
 
-export function Button({ onPress, text, variant = 'default', children, className, loading, size = 'md' }: Params) {
+export function Button({ onPress = () => {}, text, variant = 'default', children, className, loading, size = 'md' }: Params) {
     const Content = children || (
         <Text
             className={cn(

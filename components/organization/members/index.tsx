@@ -9,6 +9,7 @@ import { Button } from '../../button'
 import { useUserAuthenticated } from '../../../hooks/authenticated'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { MemberOptions } from '../modals/MemberOptions'
+import { orgOwner, userVerification } from '../../../functions/colors'
 
 export function OrganizationMembers() {
     const user = useUserAuthenticated()
@@ -75,16 +76,19 @@ export function OrganizationMembers() {
     const MemberCell = ({ item }: { item: OrganizationMember }) => {
         const {
             user: { id, name, pictureUrl, displayName },
+            role,
         } = item
 
         return (
             <TouchableOpacity className="p-2" onPress={() => router.push('/authenticated/profile/' + id)}>
                 <View className="flex-row items-center">
                     <Image source={{ uri: pictureUrl }} className="h-10 w-10 rounded-full" />
-                    <View className="flex-1 ml-2">
+                    <View className="flex-1 flex-row items-center ml-2" style={{ gap: 4 }}>
                         <Text className="font-semibold" style={{ fontSize: 16 }}>
                             {displayName}
                         </Text>
+                        {role === 'OWNER' && <MaterialCommunityIcons name="shield" size={16} color={userVerification} />}
+                        {role === 'MODERATOR' && <MaterialCommunityIcons name="shield-outline" size={16} color={userVerification} />}
                     </View>
                     {org.isMemberModerator && (
                         <Button onPress={() => setMemberSelected(item)} variant="link">

@@ -39,7 +39,7 @@ export function MemberOptions({ member, close, onConfirmEvent }: Params) {
                             <Text className="text-red-600 font-bold">Remover</Text>
                         </Button>
                     )}
-                    {(user.isAdmin || user.isModerator || org.isOwner) && role !== 'MODERATOR' && (
+                    {(user.isAdmin || user.isModerator || org.isOwner) && role !== 'MODERATOR' && role !== 'OWNER' && (
                         <Button onPress={() => {}} text="Promover a moderador" variant="white" />
                     )}
                     {(user.isAdmin || org.isOwner) && role !== 'OWNER' && (

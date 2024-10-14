@@ -80,9 +80,9 @@ export function OrganizationResume() {
             <View className="relative">
                 <Button onPress={() => setVisible(true)} size="sm" variant="link">
                     <View className="absolute z-10">
-                        <MaterialCommunityIcons name="shield-outline" size={28} color="#ff2600" />
+                        <MaterialCommunityIcons name="shield-outline" size={28} color="#000000" />
                     </View>
-                    <MaterialCommunityIcons name="shield" size={28} color="#ffdbd4" />
+                    <MaterialCommunityIcons name="shield" size={28} color="#b6b6b6" />
                 </Button>
             </View>
             <Modal isVisible={visible} close={onClose} title="Resumo">
