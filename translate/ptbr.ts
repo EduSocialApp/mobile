@@ -21,5 +21,13 @@ export const ptbr: { [key: string]: string } = {
     'Address is required': 'Endereço é obrigatório',
     'Display name must have a maximum of 20 characters': 'Nome de exibição deve ter no máximo 20 caracteres',
     'Biography must have a maximum of 80 characters': 'Biografia deve ter no máximo 80 caracteres',
+    'User not authorized': 'Usuário não autorizado',
+    'Supervisor not found': 'Supervisor não encontrado',
+    'User already linked to supervisor': 'Usuário já vinculado ao supervisor',
+    'Link not found': 'Código não encontrado',
+    'Link exceeded maximum uses': 'Código excedeu o número máximo de usos',
+    'Link expired': 'Código expirado',
+    'Users already linked': 'Usuários já vinculados',
+    'Internal error': 'Erro interno',
     unknown: 'Erro desconhecido',
 }

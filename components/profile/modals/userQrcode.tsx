@@ -1,7 +1,7 @@
 import { ActivityIndicator, Alert, View, Text } from 'react-native'
-import Modal from './base'
+import Modal from '../../modals/base'
 import { useEffect, useState } from 'react'
-import { apiUserLinkShareable } from '../../api/shareLink/user'
+import { apiUserLinkShareable } from '../../../api/shareLink/user'
 import QRCode from 'react-native-qrcode-svg'
 
 interface Params {

@@ -1,7 +1,5 @@
-import debounce from 'lodash/debounce'
-import { useEffect, useState } from 'react'
-import { View, Text, ActivityIndicator, ScrollView } from 'react-native'
-import { apiGetUserById } from '../../api/user/get'
+import { useState } from 'react'
+import { View, Text, ScrollView, RefreshControl } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Image } from 'expo-image'
 import { Button } from '../button'
@@ -12,9 +10,11 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import { Header } from '../header'
 import { ProfileOrganizations } from './organizations'
-import { ModalUserQrCode } from '../modals/userQrcode'
+import { ModalUserQrCode } from './modals/userQrcode'
 import { UserProvider } from '../context/user'
 import { useUser } from '../../hooks/user'
+import { ProfileFamily } from './family'
+import { ModalEditProfile } from './modals/editProfile'
 
 interface Params {
     id: string
@@ -40,13 +40,37 @@ function ProfileRender() {
     if (!userContext) return null
 
     const {
-        user: { displayName, pictureUrl, biography, organizations, role },
+        user: { displayName, pictureUrl, biography, organizations, role, supervisedUsers, supervisorUsers },
         isModerator,
         myProfile,
+        refresh,
     } = userContext
 
+    const haveFamily = (supervisedUsers?.length || 0) > 0 || (supervisorUsers?.length || 0) > 0
+
+    const EditProfileButton = () => {
+        const [openEditProfileModal, setOpenEditProfileModal] = useState<boolean>(false)
+
+        return (
+            <View className="flex-1">
+                <ModalEditProfile
+                    editing={openEditProfileModal}
+                    onClose={() => {
+                        setOpenEditProfileModal(false)
+                        refresh()
+                    }}
+                />
+                <Button onPress={() => setOpenEditProfileModal(true)} text="Editar perfil" variant="outline" className="flex-1" size="sm" />
+            </View>
+        )
+    }
+
     return (
-        <ScrollView className="flex-1" stickyHeaderIndices={[1]} showsVerticalScrollIndicator={false}>
+        <ScrollView
+            className="flex-1"
+            stickyHeaderIndices={[1]}
+            refreshControl={<RefreshControl refreshing={false} onRefresh={refresh} />}
+            showsVerticalScrollIndicator={false}>
             <View style={{ gap: 20 }} className="mb-2">
                 <Text className="font-semibold" style={{ fontSize: 24 }}>
                     {displayName}
@@ -79,9 +103,7 @@ function ProfileRender() {
                     )} */}
                     {myProfile && (
                         <>
-                            <View className="flex-1">
-                                <Button onPress={() => {}} text="Editar perfil" variant="outline" className="flex-1" size="sm" />
-                            </View>
+                            <EditProfileButton />
                             <ShareProfileButton />
                             <Button
                                 onPress={() => {
@@ -107,6 +129,7 @@ function ProfileRender() {
                     }}>
                     <Tab.Screen name="posts" component={ProfilePosts} options={{ tabBarLabel: 'Postagens' }} />
                     <Tab.Screen name="organizations" component={ProfileOrganizations} options={{ tabBarLabel: 'Instituições' }} />
+                    {haveFamily && <Tab.Screen name="family" component={ProfileFamily} options={{ tabBarLabel: 'Família' }} />}
                 </Tab.Navigator>
             </View>
         </ScrollView>

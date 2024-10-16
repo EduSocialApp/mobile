@@ -64,6 +64,7 @@ export function UserProvider({ id, children }: Params) {
                 user,
                 myProfile,
                 isModerator,
+                refresh: handleUser,
             }}>
             {children}
         </UserContext.Provider>

@@ -6,6 +6,7 @@ import { useState } from 'react'
 interface Params {
     onChangeText: (text: string) => void
     value: string
+    title?: string
     placeholder?: TextInputProps['placeholder']
     autoCapitalize?: TextInputProps['autoCapitalize']
     textContentType?: TextInputProps['textContentType']
@@ -38,6 +39,7 @@ export function TextInput({
     className,
     editable = true,
     help,
+    title,
     size = 'md',
 }: Params) {
     const sizes = (sm: number, md: number, lg: number) => {
@@ -46,12 +48,18 @@ export function TextInput({
 
     return (
         <View>
+            {!!title && (
+                <View className="mb-1 mx-2">
+                    <Text className="font-semibold">{title}</Text>
+                </View>
+            )}
+
             <View
                 className={cn(
                     'flex-row justify-between items-center bg-stone-100 px-6 rounded-lg',
                     !!error && 'bg-red-50 text-red-500',
                     size === 'sm' && 'px-4',
-                    className
+                    className,
                 )}
                 style={{ gap: sizes(8, 16, 18) }}>
                 {PrefixChild}

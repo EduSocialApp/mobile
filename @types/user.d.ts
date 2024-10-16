@@ -1,3 +1,23 @@
+interface UserBasicInfo {
+    id: string
+    name: string
+    displayName: string
+    pictureUrl: string
+    biography: string
+}
+
+interface SupervisedUser {
+    supervisorUserId: true
+    updatedAt: true
+    supervisorUser: UserBasicInfo
+}
+
+interface SupervisorUsers {
+    supervisedUserId: true
+    updatedAt: true
+    supervisedUser: UserBasicInfo
+}
+
 interface User {
     id: string
     name: string
@@ -31,4 +51,6 @@ interface User {
             pictureUrl: string
         }
     }[]
+    supervisedUsers?: SupervisedUser[]
+    supervisorUsers?: SupervisorUsers[]
 }
