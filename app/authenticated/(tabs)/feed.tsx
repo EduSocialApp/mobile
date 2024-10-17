@@ -4,6 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { useCallback, useEffect, useState } from 'react'
 import { apiGetHasNewNotifications } from '../../../api/user/hasNewNotifications'
 import { router, useFocusEffect } from 'expo-router'
+import { NewUserPostModal } from '../../../components/posts/modals/newUserPost'
 
 export default function Feed() {
     const [hasNewNotifications, setHasNewNotifications] = useState(false)
@@ -26,7 +27,8 @@ export default function Feed() {
     }
 
     return (
-        <SafeAreaView>
+        <SafeAreaView className="relative flex-1">
+            <NewUserPostModal />
             <View className="relative mt-2 h-10 items-center justify-center">
                 <TitleBlack />
 
@@ -37,6 +39,10 @@ export default function Feed() {
                     </TouchableOpacity>
                 </View>
             </View>
+
+            <TouchableOpacity className="absolute bottom-2 right-2 p-4 bg-headline rounded-full">
+                <MaterialCommunityIcons name="plus" size={28} color="#ffffff" />
+            </TouchableOpacity>
         </SafeAreaView>
     )
 }
