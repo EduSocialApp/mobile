@@ -1,14 +1,15 @@
 import { ScrollView, View, TextInput, SafeAreaView, TouchableOpacity, Alert } from 'react-native'
-import Gallery from 'react-native-awesome-gallery'
 import * as ImagePicker from 'expo-image-picker'
 import { Image } from 'expo-image'
 import Modal from '../../modals/base'
 import { useUserAuthenticated } from '../../../hooks/authenticated'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { useForm, Controller } from 'react-hook-form'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Button } from '../../button'
-import { MediaViewer } from '../../modals/mediaViewer'
+import MediaViewer, { MediaViewerRef } from '../../modals/mediaViewer'
+import { apiNewUserPost } from '../../../api/user/newUserPost'
+import { handleError } from '../../../functions/handleError'
 
 const charactersLimit = 600
 
@@ -17,20 +18,35 @@ interface Form {
     images: ImagePicker.ImagePickerAsset[]
 }
 
-export function NewUserPostModal() {
+interface Params {
+    visible: boolean
+    onClose: (created?: boolean) => void
+}
+
+export function NewUserPostModal({ visible, onClose }: Params) {
     const { user } = useUserAuthenticated()
     if (!user) return null
 
-    const { pictureUrl } = user
-
-    const { register, control, watch, getValues, setValue } = useForm<Form>({
+    const { control, watch, getValues, setValue, reset } = useForm<Form>({
         defaultValues: {
             text: '',
             images: [],
         },
     })
 
+    const [loading, setLoading] = useState(false)
+
     const images = watch('images')
+
+    const mediaViewerRef = useRef<MediaViewerRef>(null)
+
+    const { pictureUrl } = user
+
+    useEffect(() => {
+        if (visible) {
+            reset()
+        }
+    }, [visible])
 
     const pickImages = async () => {
         if (images.length >= 10) {
@@ -52,13 +68,33 @@ export function NewUserPostModal() {
         }
     }
 
-    const handlePost = () => {
-        console.log(getValues())
+    const handlePost = async () => {
+        try {
+            setLoading(true)
+
+            const { images, text } = getValues()
+
+            await apiNewUserPost({
+                content: text,
+                images: images.map((image) => ({
+                    uri: image.uri,
+                    mimeType: image.mimeType || '',
+                })),
+            })
+
+            onClose(true)
+        } catch (e) {
+            handleError(e)
+        } finally {
+            setLoading(false)
+        }
     }
 
+    const imagesUriList = images.map((image) => image.uri)
+
     return (
-        <Modal isVisible={true} close={() => {}} title="Nova postagem">
-            {/* <MediaViewer /> */}
+        <Modal isVisible={visible} close={onClose} title="Nova postagem">
+            <MediaViewer ref={mediaViewerRef} imagesList={imagesUriList} />
             <SafeAreaView className="flex-1">
                 <ScrollView>
                     <View className="p-2 flex-row" style={{ gap: 10 }}>
@@ -87,7 +123,7 @@ export function NewUserPostModal() {
                     <View className="h-32 border-t border-stone-100">
                         <ScrollView horizontal contentContainerStyle={{ gap: 10, padding: 10 }} showsHorizontalScrollIndicator={false}>
                             {images.map((image, index) => (
-                                <View key={`image-${index}`} className="relative">
+                                <TouchableOpacity key={`image-${index}`} className="relative" onPress={() => mediaViewerRef.current?.open(index)}>
                                     <TouchableOpacity
                                         className="absolute z-10 right-0 bg-black/80 m-1 rounded-full p-1"
                                         activeOpacity={0.9}
@@ -101,7 +137,7 @@ export function NewUserPostModal() {
                                         <MaterialCommunityIcons name="close" size={14} color="white" />
                                     </TouchableOpacity>
                                     <Image source={{ uri: image.uri }} className="h-full w-28 rounded-md" />
-                                </View>
+                                </TouchableOpacity>
                             ))}
                         </ScrollView>
                     </View>
@@ -113,7 +149,7 @@ export function NewUserPostModal() {
                         </TouchableOpacity>
                     </View>
                     <View>
-                        <Button text="Publicar" size="sm" variant="outline" onPress={handlePost} />
+                        <Button text="Publicar" size="sm" variant="outline" onPress={handlePost} loading={loading} />
                     </View>
                 </View>
             </SafeAreaView>

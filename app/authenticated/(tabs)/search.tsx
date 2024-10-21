@@ -79,7 +79,7 @@ export default function Search() {
         lastUserId.current = result.lastUserId
         lastOrgId.current = result.lastOrganizationId
 
-        if (result.itens.length === 1) {
+        if (result.itens.length === 1 || result.itens.length === 0) {
             isEndReached.current = true
         }
 
