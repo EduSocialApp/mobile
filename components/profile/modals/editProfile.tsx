@@ -8,7 +8,7 @@ import { TextInput } from '../../form'
 import { Image } from 'expo-image'
 import { Button } from '../../button'
 import { apiUpdatePictureProfile } from '../../../api/user/updatePictureProfile'
-import { handleError, handleErrorWithAlert } from '../../../functions/handleError'
+import { handleErrorWithAlert } from '../../../functions/handleError'
 import { apiUpdateProfileInformations } from '../../../api/user/updateProfileInformations'
 
 interface Form {
