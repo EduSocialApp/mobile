@@ -58,7 +58,7 @@ export function NewUserPostModal({ visible, onClose }: Params) {
 
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            quality: 0.5,
+            quality: 0.3,
             allowsMultipleSelection: true,
             selectionLimit,
         })
@@ -90,11 +90,13 @@ export function NewUserPostModal({ visible, onClose }: Params) {
         }
     }
 
-    const imagesUriList = images.map((image) => image.uri)
+    const imagesList = images.map((image) => ({
+        uri: image.uri,
+    }))
 
     return (
         <Modal isVisible={visible} close={onClose} title="Nova postagem">
-            <MediaViewer ref={mediaViewerRef} imagesList={imagesUriList} />
+            <MediaViewer ref={mediaViewerRef} imagesList={imagesList} />
             <SafeAreaView className="flex-1">
                 <ScrollView>
                     <View className="p-2 flex-row" style={{ gap: 10 }}>

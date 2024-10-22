@@ -10,6 +10,7 @@ import { Button } from '../../button'
 import { apiUpdatePictureProfile } from '../../../api/user/updatePictureProfile'
 import { handleErrorWithAlert } from '../../../functions/handleError'
 import { apiUpdateProfileInformations } from '../../../api/user/updateProfileInformations'
+import { placeholderImage } from '../../../functions/placeholderImage'
 
 interface Form {
     name: string
@@ -46,7 +47,7 @@ export function ModalEditProfile({ onClose, editing }: Params) {
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [4, 3],
-            quality: 0.5,
+            quality: 0.3,
         })
 
         if (!result.canceled) {
@@ -101,7 +102,7 @@ export function ModalEditProfile({ onClose, editing }: Params) {
                     <ScrollView>
                         <View className="m-4" style={{ gap: 20 }}>
                             <TouchableOpacity onPress={pickImage} className="items-center justify-center" style={{ gap: 10 }}>
-                                <Image source={{ uri: watchPictureUrl }} className="h-28 w-28 rounded-full" />
+                                <Image placeholder={placeholderImage} source={{ uri: watchPictureUrl }} className="h-28 w-28 rounded-full" />
                                 <Text>Alterar foto de perfil</Text>
                             </TouchableOpacity>
 

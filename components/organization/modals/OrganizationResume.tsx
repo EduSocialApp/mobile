@@ -12,6 +12,7 @@ import { apiRejectOrganization } from '../../../api/organization/reject'
 import { apiApproveOrganization } from '../../../api/organization/approve'
 import Modal from '../../modals/base'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { placeholderImage } from '../../../functions/placeholderImage'
 
 function Container({ title, children }: { children: ReactNode; title: string }) {
     return (
@@ -141,7 +142,7 @@ export function OrganizationResume() {
                                 {owners.map(({ id, user: { id: userId, name, email, pictureUrl } }) => (
                                     <View key={id} className="flex-row justify-between items-center" style={{ gap: 8 }}>
                                         <View className="flex-row items-center" style={{ gap: 8 }}>
-                                            <Image source={pictureUrl} className="h-10 w-10 rounded-full" />
+                                            <Image placeholder={placeholderImage} source={pictureUrl} className="h-10 w-10 rounded-full" />
                                             <View>
                                                 <Text className="font-semibold">{name}</Text>
                                                 <Text className="text-stone-600">{email}</Text>

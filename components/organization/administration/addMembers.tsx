@@ -10,6 +10,7 @@ import { Image } from 'expo-image'
 import { apiUsersToInvite, UserToInvite } from '../../../api/user/toInvite'
 import { router } from 'expo-router'
 import { apiLinkMember } from '../../../api/organization/linkMember'
+import { placeholderImage } from '../../../functions/placeholderImage'
 
 export default function OrganizationAddMembers() {
     const org = useOrganization()
@@ -71,7 +72,7 @@ export default function OrganizationAddMembers() {
         return (
             <View className="p-2 flex-row items-center">
                 <TouchableOpacity onPress={() => router.push(`/authenticated/profile/${id}`)} className="flex-row items-center flex-1">
-                    <Image source={{ uri: pictureUrl }} className="h-10 w-10 rounded-full" />
+                    <Image source={{ uri: pictureUrl }} placeholder={placeholderImage} className="h-10 w-10 rounded-full" />
                     <View className="flex-1 mx-2">
                         <Text className="font-semibold" style={{ fontSize: 16 }}>
                             {displayName}

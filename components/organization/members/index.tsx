@@ -10,6 +10,7 @@ import { useUserAuthenticated } from '../../../hooks/authenticated'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { MemberOptions } from '../modals/MemberOptions'
 import { orgOwner, userVerification } from '../../../functions/colors'
+import { placeholderImage } from '../../../functions/placeholderImage'
 
 export function OrganizationMembers() {
     const user = useUserAuthenticated()
@@ -82,7 +83,7 @@ export function OrganizationMembers() {
         return (
             <TouchableOpacity className="p-2" onPress={() => router.push('/authenticated/profile/' + id)}>
                 <View className="flex-row items-center">
-                    <Image source={{ uri: pictureUrl }} className="h-10 w-10 rounded-full" />
+                    <Image source={{ uri: pictureUrl }} placeholder={placeholderImage} className="h-10 w-10 rounded-full" />
                     <View className="flex-1 flex-row items-center ml-2" style={{ gap: 4 }}>
                         <Text className="font-semibold" style={{ fontSize: 16 }}>
                             {displayName}

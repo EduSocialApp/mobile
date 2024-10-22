@@ -12,6 +12,7 @@ import { OrganizationProvider } from '../context/organization'
 import { OrganizationResume } from './modals/OrganizationResume'
 import { VerifiedBadge } from '../verifiedBadge'
 import { useUserAuthenticated } from '../../hooks/authenticated'
+import { placeholderImage } from '../../functions/placeholderImage'
 
 interface Params {
     id: string
@@ -45,7 +46,7 @@ function OrganizationRender() {
                 </View>
 
                 <View className="flex-row items-center" style={{ gap: 18 }}>
-                    <Image source={pictureUrl} className="h-20 w-20 rounded-lg border border-stone-200" />
+                    <Image source={pictureUrl} placeholder={placeholderImage} className="h-20 w-20 rounded-lg border border-stone-200" />
                     <View className="flex-1">
                         <View className="flex-row justify-between mx-2 items-center flex-1" style={{ gap: 14 }}>
                             <Counter title="Membros" value={0} />

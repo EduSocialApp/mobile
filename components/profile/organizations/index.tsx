@@ -9,6 +9,7 @@ import { Image } from 'expo-image'
 import { Button } from '../../button'
 import { VerifiedBadge } from '../../verifiedBadge'
 import { useUserAuthenticated } from '../../../hooks/authenticated'
+import { placeholderImage } from '../../../functions/placeholderImage'
 
 export function ProfileOrganizations() {
     const userLogged = useUserAuthenticated()
@@ -67,7 +68,7 @@ export function ProfileOrganizations() {
         return (
             <TouchableOpacity key={id} onPress={() => router.push('/authenticated/organization/' + id)}>
                 <View className="flex-row items-center">
-                    <Image source={{ uri: pictureUrl }} className="h-10 w-10 rounded-lg" />
+                    <Image placeholder={placeholderImage} source={{ uri: pictureUrl }} className="h-10 w-10 rounded-lg" />
                     <View className="flex-1 ml-2">
                         <View className="flex-row flex-1 items-center" style={{ gap: 4 }}>
                             <Text className="font-semibold" numberOfLines={1} style={{ fontSize: 16 }}>

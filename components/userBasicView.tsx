@@ -1,6 +1,7 @@
 import { View, Text } from 'react-native'
 import { Image } from 'expo-image'
 import { Badge } from './badge'
+import { placeholderImage } from '../functions/placeholderImage'
 
 interface Params {
     title: string
@@ -12,7 +13,7 @@ interface Params {
 export function UserBasicView({ title, info, urlPicture, badge }: Params) {
     return (
         <View className="flex-row items-center flex-1">
-            <Image source={{ uri: urlPicture }} className="h-10 w-10 rounded-full" />
+            <Image source={{ uri: urlPicture }} placeholder={placeholderImage} className="h-10 w-10 rounded-full" />
             <View className="flex-1 ml-2">
                 <View className="flex-1 flex-row items-center" style={{ gap: 12 }}>
                     <Text className="font-semibold" style={{ fontSize: 16 }}>

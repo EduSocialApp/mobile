@@ -7,6 +7,7 @@ import { FlashList } from '@shopify/flash-list'
 import { maskCnpj } from '../../../../../functions/masks'
 import { Image } from 'expo-image'
 import { router } from 'expo-router'
+import { placeholderImage } from '../../../../../functions/placeholderImage'
 
 function OrganizationCell({ item: { id, displayName, document, pictureUrl } }: { item: OrganizationWaitingAnalysis }) {
     return (
@@ -14,7 +15,7 @@ function OrganizationCell({ item: { id, displayName, document, pictureUrl } }: {
             onPress={() => router.push('/authenticated/organization/' + id)}
             className="flex-row p-2 mb-2 items-center bg-white border rounded-md border-stone-200"
             style={{ gap: 8 }}>
-            <Image source={{ uri: pictureUrl }} className="h-12 w-12 rounded-md" />
+            <Image source={{ uri: pictureUrl }} placeholder={placeholderImage} className="h-12 w-12 rounded-md" />
             <View className="flex-1" style={{ gap: 2 }}>
                 <Text className="font-bold">{displayName}</Text>
                 <Text className="text-stone-500">{maskCnpj(document)}</Text>

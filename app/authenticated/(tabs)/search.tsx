@@ -8,13 +8,14 @@ import { Image } from 'expo-image'
 import { router } from 'expo-router'
 import { VerifiedBadge } from '../../../components/verifiedBadge'
 import { UserBasicView } from '../../../components/userBasicView'
+import { placeholderImage } from '../../../functions/placeholderImage'
 
 function ContentCell({ item: { title, type, id, info, urlPicture, verified } }: { item: FindItem }) {
     if (type === 'ORG') {
         return (
             <TouchableOpacity className="p-2" onPress={() => router.push('/authenticated/organization/' + id)}>
                 <View className="flex-row items-center">
-                    <Image source={{ uri: urlPicture }} className="h-10 w-10 rounded-lg" />
+                    <Image source={{ uri: urlPicture }} placeholder={placeholderImage} className="h-10 w-10 rounded-lg" />
                     <View className="flex-1 ml-2">
                         <View className="flex-row flex-1 items-center" style={{ gap: 4 }}>
                             <Text className="font-semibold" numberOfLines={1} style={{ fontSize: 16 }}>

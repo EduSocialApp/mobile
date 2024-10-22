@@ -1,12 +1,19 @@
 import { StatusBar } from 'expo-status-bar'
 import { ForwardedRef, forwardRef, useImperativeHandle, useRef, useState } from 'react'
-import { Modal, View, TouchableOpacity, Text } from 'react-native'
-import Gallery, { GalleryRef } from 'react-native-awesome-gallery'
+import { Modal, View, TouchableOpacity, Text, StyleSheet } from 'react-native'
+import Gallery, { GalleryRef, RenderItemInfo } from 'react-native-awesome-gallery'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { Image } from 'expo-image'
+import { placeholderImage } from '../../functions/placeholderImage'
+
+export interface ImageDisplay {
+    uri: string
+    blurhash?: string
+}
 
 interface Params {
     loop?: boolean
-    imagesList?: string[]
+    imagesList?: ImageDisplay[]
     onClose?: () => void
     initialIndex?: number
 }
@@ -14,6 +21,24 @@ interface Params {
 export interface MediaViewerRef {
     open: (mediaIndex: number) => void
     close: () => void
+}
+
+function RenderImage({ item: { uri, blurhash }, setImageDimensions }: RenderItemInfo<ImageDisplay>) {
+    const placeholder = blurhash ? { blurhash } : placeholderImage
+
+    return (
+        <Image
+            key={`gallery-${uri}`}
+            source={uri}
+            style={StyleSheet.absoluteFillObject}
+            placeholder={placeholder}
+            contentFit="contain"
+            onLoad={(e) => {
+                const { width, height } = e.source
+                setImageDimensions({ width, height })
+            }}
+        />
+    )
 }
 
 function MediaViewer({ loop = true, initialIndex = 0, imagesList = [], onClose }: Params, ref: ForwardedRef<MediaViewerRef>) {
@@ -55,7 +80,16 @@ function MediaViewer({ loop = true, initialIndex = 0, imagesList = [], onClose }
                         <MaterialCommunityIcons name="close" size={24} color="white" />
                     </TouchableOpacity>
                 </View>
-                <Gallery ref={gallery} loop={loop} data={imagesList} onIndexChange={setIndex} onSwipeToClose={close} initialIndex={index} />
+                <Gallery
+                    ref={gallery}
+                    keyExtractor={(item) => item.uri}
+                    loop={loop}
+                    data={imagesList}
+                    renderItem={RenderImage}
+                    onIndexChange={setIndex}
+                    onSwipeToClose={close}
+                    initialIndex={index}
+                />
             </View>
         </Modal>
     )

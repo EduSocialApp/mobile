@@ -3,7 +3,8 @@ import { Button } from '../button'
 import { Image } from 'expo-image'
 import { LinkSupervisedUser } from '../../api/user/supervised/getSupervisedUsers'
 import { router } from 'expo-router'
-import { dateShort } from '../../functions/format'
+import { dateShort } from '../../functions/date/dateFormat'
+import { placeholderImage } from '../../functions/placeholderImage'
 
 interface Params {
     member?: LinkSupervisedUser
@@ -25,7 +26,7 @@ export function FamilyMemberOptions({ member, close, onConfirmEvent }: Params) {
         return (
             <View style={{ gap: 14 }}>
                 <View className="items-center justify-center" style={{ gap: 10 }}>
-                    <Image source={{ uri: pictureUrl }} className="h-14 w-14 rounded-full" />
+                    <Image source={{ uri: pictureUrl }} placeholder={placeholderImage} className="h-14 w-14 rounded-full" />
                     <View className="items-center">
                         <Text className="font-bold texxt-center">{displayName}</Text>
                         <Text className="text-center text-stone-400">Membro desde {updatedAtFormatted}</Text>

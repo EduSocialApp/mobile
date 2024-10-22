@@ -6,6 +6,7 @@ export interface Post {
     content: string
     likesCount: number
     updatedAt: string
+    createdAt: string
     user?: {
         id: string
         name: string
@@ -19,13 +20,19 @@ export interface Post {
         pictureUrl: string
         verfied: boolean
     }
-    medias: Array<{
+    medias: {
         media: {
             id: string
             mediaUrl: string
             description: string
+            blurhash?: string
         }
-    }>
+    }[]
+    likes: {
+        userId: string
+        postId: string
+        updatedAt: string
+    }[]
 }
 
 export interface FeedPosts {

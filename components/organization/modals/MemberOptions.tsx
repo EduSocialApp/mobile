@@ -5,6 +5,7 @@ import { Image } from 'expo-image'
 import { Badge } from '../../badge'
 import { useUserAuthenticated } from '../../../hooks/authenticated'
 import { useOrganization } from '../../../hooks/organization'
+import { placeholderImage } from '../../../functions/placeholderImage'
 
 interface Params {
     member?: OrganizationMember
@@ -28,7 +29,7 @@ export function MemberOptions({ member, close, onConfirmEvent }: Params) {
         return (
             <View style={{ gap: 14 }}>
                 <View className="items-center justify-center" style={{ gap: 10 }}>
-                    <Image source={{ uri: pictureUrl }} className="h-14 w-14 rounded-full" />
+                    <Image source={{ uri: pictureUrl }} placeholder={placeholderImage} className="h-14 w-14 rounded-full" />
                     <Text className="font-bold">{displayName}</Text>
                     {role === 'MODERATOR' && <Badge title="Moderador" />}
                     {role === 'OWNER' && <Badge title="Responsável" variant="danger" />}

@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 import { apiMemberAcceptOrganization } from '../../api/organization/memberAccept'
 import { apiMemberRejectOrganization } from '../../api/organization/memberReject'
 import { VerifiedBadge } from '../verifiedBadge'
+import { placeholderImage } from '../../functions/placeholderImage'
 
 function OrganizationCell({ id, organization: { id: organizationId, displayName, biography, pictureUrl, verified } }: PendingOrganization) {
     const [status, setStatus] = useState<number>(0)
@@ -26,7 +27,7 @@ function OrganizationCell({ id, organization: { id: organizationId, displayName,
         <View key={id} className="my-2 flex-row justify-between items-center">
             <TouchableOpacity className="flex-1" onPress={() => router.push('/authenticated/organization/' + organizationId)}>
                 <View className="flex-row items-center">
-                    <Image source={{ uri: pictureUrl }} className="h-10 w-10 rounded-lg" />
+                    <Image source={{ uri: pictureUrl }} placeholder={placeholderImage} className="h-10 w-10 rounded-lg" />
                     <View className="flex-1 ml-2">
                         <View className="flex-row flex-1 items-center" style={{ gap: 4 }}>
                             <Text className="font-semibold" numberOfLines={1} style={{ fontSize: 16 }}>

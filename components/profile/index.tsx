@@ -15,6 +15,7 @@ import { UserProvider } from '../context/user'
 import { useUser } from '../../hooks/user'
 import { ProfileFamily } from './family'
 import { ModalEditProfile } from './modals/editProfile'
+import { placeholderImage } from '../../functions/placeholderImage'
 
 interface Params {
     id: string
@@ -77,7 +78,7 @@ function ProfileRender() {
                 </Text>
 
                 <View className="flex-row items-center" style={{ gap: 18 }}>
-                    <Image source={pictureUrl} className="h-20 w-20 rounded-full border-2 border-stone-200" />
+                    <Image source={pictureUrl} placeholder={placeholderImage} className="h-20 w-20 rounded-full border-2 border-stone-200" />
                     <View className="flex-1">
                         <View className="flex-row justify-between items-center flex-1 px-2" style={{ gap: 14 }}>
                             <Counter title="instituições" value={organizations.length} />
