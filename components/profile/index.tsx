@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { View, Text, ScrollView, RefreshControl } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaView, useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Image } from 'expo-image'
 import { Button } from '../button'
 import { Counter } from '../counter'
@@ -37,6 +37,9 @@ function ShareProfileButton() {
 }
 
 function ProfileRender() {
+    const { height, width } = useSafeAreaFrame()
+    const { top, bottom } = useSafeAreaInsets()
+
     const userContext = useUser()
     if (!userContext) return null
 
@@ -120,7 +123,7 @@ function ProfileRender() {
                 </View>
             </View>
 
-            <View className="flex-1 min-h-screen">
+            <View className="flex-1" style={{ height: height + bottom }}>
                 <Tab.Navigator
                     screenOptions={{
                         tabBarActiveTintColor: '#000000',
