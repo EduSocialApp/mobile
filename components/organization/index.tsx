@@ -17,6 +17,8 @@ import { useState } from 'react'
 import { NewUserPostModal } from '../posts/modals/newUserPost'
 import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons'
 import { router } from 'expo-router'
+import { HeaderOptionsContext } from '../../hooks/headerOptions'
+import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated'
 
 const { height: heightDevice } = Dimensions.get('window')
 
@@ -27,6 +29,22 @@ interface Params {
 
 const Tab = createMaterialTopTabNavigator()
 
+const HEADER_HEIGHT = 160
+
+function calculeHeaderHeight(scrollY: number) {
+    const headerHeight = HEADER_HEIGHT - scrollY
+
+    if (headerHeight < 0) {
+        return 0
+    }
+
+    if (headerHeight > HEADER_HEIGHT) {
+        return HEADER_HEIGHT
+    }
+
+    return headerHeight
+}
+
 function OrganizationRender() {
     const user = useUserAuthenticated()
     const org = useOrganization()
@@ -36,42 +54,70 @@ function OrganizationRender() {
 
     const [visibleNewPostModal, setVisibleNewPostModal] = useState(false)
 
+    const headerHeight = useSharedValue(HEADER_HEIGHT)
+
+    const setHeaderHeight = (height: number) => {
+        headerHeight.value = withTiming(calculeHeaderHeight(height), { duration: 300 })
+    }
+
+    const headerStyle = useAnimatedStyle(() => {
+        return {
+            height: headerHeight.value,
+            paddingHorizontal: 10,
+            gap: 20,
+        }
+    })
+
+    const headerProfileStyle = useAnimatedStyle(() => {
+        return {
+            opacity: headerHeight.value / HEADER_HEIGHT - 0.1,
+        }
+    })
+
     return (
-        <View className="flex-1 relative">
-            <NewUserPostModal
-                visible={visibleNewPostModal}
-                onClose={() => {
-                    setVisibleNewPostModal(false)
-                }}
-            />
+        <HeaderOptionsContext.Provider
+            value={{
+                headerHeight: HEADER_HEIGHT,
+                setHeaderHeight,
+            }}>
+            <View className="flex-1 relative">
+                <NewUserPostModal
+                    visible={visibleNewPostModal}
+                    onClose={() => {
+                        setVisibleNewPostModal(false)
+                    }}
+                />
 
-            <TouchableOpacity className="absolute bottom-2 right-2 p-4 bg-headline rounded-full z-10" onPress={() => setVisibleNewPostModal(true)}>
-                <MaterialCommunityIcons name="plus" size={28} color="#ffffff" />
-            </TouchableOpacity>
-
-            <View className="flex-row justify-between items-center relative p-2" style={{ gap: 8 }}>
-                <TouchableOpacity onPress={() => router.back()}>
-                    <Entypo name="chevron-left" size={24} color="black" />
+                <TouchableOpacity
+                    className="absolute bottom-2 right-2 p-4 bg-headline rounded-full z-10"
+                    onPress={() => setVisibleNewPostModal(true)}>
+                    <MaterialCommunityIcons name="plus" size={28} color="#ffffff" />
                 </TouchableOpacity>
 
-                <View className="flex-row flex-1 items-center" style={{ gap: 4 }}>
-                    <Text className="font-semibold" numberOfLines={1} style={{ fontSize: 24 }}>
-                        {displayName}
-                    </Text>
-                    {verified && <VerifiedBadge type="organization" size="lg" />}
+                <View className="flex-row justify-between items-center relative p-2" style={{ gap: 8 }}>
+                    <TouchableOpacity onPress={() => router.back()}>
+                        <Entypo name="chevron-left" size={24} color="black" />
+                    </TouchableOpacity>
+
+                    <View className="flex-row flex-1 items-center" style={{ gap: 4 }}>
+                        <Text className="font-semibold" numberOfLines={1} style={{ fontSize: 24 }}>
+                            {displayName}
+                        </Text>
+                        {verified && <VerifiedBadge type="organization" size="lg" />}
+                    </View>
+
+                    {user.isModerator && (
+                        <View>
+                            <OrganizationResume />
+                        </View>
+                    )}
                 </View>
 
-                {user.isModerator && (
-                    <View>
-                        <OrganizationResume />
-                    </View>
-                )}
-            </View>
-
-            <ScrollView className="flex-1" stickyHeaderIndices={[1]} showsVerticalScrollIndicator={false}>
-                <View style={{ gap: 20 }} className="p-2">
-                    <View className="flex-row items-center" style={{ gap: 18 }}>
-                        <Image source={pictureUrl} placeholder={placeholderImage} className="h-20 w-20 rounded-lg border border-stone-200" />
+                <Animated.View style={headerStyle}>
+                    <View className="flex-row items-center mt-2" style={{ gap: 18 }}>
+                        <Animated.View style={headerProfileStyle}>
+                            <Image source={pictureUrl} placeholder={placeholderImage} className="h-20 w-20 rounded-lg border border-stone-200" />
+                        </Animated.View>
                         <View className="flex-1">
                             <View className="flex-row justify-between mx-2 items-center flex-1" style={{ gap: 14 }}>
                                 <Counter title="Membros" value={0} />
@@ -96,24 +142,22 @@ function OrganizationRender() {
                             </View>
                         )}
                     </View>
-                </View>
+                </Animated.View>
 
-                <View className="flex-1 bg-red-500" style={{ height: heightDevice - 100 }}>
-                    <Tab.Navigator
-                        screenOptions={{
-                            tabBarActiveTintColor: '#000000',
-                            tabBarLabelStyle: { fontSize: 14, textTransform: 'none' },
-                            tabBarIndicatorStyle: { backgroundColor: '#000000' },
-                            tabBarStyle: {},
-                        }}>
-                        <Tab.Screen name="posts" component={OrganizationPosts} options={{ tabBarLabel: 'Postagens' }} />
-                        {(org.isMember || user.isModerator) && (
-                            <Tab.Screen name="members" component={OrganizationMembers} options={{ tabBarLabel: 'Membros' }} />
-                        )}
-                    </Tab.Navigator>
-                </View>
-            </ScrollView>
-        </View>
+                <Tab.Navigator
+                    screenOptions={{
+                        tabBarActiveTintColor: '#000000',
+                        tabBarLabelStyle: { fontSize: 14, textTransform: 'none' },
+                        tabBarIndicatorStyle: { backgroundColor: '#000000' },
+                        tabBarStyle: {},
+                    }}>
+                    <Tab.Screen name="posts" component={OrganizationPosts} options={{ tabBarLabel: 'Postagens' }} />
+                    {(org.isMember || user.isModerator) && (
+                        <Tab.Screen name="members" component={OrganizationMembers} options={{ tabBarLabel: 'Membros' }} />
+                    )}
+                </Tab.Navigator>
+            </View>
+        </HeaderOptionsContext.Provider>
     )
 }
 

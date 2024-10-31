@@ -12,6 +12,7 @@ import { dateDiff } from '../../functions/date/dateDiff'
 import { dateShort } from '../../functions/date/dateFormat'
 import { cn } from '../../functions/utils'
 import { apiLikeOrUnlikePost } from '../../api/post/likePost'
+import { useHeaderOptions } from '../../hooks/headerOptions'
 
 interface Params {
     posts?: IPost[]
@@ -148,6 +149,8 @@ function Post({
 }
 
 export function ListPosts({ posts = [], loading = false, onRefresh = () => {} }: Params) {
+    const { setHeaderHeight, headerHeight } = useHeaderOptions()
+
     const [galleryMedias, setGalleryMedias] = useState<ImageDisplay[]>()
 
     const mediaViewerRef = useRef<MediaViewerRef>(null)
@@ -200,6 +203,14 @@ export function ListPosts({ posts = [], loading = false, onRefresh = () => {} }:
                 onEndReachedThreshold={0.5}
                 refreshing={loading && !havePosts}
                 onRefresh={() => onRefresh(true)}
+                onScroll={({
+                    nativeEvent: {
+                        contentOffset: { y },
+                    },
+                }) => {
+                    setHeaderHeight(y)
+                }}
+                scrollEventThrottle={16}
                 ListFooterComponent={loading && havePosts ? <ActivityIndicator color="#a5a5a5" /> : null}
             />
         </View>
