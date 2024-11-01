@@ -19,8 +19,7 @@ import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import { HeaderOptionsContext } from '../../hooks/headerOptions'
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated'
-
-const { height: heightDevice } = Dimensions.get('window')
+import { NewOrganizationPostModal } from '../posts/modals/newOrganizationPost'
 
 interface Params {
     id: string
@@ -81,7 +80,7 @@ function OrganizationRender() {
                 setHeaderHeight,
             }}>
             <View className="flex-1 relative">
-                <NewUserPostModal
+                <NewOrganizationPostModal
                     visible={visibleNewPostModal}
                     onClose={() => {
                         setVisibleNewPostModal(false)

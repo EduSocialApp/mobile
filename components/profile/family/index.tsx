@@ -2,6 +2,7 @@ import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import { useUser } from '../../../hooks/user'
 import { UserBasicView } from '../../userBasicView'
 import { router } from 'expo-router'
+import { useHeaderOptions } from '../../../hooks/headerOptions'
 
 interface FamilyMember {
     isSupervisor: boolean
@@ -30,6 +31,8 @@ function makeUniqueList(supervisedUsers: SupervisedUser[] = [], supervisorUsers:
 }
 
 export function ProfileFamily() {
+    const { setHeaderHeight } = useHeaderOptions()
+
     const userHook = useUser()
     if (!userHook) return null
 
@@ -40,8 +43,17 @@ export function ProfileFamily() {
     const list = makeUniqueList(supervisedUsers, supervisorUsers)
 
     return (
-        <ScrollView className="flex-1 bg-white">
-            <View className="py-4" style={{ gap: 20 }}>
+        <ScrollView
+            className="flex-1 bg-white"
+            onScroll={({
+                nativeEvent: {
+                    contentOffset: { y },
+                },
+            }) => {
+                setHeaderHeight(y - 300)
+            }}
+            scrollEventThrottle={16}>
+            <View className="p-2" style={{ gap: 20 }}>
                 {list.map(({ biography, displayName, id, pictureUrl, isSupervisor }, index) => {
                     return (
                         <TouchableOpacity className="flex-1" key={index} onPress={() => router.push(`/authenticated/profile/${id}`)}>

@@ -1,32 +1,74 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import { Post } from '../../../api/user/getUserFeed'
 import { ListPosts } from '../../posts/ListPosts'
-import { useState } from 'react'
-import { NewUserPostModal } from '../../posts/modals/newUserPost'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { useCallback, useRef, useState } from 'react'
+import { useFocusEffect } from 'expo-router'
+import { apiGetOrganizationPosts } from '../../../api/organization/getOrganizationPosts'
+import debounce from 'lodash/debounce'
+import { useOrganization } from '../../../hooks/organization'
 
 export function OrganizationPosts() {
-    // gere uma lista com 1000 posicoes
-    const list: Post[] = Array.from({ length: 50 }, (_, i) => ({
-        id: String(i),
-        title: `Post ${i}`,
-        content: `Conteudo do post ${i}`,
-        likesCount: 0,
-        updatedAt: new Date().toISOString(),
-        createdAt: new Date().toISOString(),
-        user: {
-            id: '01926c74-723e-7004-9449-74dac3c3609d',
-            name: 'Felipe Vieira Sobral',
-            displayName: 'Felipe',
-            pictureUrl: 'https://edusocial-medias.s3.amazonaws.com/0192970d-af7b-7884-99c5-b82b1b94a1bb.jpeg',
-        },
-        medias: [],
-        likes: [],
-    }))
+    const org = useOrganization()
+    if (!org) return null
+
+    const [loading, setLoading] = useState<boolean>(true)
+    const [posts, setPosts] = useState<Post[]>([])
+
+    const lastPostId = useRef<string>()
+    const isEndReached = useRef(false)
+
+    const { id } = org.organization
+
+    // Executa a função fetchOrganizations sempre que a tela é focada
+    useFocusEffect(
+        useCallback(() => {
+            resetPosts()
+
+            return () => {}
+        }, [])
+    )
+
+    const resetPosts = () => {
+        isEndReached.current = false
+        lastPostId.current = undefined
+        debouncedFetchPosts([])
+    }
+
+    const fetchPosts = async (loadedItems: Post[] = posts) => {
+        setLoading(true)
+        try {
+            const result = await apiGetOrganizationPosts({ id, lastPostId: lastPostId.current })
+
+            lastPostId.current = result.lastPostId
+
+            if (result.itens.length === 1 || result.itens.length === 0) {
+                isEndReached.current = true
+            }
+
+            setPosts([...loadedItems, ...result.itens])
+        } catch (error) {
+            setPosts([])
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const debouncedFetchPosts = debounce(fetchPosts, 100)
 
     return (
-        <View className="flex-1 bg-white relative">
-            <ListPosts posts={list} loading={false} onRefresh={() => {}} />
+        <View className="flex-1 bg-white">
+            <ListPosts
+                posts={posts}
+                loading={loading}
+                onRefresh={(newList) => {
+                    if (newList) {
+                        resetPosts()
+                        return
+                    }
+
+                    debouncedFetchPosts()
+                }}
+            />
         </View>
     )
 }

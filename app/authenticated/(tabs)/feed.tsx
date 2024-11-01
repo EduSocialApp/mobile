@@ -31,7 +31,6 @@ export default function Feed() {
     }
 
     const handleInit = () => {
-        console.log('renderizou')
         apiGetHasNewNotifications()
             .then((res) => {
                 setHasNewNotifications(res.data.total > 0)
@@ -58,7 +57,7 @@ export default function Feed() {
     }
 
     return (
-        <SafeAreaView className="relative flex-1">
+        <SafeAreaView className="relative flex-1 bg-white">
             <NewUserPostModal
                 visible={visibleNewPostModal}
                 onClose={() => {

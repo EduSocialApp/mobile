@@ -3,7 +3,7 @@ import { orgVerification, userVerification } from '../functions/colors'
 
 interface Params {
     type: 'user' | 'organization'
-    size?: 'sm' | 'md' | 'lg'
+    size?: 'xs' | 'sm' | 'md' | 'lg'
 }
 
 export function VerifiedBadge({ type, size = 'sm' }: Params) {
@@ -13,6 +13,7 @@ export function VerifiedBadge({ type, size = 'sm' }: Params) {
     }[type]
 
     const sizeBadge = {
+        xs: 16,
         sm: 20,
         md: 24,
         lg: 28,
