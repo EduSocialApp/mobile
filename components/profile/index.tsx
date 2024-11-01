@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { View, Text, ScrollView, RefreshControl, TouchableOpacity } from 'react-native'
-import { SafeAreaView, useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Image } from 'expo-image'
 import { Button } from '../button'
 import { Counter } from '../counter'
@@ -8,7 +7,6 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { ProfilePosts } from './posts'
 import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons'
 import { router } from 'expo-router'
-import { Header } from '../header'
 import { ProfileOrganizations } from './organizations'
 import { ModalUserQrCode } from './modals/userQrcode'
 import { UserProvider } from '../context/user'
@@ -18,12 +16,15 @@ import { ModalEditProfile } from './modals/editProfile'
 import { placeholderImage } from '../../functions/placeholderImage'
 import { HeaderOptionsContext } from '../../hooks/headerOptions'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
+import Constants from 'expo-constants'
 
 interface Params {
     id: string
     header?: boolean
     withConfig?: boolean
 }
+
+const TOPBAR_HEIGHT = Constants.statusBarHeight + 4
 
 const Tab = createMaterialTopTabNavigator()
 
@@ -110,8 +111,8 @@ function ProfileRender({ header }: Params) {
                 headerHeight: HEADER_HEIGHT,
                 setHeaderHeight,
             }}>
-            <View className="flex-1 relative">
-                <View className="flex-row justify-between items-center p-2" style={{ gap: 8 }}>
+            <View className="flex-1 relative bg-white">
+                <View className="flex-row justify-between items-center p-2" style={{ gap: 8, marginTop: TOPBAR_HEIGHT }}>
                     {header && (
                         <TouchableOpacity onPress={() => router.back()}>
                             <Entypo name="chevron-left" size={24} color="black" />
@@ -188,9 +189,7 @@ function ProfileRender({ header }: Params) {
 export function Profile(params: Params) {
     return (
         <UserProvider id={params.id}>
-            <SafeAreaView className="flex-1 bg-white">
-                <ProfileRender {...params} />
-            </SafeAreaView>
+            <ProfileRender {...params} />
         </UserProvider>
     )
 }

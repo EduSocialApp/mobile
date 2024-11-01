@@ -49,7 +49,7 @@ function OrganizationRender() {
     const org = useOrganization()
     if (!org) return null
 
-    const { displayName, pictureUrl, biography, verified } = org.organization
+    const { displayName, pictureUrl, biography, verified, stats } = org.organization
 
     const [visibleNewPostModal, setVisibleNewPostModal] = useState(false)
 
@@ -119,9 +119,9 @@ function OrganizationRender() {
                         </Animated.View>
                         <View className="flex-1">
                             <View className="flex-row justify-between mx-2 items-center flex-1" style={{ gap: 14 }}>
-                                <Counter title="Membros" value={0} />
-                                <Counter title="Prêmios" value={0} />
-                                <Counter title="Curtidas" value={0} />
+                                <Counter title="Membros" value={stats?.members || 0} />
+                                <Counter title="Medalhas" value={stats?.medals || 0} />
+                                <Counter title="Curtidas" value={stats?.likes || 0} />
                             </View>
                             {biography && (
                                 <Text className="text-stone-500 mt-1 text-sm" numberOfLines={2}>
