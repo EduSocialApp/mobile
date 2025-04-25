@@ -152,7 +152,7 @@ export function ListPosts({ posts = [], loading = false, onRefresh = () => {} }:
 
     const mediaViewerRef = useRef<MediaViewerRef>(null)
 
-    const PostCell = ({ item: { content, id, likesCount, medias, organization, createdAt, user, likes } }: { item: IPost }) => {
+    const PostCell = ({ item: { content, id, likesCount, medias, organization, createdAt, updatedAt, user, likes } }: { item: IPost }) => {
         const pictureUrl = organization?.pictureUrl || user?.pictureUrl
         const name = organization?.displayName || user?.displayName
         const profileId = organization?.id || user?.id
@@ -195,7 +195,7 @@ export function ListPosts({ posts = [], loading = false, onRefresh = () => {} }:
                 renderItem={PostCell}
                 data={posts}
                 estimatedItemSize={100}
-                ItemSeparatorComponent={() => <View className="h-[1] bg-stone-200" />}
+                ItemSeparatorComponent={() => <View className="h-[1] bg-stone-100" />}
                 onEndReached={onRefresh}
                 onEndReachedThreshold={0.5}
                 refreshing={loading && !havePosts}

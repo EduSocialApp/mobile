@@ -31,7 +31,6 @@ export default function Feed() {
     }
 
     const handleInit = () => {
-        console.log('renderizou')
         apiGetHasNewNotifications()
             .then((res) => {
                 setHasNewNotifications(res.data.total > 0)
@@ -58,7 +57,7 @@ export default function Feed() {
     }
 
     return (
-        <SafeAreaView className="relative flex-1">
+        <SafeAreaView className="relative flex-1 bg-white">
             <NewUserPostModal
                 visible={visibleNewPostModal}
                 onClose={() => {
@@ -68,10 +67,10 @@ export default function Feed() {
                     fetchPosts([])
                 }}
             />
-            <View className="relative mt-2 h-10 items-center justify-center">
+            <View className="relative mt-2 pb-2 h-10 items-center justify-center border-b border-stone-100">
                 <TitleBlack />
 
-                <View className="absolute t-0 w-full h-full items-end justify-center">
+                <View className="absolute top-0 w-full h-full items-end justify-center">
                     <TouchableOpacity onPress={() => router.push('/authenticated/notifications')} className="px-2 relative">
                         {hasNewNotifications && <View className="absolute top-0 right-2 w-2 h-2 bg-red-500 rounded-full z-10" />}
                         <MaterialCommunityIcons name={'bell-outline'} size={28} color="black" />

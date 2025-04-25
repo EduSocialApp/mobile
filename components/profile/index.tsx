@@ -99,13 +99,14 @@ function ProfileRender() {
                     </View>
                 </View>
 
-                <View className="flex-row" style={{ gap: 14 }}>
-                    {/* {id !== 'me' && (
+                {myProfile && (
+                    <View className="flex-row" style={{ gap: 14 }}>
+                        {/* {id !== 'me' && (
                         <View className="flex-1">
                             <Button onPress={() => {}} text="Conectar" className="flex-1" />
                         </View>
                     )} */}
-                    {myProfile && (
+
                         <>
                             <EditProfileButton />
                             <ShareProfileButton />
@@ -119,8 +120,8 @@ function ProfileRender() {
                                 <MaterialCommunityIcons name="cog" size={24} />
                             </Button>
                         </>
-                    )}
-                </View>
+                    </View>
+                )}
             </View>
 
             <View className="flex-1" style={{ height: height + bottom }}>

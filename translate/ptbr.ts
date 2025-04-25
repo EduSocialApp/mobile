@@ -29,5 +29,6 @@ export const ptbr: { [key: string]: string } = {
     'Link expired': 'Código expirado',
     'Users already linked': 'Usuários já vinculados',
     'Internal error': 'Erro interno',
+    'Organization already exists': 'Organização já existe',
     unknown: 'Erro desconhecido',
 }

@@ -9,6 +9,7 @@ import { useState } from 'react'
 import { cepScan } from '../../../../api/thirdParties/cepScan'
 import { apiOrganizationRegister } from '../../../../api/organization/register'
 import { router } from 'expo-router'
+import { handleErrorWithAlert } from '../../../../functions/handleError'
 
 const gap = 18
 
@@ -115,8 +116,8 @@ export default function CreateOrganization() {
             })
 
             router.back()
-        } catch {
-            Alert.alert('Erro', 'Erro ao enviar dados')
+        } catch (e) {
+            handleErrorWithAlert(e)
         }
 
         setLoading(undefined)

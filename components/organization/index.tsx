@@ -38,16 +38,24 @@ function OrganizationRender() {
 
     return (
         <View className="flex-1 relative">
-            <NewUserPostModal
-                visible={visibleNewPostModal}
-                onClose={() => {
-                    setVisibleNewPostModal(false)
-                }}
-            />
+            {org.isMember ||
+                org.isOwner ||
+                (org.isMemberModerator && (
+                    <>
+                        <NewUserPostModal
+                            visible={visibleNewPostModal}
+                            onClose={() => {
+                                setVisibleNewPostModal(false)
+                            }}
+                        />
 
-            <TouchableOpacity className="absolute bottom-2 right-2 p-4 bg-headline rounded-full z-10" onPress={() => setVisibleNewPostModal(true)}>
-                <MaterialCommunityIcons name="plus" size={28} color="#ffffff" />
-            </TouchableOpacity>
+                        <TouchableOpacity
+                            className="absolute bottom-2 right-2 p-4 bg-headline rounded-full z-10"
+                            onPress={() => setVisibleNewPostModal(true)}>
+                            <MaterialCommunityIcons name="plus" size={28} color="#ffffff" />
+                        </TouchableOpacity>
+                    </>
+                ))}
 
             <View className="flex-row justify-between items-center relative p-2" style={{ gap: 8 }}>
                 <TouchableOpacity onPress={() => router.back()}>
@@ -86,16 +94,13 @@ function OrganizationRender() {
                         </View>
                     </View>
 
-                    <View className="flex-row" style={{ gap: 14 }}>
-                        <View className="flex-1">
-                            <Button onPress={() => {}} text="Conectar" className="flex-1" />
-                        </View>
-                        {(org.isOwner || user.isAdmin) && (
+                    {(org.isOwner || user.isAdmin) && (
+                        <View className="flex-row" style={{ gap: 14 }}>
                             <View className="flex-1">
                                 <Button onPress={() => {}} text="Editar perfil" variant="outline" className="flex-1" />
                             </View>
-                        )}
-                    </View>
+                        </View>
+                    )}
                 </View>
 
                 <View className="flex-1 bg-red-500" style={{ height: heightDevice - 100 }}>

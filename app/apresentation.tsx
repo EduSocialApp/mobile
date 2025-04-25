@@ -13,7 +13,7 @@ import imgSchool from '../assets/apresentation/school.png'
 
 import { saveCache } from '../functions/cache'
 
-import Title from '../components/title'
+import Title, { TitleBlack } from '../components/title'
 import { StatusBar } from 'expo-status-bar'
 
 interface IParamsSlide {
@@ -53,8 +53,8 @@ export default function Apresentation() {
                 <Image source={image} className="w-full h-full p-2" style={{ maxWidth: 500 }} contentFit="contain" />
             </View>
             <View className="m-3 rounded-md mb-6">
-                <Text className="font-bold text-xl text-white">{title}</Text>
-                <Text className="mt-2 text-base text-white">{description}</Text>
+                <Text className="font-bold text-xl">{title}</Text>
+                <Text className="mt-2 text-base">{description}</Text>
             </View>
         </View>
     )
@@ -69,11 +69,13 @@ export default function Apresentation() {
 
     return (
         <View className="flex-1">
-            <StatusBar style="light" />
-            <LinearGradient colors={['#39335e', '#272343']} className="absolute flex-1 z-0 w-full h-full" />
+            <StatusBar style="dark" />
+            <LinearGradient colors={['#ffffff', '#f0f0f0']} className="absolute flex-1 z-0 w-full h-full" />
 
             <View className="flex-1" style={{ paddingTop: constants.statusBarHeight + 10 }}>
-                <Title />
+                <View className="mt-2">
+                    <TitleBlack />
+                </View>
                 <PagerView
                     className="flex-1"
                     initialPage={0}
@@ -85,7 +87,7 @@ export default function Apresentation() {
                     ))}
                 </PagerView>
                 <View>
-                    <View className="h-2 mx-3 opacity-80 rounded-full" style={{ backgroundColor: '#e3f6f530' }}>
+                    <View className="h-2 mx-3 opacity-80 rounded-full" style={{ backgroundColor: '#ffffffff' }}>
                         <Animated.View
                             onLayout={({
                                 nativeEvent: {
@@ -94,7 +96,7 @@ export default function Apresentation() {
                             }) => {
                                 barWidth.current = width
                             }}
-                            className="h-full w-1/3 bg-secondary rounded-full"
+                            className="h-full w-1/3 bg-headline rounded-full"
                             style={animatedStyle}
                         />
                     </View>
@@ -105,11 +107,11 @@ export default function Apresentation() {
                             saveCache('SAW_PRESENTATION', true)
                             router.replace('/login')
                         }}
-                        className="bg-tertiary items-center justify-center rounded-md mb-1">
-                        <Text className="p-4 text-xl font-semibold text-headline">Entrar agora</Text>
+                        className="bg-headline items-center justify-center rounded-md mb-1">
+                        <Text className="p-4 text-xl font-semibold text-white">Entrar agora</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{ marginTop: 8 }} onPress={() => router.push('/createAccount')}>
-                        <Text className="text-white text-center mt-1">
+                        <Text className="text-center mt-1">
                             Não tem uma conta? <Text className="font-bold">Criar agora</Text>
                         </Text>
                     </TouchableOpacity>

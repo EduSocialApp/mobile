@@ -77,11 +77,11 @@ export default function CreateAccountTerms() {
 
                     <View style={{ gap: 4 }}>
                         <Permission id="receiveEmails" title="Receber emails" description="Enviaremos emails de ajuda, notícias e avisos" />
-                        <Permission
+                        {/* <Permission
                             id="connectWithNeighbors"
                             title="Conectar com conhecidos"
                             description="Buscaremos em sua agenda telefonica colegas que já estão cadastrados no EduSocial"
-                        />
+                        /> */}
                         <Permission
                             id="receiveNotifications"
                             title="Receber notificações"

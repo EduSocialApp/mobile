@@ -104,7 +104,7 @@ export default function OrganizationAddMembers() {
     return (
         <View className="flex-1 bg-white">
             <View className="p-2 py-4 border-b border-stone-100" style={{ gap: 12 }}>
-                <View className="flex-row" style={{ gap: 12 }}>
+                {/* <View className="flex-row" style={{ gap: 12 }}>
                     <View className="flex-1">
                         <Button text="Adicionar" onPress={() => {}} variant="outline">
                             <View className="flex-row items-center" style={{ gap: 10 }}>
@@ -121,7 +121,7 @@ export default function OrganizationAddMembers() {
                             </View>
                         </Button>
                     </View>
-                </View>
+                </View> */}
                 <TextInput
                     placeholder="Buscar usuário"
                     onChangeText={setSearch}
