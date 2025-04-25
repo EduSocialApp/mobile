@@ -86,11 +86,12 @@ export default function Family() {
                 contentContainerStyle={{ paddingVertical: 20, gap: 10 }}
                 refreshControl={<RefreshControl refreshing={loadingList} onRefresh={findSupervisedUsers} />}>
                 <SettingContainer>
-                    <View style={{ maxHeight: 200 }}>
-                        <Image source={imgFamily} className="h-full w-full" contentFit="contain" />
+                    <View style={{ gap: 8 }}>
+                        <Button text="Conectar" onPress={() => setOpenQrCodeScanner(true)} loading={loadingLinkingUser} />
+                        <Text className="text-center text-stone-600">
+                            Você pode se conectar com seus filhos, netos ou com aqueles de quem você cuida
+                        </Text>
                     </View>
-                    <Text className="text-center">Você pode se conectar com seus filhos, netos ou com aqueles de quem você cuida</Text>
-                    <Button text="Conectar" onPress={() => setOpenQrCodeScanner(true)} loading={loadingLinkingUser} />
                 </SettingContainer>
 
                 {supervisedUsers.length > 0 && (

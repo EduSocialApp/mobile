@@ -12,6 +12,9 @@ import { dateDiff } from '../../functions/date/dateDiff'
 import { dateShort } from '../../functions/date/dateFormat'
 import { cn } from '../../functions/utils'
 import { apiLikeOrUnlikePost } from '../../api/post/likePost'
+import { useHeaderOptions } from '../../hooks/headerOptions'
+import { EmptyList } from '../emptyList'
+import { VerifiedBadge } from '../verifiedBadge'
 
 interface Params {
     posts?: IPost[]
@@ -106,12 +109,19 @@ function Post({
         <View style={{ gap: 8, paddingVertical: 8 }}>
             <View className="flex-row px-2" style={{ gap: 10 }}>
                 <TouchableOpacity onPress={onProfileClick}>
-                    <Image source={pictureUrl} placeholder={placeholderImage} className="h-12 w-12 rounded-full" />
+                    <Image
+                        source={pictureUrl}
+                        placeholder={placeholderImage}
+                        className={cn('h-12 w-12 rounded-full', isOrganization && 'rounded-lg')}
+                    />
                 </TouchableOpacity>
                 <View className="flex-1" style={{ gap: 8 }}>
                     <View>
                         <TouchableOpacity onPress={onProfileClick} className="flex-row" style={{ gap: 4 }}>
-                            <Text className="font-bold">{name}</Text>
+                            <View className="flex-row" style={{ gap: 4 }}>
+                                <Text className="font-bold">{name}</Text>
+                                {verified && <VerifiedBadge type="organization" size="xs" />}
+                            </View>
                             <Text className="text-stone-500">•</Text>
                             <Text className="text-stone-500">{timeSincePost}</Text>
                         </TouchableOpacity>
@@ -148,6 +158,8 @@ function Post({
 }
 
 export function ListPosts({ posts = [], loading = false, onRefresh = () => {} }: Params) {
+    const { setHeaderHeight, headerHeight } = useHeaderOptions()
+
     const [galleryMedias, setGalleryMedias] = useState<ImageDisplay[]>()
 
     const mediaViewerRef = useRef<MediaViewerRef>(null)
@@ -156,6 +168,7 @@ export function ListPosts({ posts = [], loading = false, onRefresh = () => {} }:
         const pictureUrl = organization?.pictureUrl || user?.pictureUrl
         const name = organization?.displayName || user?.displayName
         const profileId = organization?.id || user?.id
+        const verified = organization?.verified
 
         const liked = likes.length > 0
 
@@ -178,6 +191,7 @@ export function ListPosts({ posts = [], loading = false, onRefresh = () => {} }:
                 dateStr={createdAt}
                 isOrganization={!!organization}
                 liked={liked}
+                verified={verified}
                 onMediaClick={(uris, index) => {
                     setGalleryMedias(uris)
                     mediaViewerRef.current?.open(index || 0)
@@ -200,7 +214,16 @@ export function ListPosts({ posts = [], loading = false, onRefresh = () => {} }:
                 onEndReachedThreshold={0.5}
                 refreshing={loading && !havePosts}
                 onRefresh={() => onRefresh(true)}
+                onScroll={({
+                    nativeEvent: {
+                        contentOffset: { y },
+                    },
+                }) => {
+                    setHeaderHeight(y - 300)
+                }}
+                scrollEventThrottle={16}
                 ListFooterComponent={loading && havePosts ? <ActivityIndicator color="#a5a5a5" /> : null}
+                ListEmptyComponent={!loading ? () => <EmptyList title="Nenhuma postagem" subtitle="Este perfil ainda não compartilhou nada" /> : null}
             />
         </View>
     )

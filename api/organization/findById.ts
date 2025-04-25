@@ -31,6 +31,11 @@ export interface OrganizationSimple {
             updatedAt: string
         }
     }[]
+    stats?: {
+        members: number
+        likes: number
+        medals: number
+    }
     owners?: {
         id: string
         updatedAt: string

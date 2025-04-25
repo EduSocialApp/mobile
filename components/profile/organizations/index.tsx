@@ -10,8 +10,11 @@ import { Button } from '../../button'
 import { VerifiedBadge } from '../../verifiedBadge'
 import { useUserAuthenticated } from '../../../hooks/authenticated'
 import { placeholderImage } from '../../../functions/placeholderImage'
+import { useHeaderOptions } from '../../../hooks/headerOptions'
 
 export function ProfileOrganizations() {
+    const { setHeaderHeight } = useHeaderOptions()
+
     const userLogged = useUserAuthenticated()
     const userHook = useUser()
     if (!userHook) return null
@@ -93,11 +96,19 @@ export function ProfileOrganizations() {
                 data={organizations}
                 ListHeaderComponent={Header}
                 renderItem={OrganizationRender}
-                contentContainerStyle={{ paddingVertical: 20 }}
+                contentContainerStyle={{ padding: 10 }}
                 estimatedItemSize={100}
                 refreshing={loading === 'loading'}
                 onRefresh={handleOrganizations}
                 ItemSeparatorComponent={() => <View className="h-[1] bg-stone-100" />}
+                onScroll={({
+                    nativeEvent: {
+                        contentOffset: { y },
+                    },
+                }) => {
+                    setHeaderHeight(y - 150)
+                }}
+                scrollEventThrottle={16}
             />
         </View>
     )

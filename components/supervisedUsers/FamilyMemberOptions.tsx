@@ -5,6 +5,8 @@ import { LinkSupervisedUser } from '../../api/user/supervised/getSupervisedUsers
 import { router } from 'expo-router'
 import { dateShort } from '../../functions/date/dateFormat'
 import { placeholderImage } from '../../functions/placeholderImage'
+import Animated, { runOnJS, useSharedValue, withDelay, withTiming } from 'react-native-reanimated'
+import { useEffect } from 'react'
 
 interface Params {
     member?: LinkSupervisedUser
@@ -13,6 +15,23 @@ interface Params {
 }
 
 export function FamilyMemberOptions({ member, close, onConfirmEvent }: Params) {
+    const bgOpacity = useSharedValue(0)
+    const opened = Boolean(member)
+
+    useEffect(() => {
+        if (opened) {
+            bgOpacity.value = withDelay(250, withTiming(1, { duration: 300 }))
+        }
+    }, [opened])
+
+    const onClose = () => {
+        bgOpacity.value = withTiming(0, { duration: 50 }, (isFinished) => {
+            if (isFinished) {
+                runOnJS(close)()
+            }
+        })
+    }
+
     const MenuRender = () => {
         if (!member) return null
 
@@ -50,15 +69,17 @@ export function FamilyMemberOptions({ member, close, onConfirmEvent }: Params) {
     }
 
     return (
-        <Modal visible={Boolean(member)} animationType="slide" transparent>
+        <Modal visible={opened} animationType="slide" transparent>
             <View className="flex-1 relative justify-end">
-                <TouchableOpacity className="flex-1 bg-black/70" onPress={close} activeOpacity={1}></TouchableOpacity>
+                <Animated.View style={{ flex: 1, opacity: bgOpacity }}>
+                    <TouchableOpacity className="flex-1 bg-black/70" onPress={onClose} activeOpacity={1}></TouchableOpacity>
+                </Animated.View>
                 <View className="py-10 px-4 absolute w-full" style={{ gap: 30 }}>
                     <View className="bg-white rounded-lg p-4">
                         <MenuRender />
                     </View>
 
-                    <Button onPress={close} text="Cancelar" variant="white" />
+                    <Button onPress={onClose} text="Cancelar" variant="white" />
                 </View>
             </View>
         </Modal>

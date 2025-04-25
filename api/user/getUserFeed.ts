@@ -18,7 +18,7 @@ export interface Post {
         name: string
         displayName: string
         pictureUrl: string
-        verfied: boolean
+        verified: boolean
     }
     medias: {
         media: {
