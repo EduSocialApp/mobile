@@ -106,8 +106,8 @@ function Post({
     const timeSincePost = textTimeSincePost(dateStr)
 
     return (
-        <View style={{ gap: 8, paddingVertical: 8 }}>
-            <View className="flex-row px-2" style={{ gap: 10 }}>
+        <View>
+            <View className="flex-row p-2" style={{ gap: 8 }}>
                 <TouchableOpacity onPress={onProfileClick}>
                     <Image
                         source={pictureUrl}
@@ -115,43 +115,42 @@ function Post({
                         className={cn('h-12 w-12 rounded-full', isOrganization && 'rounded-lg')}
                     />
                 </TouchableOpacity>
-                <View className="flex-1" style={{ gap: 8 }}>
-                    <View>
-                        <TouchableOpacity onPress={onProfileClick} className="flex-row" style={{ gap: 4 }}>
-                            <View className="flex-row" style={{ gap: 4 }}>
-                                <Text className="font-bold">{name}</Text>
-                                {verified && <VerifiedBadge type="organization" size="xs" />}
-                            </View>
-                            <Text className="text-stone-500">•</Text>
-                            <Text className="text-stone-500">{timeSincePost}</Text>
-                        </TouchableOpacity>
-                        <Text>{content}</Text>
+                <View className="flex-1" style={{ gap: 4 }}>
+                    <TouchableOpacity onPress={onProfileClick} className="flex-row" style={{ gap: 4 }}>
+                        <View className="flex-row" style={{ gap: 4 }}>
+                            <Text className="font-bold">{name}</Text>
+                            {verified && <VerifiedBadge type="organization" size="xs" />}
+                        </View>
+                        <Text className="text-stone-500">•</Text>
+                        <Text className="text-stone-500">{timeSincePost}</Text>
+                    </TouchableOpacity>
+
+                    <Text>{content}</Text>
+
+                    {medias.length > 0 && (
+                        <View className="h-32 mt-1">
+                            <ScrollView
+                                horizontal
+                                className="flex-1"
+                                contentContainerStyle={{ gap: 10, paddingRight: 8 }}
+                                showsHorizontalScrollIndicator={false}>
+                                {medias.map(({ uri, blurhash }, index) => {
+                                    const placeholder = blurhash ? { blurhash } : placeholderImage
+
+                                    return (
+                                        <TouchableOpacity key={`media-${uri}`} className="relative" onPress={() => onMediaClick(medias, index)}>
+                                            <Image source={{ uri }} className="h-full w-28 rounded-md" placeholder={placeholder} />
+                                        </TouchableOpacity>
+                                    )
+                                })}
+                            </ScrollView>
+                        </View>
+                    )}
+
+                    <View className="flex-row items-center justify-between mt-1">
+                        <LikeButton count={likesCount} id={id} liked={liked} />
                     </View>
                 </View>
-            </View>
-
-            {medias.length > 0 && (
-                <View className="h-32">
-                    <ScrollView
-                        horizontal
-                        className="flex-1"
-                        contentContainerStyle={{ gap: 10, paddingLeft: 66, paddingRight: 8 }}
-                        showsHorizontalScrollIndicator={false}>
-                        {medias.map(({ uri, blurhash }, index) => {
-                            const placeholder = blurhash ? { blurhash } : placeholderImage
-
-                            return (
-                                <TouchableOpacity key={`media-${uri}`} className="relative" onPress={() => onMediaClick(medias, index)}>
-                                    <Image source={{ uri }} className="h-full w-28 rounded-md" placeholder={placeholder} />
-                                </TouchableOpacity>
-                            )
-                        })}
-                    </ScrollView>
-                </View>
-            )}
-
-            <View className="flex-row items-center justify-between" style={{ marginLeft: 66 }}>
-                <LikeButton count={likesCount} id={id} liked={liked} />
             </View>
         </View>
     )

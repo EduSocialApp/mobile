@@ -28,7 +28,7 @@ export default function Login() {
             } else {
                 Alert.alert('Erro', 'Usuário ou senha incorretos')
             }
-        } catch {
+        } catch (e) {
             setLoading(undefined)
             Alert.alert('Erro', 'Usuário ou senha incorretos')
         }

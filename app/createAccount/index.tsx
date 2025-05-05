@@ -93,6 +93,7 @@ export default function CreateAccount() {
                         <DateInput
                             onChange={setBirthdayDate}
                             value={birthdayDate}
+                            placeholder="Seu aniversário"
                             error={errorMessage('Precisamos saber sua idade para adequar a melhor experiência a você', !!birthdayDate)}
                         />
                     </View>
