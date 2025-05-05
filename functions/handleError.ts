@@ -4,6 +4,7 @@ import { Alert } from 'react-native'
 
 export function handleError(error: unknown) {
     if (error instanceof AxiosError) {
+        console.log('AxiosError', error.response?.data)
         return translateMessage(error.response?.data?.message)
     }
 

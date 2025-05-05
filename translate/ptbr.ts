@@ -30,5 +30,11 @@ export const ptbr: { [key: string]: string } = {
     'Users already linked': 'Usuários já vinculados',
     'Internal error': 'Erro interno',
     'Organization already exists': 'Organização já existe',
+    'Start date must be earlier than the end date': 'A data de início deve ser anterior à data de término',
+    'Start date must be greater than the current date': 'A data de início deve ser maior que a data atual',
+    'Address does not belong to the organization': 'Endereço não pertence à organização',
+    'Content is required': 'Conteúdo é obrigatório',
+    'Content is too long': 'Conteúdo é muito longo',
+    'Level is invalid': 'Nível é inválido',
     unknown: 'Erro desconhecido',
 }

@@ -1,5 +1,6 @@
 import { apiAuthenticated } from '../route'
 
+//content, startDate, endDate, level, notifiedUsers, title
 interface Params {
     organizationId: string
     content: string
@@ -7,12 +8,31 @@ interface Params {
         uri: string
         mimeType: string
     }[]
+    level: string
+    title: string
+    startDate?: Date
+    endDate?: Date
+    addressId?: string
 }
 
-export async function apiNewOrganizationPost({ organizationId, content, images }: Params) {
+export async function apiNewOrganizationPost({ organizationId, content, images, level, title, startDate, endDate, addressId }: Params) {
     const formData = new FormData()
 
     formData.append('content', content)
+    formData.append('level', level)
+    formData.append('title', title)
+
+    if (startDate) {
+        formData.append('startDate', startDate.toISOString())
+    }
+
+    if (endDate) {
+        formData.append('endDate', endDate.toISOString())
+    }
+
+    if (addressId) {
+        formData.append('addressId', addressId)
+    }
 
     images.forEach(({ uri, mimeType }) => {
         // @ts-expect-error: special react native format for form data

@@ -8,7 +8,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { useEffect, useRef, useState } from 'react'
 import { Button } from '../../button'
 import MediaViewer, { MediaViewerRef } from '../../modals/mediaViewer'
-import { handleError } from '../../../functions/handleError'
+import { handleError, handleErrorWithAlert } from '../../../functions/handleError'
 import { useOrganization } from '../../../hooks/organization'
 import { apiNewOrganizationPost } from '../../../api/organization/newOrganizationPost'
 import { DateInput } from '../../form'
@@ -16,12 +16,16 @@ import { PickAddressModal } from '../../adresses/pickAddress'
 
 const charactersLimit = 600
 
+type PostLevel = 'NORMAL' | 'IMPORTANT' | 'URGENT'
+
 interface Form {
     text: string
-    startDate?: Date
-    address?: Address
-    endDate?: Date
+    title: string
+    startDate?: Date | null
+    address?: Address | null
+    endDate?: Date | null
     images: ImagePicker.ImagePickerAsset[]
+    level: PostLevel
 }
 
 interface Params {
@@ -37,6 +41,8 @@ export function NewOrganizationPostModal({ visible, onClose }: Params) {
     const { control, watch, getValues, setValue, reset } = useForm<Form>({
         defaultValues: {
             text: '',
+            title: '',
+            level: 'NORMAL',
             images: [],
         },
     })
@@ -46,6 +52,7 @@ export function NewOrganizationPostModal({ visible, onClose }: Params) {
     const [openPickerAddress, setOpenPickerAddress] = useState(false)
 
     const images = watch('images')
+    const address = watch('address')
 
     const mediaViewerRef = useRef<MediaViewerRef>(null)
 
@@ -55,7 +62,6 @@ export function NewOrganizationPostModal({ visible, onClose }: Params) {
     useEffect(() => {
         if (visible) {
             reset()
-            console.log('AQUI')
         }
     }, [visible])
 
@@ -68,7 +74,7 @@ export function NewOrganizationPostModal({ visible, onClose }: Params) {
         const selectionLimit = 10 - images.length
 
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            mediaTypes: 'images',
             quality: 0.3,
             allowsMultipleSelection: true,
             selectionLimit,
@@ -83,7 +89,7 @@ export function NewOrganizationPostModal({ visible, onClose }: Params) {
         try {
             setLoading(true)
 
-            const { images, text } = getValues()
+            const { images, text, level, address, endDate, startDate, title } = getValues()
 
             await apiNewOrganizationPost({
                 organizationId,
@@ -92,11 +98,16 @@ export function NewOrganizationPostModal({ visible, onClose }: Params) {
                     uri: image.uri,
                     mimeType: image.mimeType || '',
                 })),
+                level,
+                title,
+                startDate: startDate || undefined,
+                endDate: endDate || undefined,
+                addressId: address ? address.id : undefined,
             })
 
             onClose(true)
         } catch (e) {
-            handleError(e)
+            handleErrorWithAlert(e)
         } finally {
             setLoading(false)
         }
@@ -122,12 +133,27 @@ export function NewOrganizationPostModal({ visible, onClose }: Params) {
 
             <SafeAreaView className="flex-1">
                 <ScrollView>
-                    <View className="p-2 flex-row" style={{ gap: 2 }}>
+                    <View className="p-2 flex-row items-start" style={{ gap: 2 }}>
                         <View className="flex-row relative items-center">
                             <Image source={userPictureUrl} className="h-8 w-8 rounded-full left-0" />
                             <Image source={orgPictureUrl} className="h-10 w-10 rounded-lg -left-3" />
                         </View>
-                        <View className="flex-1">
+                        <View className="flex-1 h-full">
+                            <Controller
+                                control={control}
+                                name="title"
+                                render={({ field: { value, onChange } }) => {
+                                    return (
+                                        <TextInput
+                                            placeholder="Título (opcional)"
+                                            placeholderTextColor={'#78716c'}
+                                            value={value}
+                                            onChangeText={onChange}
+                                            className="font-bold border-b border-stone-100 pb-1"
+                                        />
+                                    )
+                                }}
+                            />
                             <Controller
                                 control={control}
                                 name="text"
@@ -147,6 +173,7 @@ export function NewOrganizationPostModal({ visible, onClose }: Params) {
                         </View>
                     </View>
                 </ScrollView>
+
                 {images.length > 0 && (
                     <View className="h-32 border-t border-stone-100">
                         <ScrollView horizontal contentContainerStyle={{ gap: 8, padding: 8 }} showsHorizontalScrollIndicator={false}>
@@ -170,56 +197,57 @@ export function NewOrganizationPostModal({ visible, onClose }: Params) {
                         </ScrollView>
                     </View>
                 )}
+
                 {openStartAndEndDate && (
                     <View className="border-t border-stone-100 flex flex-row items-center p-2" style={{ gap: 8 }}>
                         <View className="flex-1" style={{ gap: 4 }}>
-                            <Text>Data de início</Text>
+                            <Text>Início do evento</Text>
                             <Controller
                                 control={control}
                                 name="startDate"
                                 render={({ field: { value, onChange } }) => {
-                                    return <DateInput onChange={onChange} value={value} placeholder="Selecionar..." size="compact" />
+                                    return <DateInput onChange={onChange} value={value} placeholder="Selecionar..." size="compact" mode="datetime" />
                                 }}
                             />
                         </View>
 
                         <View className="flex-1" style={{ gap: 4 }}>
-                            <Text>Data de término</Text>
+                            <Text>Término do evento</Text>
                             <Controller
                                 control={control}
                                 name="endDate"
                                 render={({ field: { value, onChange } }) => {
-                                    return <DateInput onChange={onChange} value={value} placeholder="Selecionar..." size="compact" cleanable />
+                                    return (
+                                        <DateInput
+                                            onChange={onChange}
+                                            value={value}
+                                            placeholder="Selecionar..."
+                                            size="compact"
+                                            cleanable
+                                            mode="datetime"
+                                        />
+                                    )
                                 }}
                             />
                         </View>
                     </View>
                 )}
 
-                <Controller
-                    control={control}
-                    name="address"
-                    render={({ field: { value, onChange } }) => {
-                        if (!value) return <></>
+                {address && (
+                    <View className="border-t border-stone-100 p-2 flex-row items-center" style={{ gap: 4 }}>
+                        <Text className="flex-1">
+                            {address.street}, {address.number}
+                            {address.complement ? ` - ${address.complement}` : ''}. {address.neighborhood}. {address.city} - {address.state},{' '}
+                            {address.zipCode}, {address.country}
+                        </Text>
+                        <TouchableOpacity onPress={() => setValue('address', null)}>
+                            <MaterialCommunityIcons name="close" size={20} />
+                        </TouchableOpacity>
+                    </View>
+                )}
 
-                        const { id, street, number, complement, neighborhood, city, state, zipCode, country } = value
-
-                        return (
-                            <View className="border-t border-stone-100 p-2 flex-row items-center" style={{ gap: 4 }}>
-                                <Text className="flex-1">
-                                    {street}, {number}
-                                    {complement ? ` - ${complement}` : ''}. {neighborhood}. {city} - {state}, {zipCode}, {country}
-                                </Text>
-                                <TouchableOpacity>
-                                    <MaterialCommunityIcons name="close" size={20} onPress={() => onChange(undefined)} />
-                                </TouchableOpacity>
-                            </View>
-                        )
-                    }}
-                />
-
-                <View className="p-2 border-t border-stone-100 flex-row justify-between" style={{ gap: 10 }}>
-                    <View className="flex-1 items-center flex-row" style={{ gap: 8 }}>
+                <View className="p-2 border-t border-stone-100 flex-row justify-between" style={{ gap: 8 }}>
+                    <View className="flex-1 items-center flex-row" style={{ gap: 14 }}>
                         <TouchableOpacity onPress={pickImages}>
                             <MaterialCommunityIcons name="image-outline" size={32} color="black" />
                         </TouchableOpacity>
@@ -229,6 +257,27 @@ export function NewOrganizationPostModal({ visible, onClose }: Params) {
                         <TouchableOpacity onPress={() => setOpenPickerAddress(true)}>
                             <MaterialCommunityIcons name="map-marker-radius-outline" size={32} color="black" />
                         </TouchableOpacity>
+                        <Controller
+                            control={control}
+                            name="level"
+                            render={({ field: { value, onChange } }) => {
+                                const [bgColor, text, nextState] = {
+                                    NORMAL: ['#009013', 'Normal', 'IMPORTANT'],
+                                    IMPORTANT: ['#f59e0b', 'Importante', 'URGENT'],
+                                    URGENT: ['#dc2626', 'Urgente', 'NORMAL'],
+                                }[value] as [string, string, PostLevel]
+
+                                return (
+                                    <TouchableOpacity
+                                        className="flex-row items-center"
+                                        style={{ gap: 4 }}
+                                        onPress={() => setValue('level', nextState)}>
+                                        <MaterialCommunityIcons name="circle" size={12} color={bgColor} />
+                                        <Text>{text}</Text>
+                                    </TouchableOpacity>
+                                )
+                            }}
+                        />
                     </View>
                     <View>
                         <Button text="Publicar" size="sm" variant="outline" onPress={handlePost} loading={loading} />
