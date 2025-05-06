@@ -7,11 +7,24 @@ export interface Post {
     likesCount: number
     updatedAt: string
     createdAt: string
+    startDate?: string
+    endDate?: string
+    level?: 'NORMAL' | 'IMPORTANT' | 'URGENT'
     user?: {
         id: string
         name: string
         displayName: string
         pictureUrl: string
+    }
+    address?: {
+        city: string
+        state: string
+        country: string
+        street: string
+        number: string
+        neighborhood: string
+        complement: string
+        zipCode: string
     }
     organization?: {
         id: string

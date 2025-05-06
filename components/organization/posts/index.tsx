@@ -14,7 +14,7 @@ export function OrganizationPosts() {
     const [loading, setLoading] = useState<boolean>(true)
     const [posts, setPosts] = useState<Post[]>([])
 
-    const lastPostId = useRef<string>()
+    const lastPostId = useRef<string>(undefined)
     const isEndReached = useRef(false)
 
     const { id } = org.organization

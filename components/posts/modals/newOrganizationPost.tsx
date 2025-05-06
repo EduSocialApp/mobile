@@ -16,8 +16,6 @@ import { PickAddressModal } from '../../adresses/pickAddress'
 
 const charactersLimit = 600
 
-type PostLevel = 'NORMAL' | 'IMPORTANT' | 'URGENT'
-
 interface Form {
     text: string
     title: string

@@ -20,6 +20,7 @@ import { router } from 'expo-router'
 import { HeaderOptionsContext } from '../../hooks/headerOptions'
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated'
 import { NewOrganizationPostModal } from '../posts/modals/newOrganizationPost'
+import OrganizationEvents from './events'
 
 interface Params {
     id: string
@@ -118,9 +119,9 @@ function OrganizationRender() {
                             <Image source={pictureUrl} placeholder={placeholderImage} className="h-20 w-20 rounded-lg border border-stone-200" />
                         </Animated.View>
                         <View className="flex-1">
-                            <View className="flex-row justify-between mx-2 items-center flex-1" style={{ gap: 14 }}>
+                            <View className="flex-row justify-between mx-2 items-center flex-1" style={{ gap: 8 }}>
                                 <Counter title="Membros" value={stats?.members || 0} />
-                                <Counter title="Medalhas" value={stats?.medals || 0} />
+                                {/* <Counter title="Medalhas" value={stats?.medals || 0} /> */}
                                 <Counter title="Curtidas" value={stats?.likes || 0} />
                             </View>
                             {biography && (
@@ -148,6 +149,7 @@ function OrganizationRender() {
                         tabBarStyle: {},
                     }}>
                     <Tab.Screen name="posts" component={OrganizationPosts} options={{ tabBarLabel: 'Postagens' }} />
+                    <Tab.Screen name="events" component={OrganizationEvents} options={{ tabBarLabel: 'Eventos' }} />
                     {(org.isMember || user.isModerator) && (
                         <Tab.Screen name="members" component={OrganizationMembers} options={{ tabBarLabel: 'Membros' }} />
                     )}

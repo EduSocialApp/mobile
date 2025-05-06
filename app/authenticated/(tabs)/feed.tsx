@@ -22,7 +22,7 @@ export default function Feed() {
         }, [])
     )
 
-    const lastPostId = useRef<string>()
+    const lastPostId = useRef<string>(undefined)
     const isEndReached = useRef(false)
 
     const resetFeed = () => {

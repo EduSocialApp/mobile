@@ -130,11 +130,11 @@ function ProfileRender({ header }: Params) {
                             <Image source={pictureUrl} placeholder={placeholderImage} className="h-20 w-20 rounded-full border-2 border-stone-200" />
                         </Animated.View>
                         <View className="flex-1">
-                            <View className="flex-row justify-between items-center flex-1 px-2" style={{ gap: 14 }}>
+                            {/* <View className="flex-row items-center flex-1" style={{ gap: 14 }}>
                                 <Counter title="instituições" value={organizations.length} />
                                 <Counter title="prêmios" value={0} />
                                 <Counter title="curtidas" value={0} />
-                            </View>
+                            </View> */}
                             {biography && (
                                 <Text className="text-stone-500 mt-1 text-sm" numberOfLines={2}>
                                     {biography}

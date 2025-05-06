@@ -5,16 +5,15 @@ import { Image } from 'expo-image'
 import { Post as IPost } from '../../api/user/getUserFeed'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { router } from 'expo-router'
-import { useCallback, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import MediaViewer, { ImageDisplay, MediaViewerRef } from '../modals/mediaViewer'
 import { placeholderImage } from '../../functions/placeholderImage'
-import { dateDiff } from '../../functions/date/dateDiff'
-import { dateShort } from '../../functions/date/dateFormat'
 import { cn } from '../../functions/utils'
 import { apiLikeOrUnlikePost } from '../../api/post/likePost'
 import { useHeaderOptions } from '../../hooks/headerOptions'
 import { EmptyList } from '../emptyList'
 import { VerifiedBadge } from '../verifiedBadge'
+import { textTimeSincePost } from '../../functions/textTimeSincePost'
 
 interface Params {
     posts?: IPost[]
@@ -35,16 +34,6 @@ interface PostParams {
     isOrganization?: boolean
     liked?: boolean
     onMediaClick?: (uris: ImageDisplay[], index?: number) => void
-}
-
-function textTimeSincePost(dateStr: string) {
-    const { days, hours, minutes, seconds } = dateDiff(dateStr, new Date().toISOString())
-
-    if (days > 3) return dateShort(dateStr)
-    if (days > 0) return `${Math.round(days)}d`
-    if (hours > 0) return `${Math.round(hours)}h`
-    if (minutes > 0) return `${Math.round(minutes)}m`
-    return `${Math.round(seconds)}s`
 }
 
 // https://shopify.github.io/flash-list/docs/recycling/
