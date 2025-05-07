@@ -36,5 +36,7 @@ export const ptbr: { [key: string]: string } = {
     'Content is required': 'Conteúdo é obrigatório',
     'Content is too long': 'Conteúdo é muito longo',
     'Level is invalid': 'Nível é inválido',
+    URGENT: 'Urgente',
+    IMPORTANT: 'Importante',
     unknown: 'Erro desconhecido',
 }

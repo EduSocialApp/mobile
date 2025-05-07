@@ -46,10 +46,10 @@ export default function Search() {
     const [content, setContent] = useState<FindItem[]>([])
     const [loading, setLoading] = useState(true)
 
-    const lastOrgId = useRef<string>()
-    const lastUserId = useRef<string>()
+    const lastOrgId = useRef<string>(undefined)
+    const lastUserId = useRef<string>(undefined)
     const isEndReached = useRef(false)
-    const debounceTime = useRef<NodeJS.Timeout>()
+    const debounceTime = useRef<NodeJS.Timeout>(undefined)
 
     useEffect(() => {
         lastOrgId.current = undefined

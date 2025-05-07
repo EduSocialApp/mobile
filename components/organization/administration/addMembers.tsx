@@ -20,9 +20,9 @@ export default function OrganizationAddMembers() {
     const [loading, setLoading] = useState(true)
     const [search, setSearch] = useState('')
 
-    const lastUserId = useRef<string>()
+    const lastUserId = useRef<string>(undefined)
     const isEndReached = useRef(false)
-    const debounceTime = useRef<NodeJS.Timeout>()
+    const debounceTime = useRef<NodeJS.Timeout>(undefined)
 
     useEffect(() => {
         lastUserId.current = undefined

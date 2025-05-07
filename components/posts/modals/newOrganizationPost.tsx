@@ -131,27 +131,27 @@ export function NewOrganizationPostModal({ visible, onClose }: Params) {
 
             <SafeAreaView className="flex-1">
                 <ScrollView>
+                    <Controller
+                        control={control}
+                        name="title"
+                        render={({ field: { value, onChange } }) => {
+                            return (
+                                <TextInput
+                                    placeholder="Título (opcional)"
+                                    placeholderTextColor={'#78716c'}
+                                    value={value}
+                                    onChangeText={onChange}
+                                    className="font-bold bg-stone-100 p-2 rounded-lg mt-2 mx-2 text-center"
+                                />
+                            )
+                        }}
+                    />
                     <View className="p-2 flex-row items-start" style={{ gap: 2 }}>
                         <View className="flex-row relative items-center">
                             <Image source={userPictureUrl} className="h-8 w-8 rounded-full left-0" />
                             <Image source={orgPictureUrl} className="h-10 w-10 rounded-lg -left-3" />
                         </View>
                         <View className="flex-1 h-full">
-                            <Controller
-                                control={control}
-                                name="title"
-                                render={({ field: { value, onChange } }) => {
-                                    return (
-                                        <TextInput
-                                            placeholder="Título (opcional)"
-                                            placeholderTextColor={'#78716c'}
-                                            value={value}
-                                            onChangeText={onChange}
-                                            className="font-bold border-b border-stone-100 pb-1"
-                                        />
-                                    )
-                                }}
-                            />
                             <Controller
                                 control={control}
                                 name="text"

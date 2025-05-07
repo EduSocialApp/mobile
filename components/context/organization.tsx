@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react'
 import { apiOrganizationFindById, OrganizationSimple } from '../../api/organization/findById'
 import debounce from 'lodash/debounce'
 import { apiOrganizationRole } from '../../api/organization/role'
-import { ActivityIndicator, View, Text } from 'react-native'
 import { OrganizationContext } from '../../hooks/organization'
 import { useUserAuthenticated } from '../../hooks/authenticated'
+import { LoadingScreen } from '../loading'
+import { DataNotFound } from '../404'
 
 interface Params {
     id: string
@@ -59,19 +60,11 @@ export function OrganizationProvider({ id, children }: Params) {
     }
 
     if (loading === 'organization') {
-        return (
-            <View className="flex-1 items-center justify-center">
-                <ActivityIndicator size="large" color="#c5c5c5" />
-            </View>
-        )
+        return <LoadingScreen />
     }
 
     if (!organization) {
-        return (
-            <View className="flex-1 items-center justify-center">
-                <Text>Organização não encontrada</Text>
-            </View>
-        )
+        return <DataNotFound text="Organização não encontrada" />
     }
 
     return (

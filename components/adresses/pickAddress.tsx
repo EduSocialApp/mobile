@@ -15,7 +15,7 @@ export function PickAddressModal({ visible, onClose, organizationId }: Params) {
     const [loading, setLoading] = useState(false)
     const [addresses, setAddresses] = useState<Address[]>([])
 
-    const debounceRef = useRef<NodeJS.Timeout>()
+    const debounceRef = useRef<NodeJS.Timeout>(undefined)
 
     useEffect(() => {
         searchAddresses()

@@ -5,7 +5,6 @@ import { Button } from '../button'
 import { Counter } from '../counter'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { OrganizationPosts } from './posts'
-import { Header } from '../header'
 import { OrganizationMembers } from './members'
 import { useOrganization } from '../../hooks/organization'
 import { OrganizationProvider } from '../context/organization'
@@ -14,13 +13,13 @@ import { VerifiedBadge } from '../verifiedBadge'
 import { useUserAuthenticated } from '../../hooks/authenticated'
 import { placeholderImage } from '../../functions/placeholderImage'
 import { useState } from 'react'
-import { NewUserPostModal } from '../posts/modals/newUserPost'
 import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import { HeaderOptionsContext } from '../../hooks/headerOptions'
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated'
 import { NewOrganizationPostModal } from '../posts/modals/newOrganizationPost'
 import OrganizationEvents from './events'
+import { BioBubble } from '../bioBubble'
 
 interface Params {
     id: string
@@ -31,15 +30,15 @@ const Tab = createMaterialTopTabNavigator()
 
 const HEADER_HEIGHT = 160
 
-function calculeHeaderHeight(scrollY: number) {
-    const headerHeight = HEADER_HEIGHT - scrollY
+function calculeHeaderHeight(scrollY: number, headerHeightBase: number = HEADER_HEIGHT) {
+    const headerHeight = headerHeightBase - scrollY
 
     if (headerHeight < 0) {
         return 0
     }
 
-    if (headerHeight > HEADER_HEIGHT) {
-        return HEADER_HEIGHT
+    if (headerHeight > headerHeightBase) {
+        return headerHeightBase
     }
 
     return headerHeight
@@ -50,14 +49,16 @@ function OrganizationRender() {
     const org = useOrganization()
     if (!org) return null
 
-    const { displayName, pictureUrl, biography, verified, stats } = org.organization
+    let { displayName, pictureUrl, biography, verified, stats } = org.organization
 
     const [visibleNewPostModal, setVisibleNewPostModal] = useState(false)
 
-    const headerHeight = useSharedValue(HEADER_HEIGHT)
+    const headerHeightBase = user.isAdmin ? HEADER_HEIGHT : HEADER_HEIGHT - 65 // Remove tamanho dos botoes de edicao de perfil
+
+    const headerHeight = useSharedValue(headerHeightBase)
 
     const setHeaderHeight = (height: number) => {
-        headerHeight.value = withTiming(calculeHeaderHeight(height), { duration: 300 })
+        headerHeight.value = withTiming(calculeHeaderHeight(height, headerHeightBase), { duration: 300 })
     }
 
     const headerStyle = useAnimatedStyle(() => {
@@ -70,29 +71,40 @@ function OrganizationRender() {
 
     const headerProfileStyle = useAnimatedStyle(() => {
         return {
-            opacity: headerHeight.value / HEADER_HEIGHT - 0.1,
+            opacity: headerHeight.value / headerHeightBase - 0.1,
         }
     })
+
+    if (!biography) {
+        if (user.isAdmin) {
+            biography = 'Esta organização ainda não possui uma biografia.'
+        } else {
+            biography = 'Estamos no EduSocial para fortalecer a comunicação com nossa comunidade 😄'
+        }
+    }
 
     return (
         <HeaderOptionsContext.Provider
             value={{
-                headerHeight: HEADER_HEIGHT,
+                headerHeight: headerHeightBase,
                 setHeaderHeight,
             }}>
             <View className="flex-1 relative">
-                <NewOrganizationPostModal
-                    visible={visibleNewPostModal}
-                    onClose={() => {
-                        setVisibleNewPostModal(false)
-                    }}
-                />
-
-                <TouchableOpacity
-                    className="absolute bottom-2 right-2 p-4 bg-headline rounded-full z-10"
-                    onPress={() => setVisibleNewPostModal(true)}>
-                    <MaterialCommunityIcons name="plus" size={28} color="#ffffff" />
-                </TouchableOpacity>
+                {(user.isModerator || user.isAdmin) && (
+                    <>
+                        <NewOrganizationPostModal
+                            visible={visibleNewPostModal}
+                            onClose={() => {
+                                setVisibleNewPostModal(false)
+                            }}
+                        />
+                        <TouchableOpacity
+                            className="absolute bottom-2 right-2 p-4 bg-headline rounded-full z-10"
+                            onPress={() => setVisibleNewPostModal(true)}>
+                            <MaterialCommunityIcons name="plus" size={28} color="#ffffff" />
+                        </TouchableOpacity>
+                    </>
+                )}
 
                 <View className="flex-row justify-between items-center relative p-2" style={{ gap: 8 }}>
                     <TouchableOpacity onPress={() => router.back()}>
@@ -119,16 +131,7 @@ function OrganizationRender() {
                             <Image source={pictureUrl} placeholder={placeholderImage} className="h-20 w-20 rounded-lg border border-stone-200" />
                         </Animated.View>
                         <View className="flex-1">
-                            <View className="flex-row justify-between mx-2 items-center flex-1" style={{ gap: 8 }}>
-                                <Counter title="Membros" value={stats?.members || 0} />
-                                {/* <Counter title="Medalhas" value={stats?.medals || 0} /> */}
-                                <Counter title="Curtidas" value={stats?.likes || 0} />
-                            </View>
-                            {biography && (
-                                <Text className="text-stone-500 mt-1 text-sm" numberOfLines={2}>
-                                    {biography}
-                                </Text>
-                            )}
+                            <BioBubble text={biography} numberOfLines={3} />
                         </View>
                     </View>
 

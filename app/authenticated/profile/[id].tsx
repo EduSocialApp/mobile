@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from 'expo-router'
-import { Profile } from '../../../components/profile'
+import { Profile } from '../../../components/user'
 
 export default function ProfileView() {
     const { id } = useLocalSearchParams()

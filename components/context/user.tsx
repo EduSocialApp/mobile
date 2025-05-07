@@ -4,6 +4,8 @@ import { ActivityIndicator, View, Text } from 'react-native'
 import { useUserAuthenticated } from '../../hooks/authenticated'
 import { apiGetUserById } from '../../api/user/get'
 import { UserContext } from '../../hooks/user'
+import { LoadingScreen } from '../loading'
+import { DataNotFound } from '../404'
 
 interface Params {
     id: string
@@ -40,19 +42,11 @@ export function UserProvider({ id, children }: Params) {
     }
 
     if (loading === 'user') {
-        return (
-            <View className="flex-1 items-center justify-center">
-                <ActivityIndicator size="large" color="#c5c5c5" />
-            </View>
-        )
+        return <LoadingScreen />
     }
 
     if (!user) {
-        return (
-            <View className="flex-1 items-center justify-center">
-                <Text>Usuário não encontrado</Text>
-            </View>
-        )
+        return <DataNotFound text="Usuário não encontrado" />
     }
 
     const myProfile = user.id === loggedUser.id

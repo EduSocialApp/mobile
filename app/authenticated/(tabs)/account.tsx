@@ -1,4 +1,4 @@
-import { Profile } from '../../../components/profile'
+import { Profile } from '../../../components/user'
 import { useUserAuthenticated } from '../../../hooks/authenticated'
 
 export default function Account() {

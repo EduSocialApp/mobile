@@ -1,8 +1,7 @@
 import { useState } from 'react'
-import { View, Text, ScrollView, RefreshControl, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import { Image } from 'expo-image'
 import { Button } from '../button'
-import { Counter } from '../counter'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { ProfilePosts } from './posts'
 import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons'
@@ -17,6 +16,7 @@ import { placeholderImage } from '../../functions/placeholderImage'
 import { HeaderOptionsContext } from '../../hooks/headerOptions'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import Constants from 'expo-constants'
+import { BioBubble } from '../bioBubble'
 
 interface Params {
     id: string
@@ -24,10 +24,9 @@ interface Params {
     withConfig?: boolean
 }
 
-const TOPBAR_HEIGHT = Constants.statusBarHeight + 4
-
 const Tab = createMaterialTopTabNavigator()
 
+const TOPBAR_HEIGHT = Constants.statusBarHeight + 4
 const HEADER_HEIGHT = 160
 
 function ShareProfileButton() {
@@ -41,15 +40,15 @@ function ShareProfileButton() {
     )
 }
 
-function calculeHeaderHeight(scrollY: number) {
-    const headerHeight = HEADER_HEIGHT - scrollY
+function calculeHeaderHeight(scrollY: number, headerHeightBase: number = HEADER_HEIGHT) {
+    const headerHeight = headerHeightBase - scrollY
 
     if (headerHeight < 0) {
         return 0
     }
 
-    if (headerHeight > HEADER_HEIGHT) {
-        return HEADER_HEIGHT
+    if (headerHeight > headerHeightBase) {
+        return headerHeightBase
     }
 
     return headerHeight
@@ -59,19 +58,20 @@ function ProfileRender({ header }: Params) {
     const userContext = useUser()
     if (!userContext) return null
 
-    const {
-        user: { displayName, pictureUrl, biography, organizations, role, supervisedUsers, supervisorUsers },
-        isModerator,
+    let {
+        user: { displayName, pictureUrl, biography, supervisedUsers, supervisorUsers },
         myProfile,
         refresh,
     } = userContext
 
-    const headerHeight = useSharedValue(HEADER_HEIGHT)
+    const headerHeightBase = myProfile ? HEADER_HEIGHT : HEADER_HEIGHT - 65 // Remove tamanho dos botoes de edicao de perfil
+
+    const headerHeight = useSharedValue(headerHeightBase)
 
     const haveFamily = (supervisedUsers?.length || 0) > 0 || (supervisorUsers?.length || 0) > 0
 
     const setHeaderHeight = (height: number) => {
-        headerHeight.value = withTiming(calculeHeaderHeight(height), { duration: 300 })
+        headerHeight.value = withTiming(calculeHeaderHeight(height, headerHeightBase), { duration: 300 })
     }
 
     const headerStyle = useAnimatedStyle(() => {
@@ -84,7 +84,7 @@ function ProfileRender({ header }: Params) {
 
     const headerProfileStyle = useAnimatedStyle(() => {
         return {
-            opacity: headerHeight.value / HEADER_HEIGHT - 0.1,
+            opacity: headerHeight.value / headerHeightBase - 0.1,
         }
     })
 
@@ -105,10 +105,18 @@ function ProfileRender({ header }: Params) {
         )
     }
 
+    if (!biography) {
+        if (myProfile) {
+            biography = 'Você ainda não preencheu sua biografia. Que tal contar um pouco sobre você?'
+        } else {
+            biography = 'Olá! Que bom ter você por aqui no meu perfil do EduSocial 😁'
+        }
+    }
+
     return (
         <HeaderOptionsContext.Provider
             value={{
-                headerHeight: HEADER_HEIGHT,
+                headerHeight: headerHeightBase,
                 setHeaderHeight,
             }}>
             <View className="flex-1 relative bg-white">
@@ -130,44 +138,25 @@ function ProfileRender({ header }: Params) {
                             <Image source={pictureUrl} placeholder={placeholderImage} className="h-20 w-20 rounded-full border-2 border-stone-200" />
                         </Animated.View>
                         <View className="flex-1">
-                            {/* <View className="flex-row items-center flex-1" style={{ gap: 14 }}>
-                                <Counter title="instituições" value={organizations.length} />
-                                <Counter title="prêmios" value={0} />
-                                <Counter title="curtidas" value={0} />
-                            </View> */}
-                            {biography && (
-                                <Text className="text-stone-500 mt-1 text-sm" numberOfLines={2}>
-                                    {biography}
-                                </Text>
-                            )}
-                            {!biography && myProfile && (
-                                <Text className="text-stone-500 mt-1 text-sm italic">Você pode adicionar uma biografia editando seu perfil</Text>
-                            )}
+                            <BioBubble text={biography} numberOfLines={3} />
                         </View>
                     </View>
 
-                    <View className="flex-row" style={{ gap: 14 }}>
-                        {/* {id !== 'me' && (
-                        <View className="flex-1">
-                            <Button onPress={() => {}} text="Conectar" className="flex-1" />
+                    {myProfile && (
+                        <View className="flex-row items-center" style={{ gap: 8 }}>
+                            <EditProfileButton />
+                            <ShareProfileButton />
+                            <Button
+                                onPress={() => {
+                                    router.push('/authenticated/settings')
+                                }}
+                                variant="outline"
+                                className="flex-1"
+                                size="sm">
+                                <MaterialCommunityIcons name="cog" size={24} />
+                            </Button>
                         </View>
-                    )} */}
-                        {myProfile && (
-                            <>
-                                <EditProfileButton />
-                                <ShareProfileButton />
-                                <Button
-                                    onPress={() => {
-                                        router.push('/authenticated/settings')
-                                    }}
-                                    variant="outline"
-                                    className="flex-1"
-                                    size="sm">
-                                    <MaterialCommunityIcons name="cog" size={24} />
-                                </Button>
-                            </>
-                        )}
-                    </View>
+                    )}
                 </Animated.View>
 
                 <Tab.Navigator

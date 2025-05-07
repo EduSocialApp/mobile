@@ -54,3 +54,46 @@ interface User {
     supervisedUsers?: SupervisedUser[]
     supervisorUsers?: SupervisorUsers[]
 }
+
+interface Contact {
+    id: string
+    name: string
+    displayName: string
+    pictureUrl: string
+    type: 'user' | 'organization'
+    role: string
+    verified: boolean
+}
+
+interface ContactList {
+    id: string
+    name: string
+    displayName: string
+    pictureUrl: string
+    organizations?: {
+        role: string
+        organization: {
+            id: string
+            name: string
+            displayName: string
+            pictureUrl: string
+            verified: boolean
+        }
+    }[]
+    supervisedUsers?: {
+        supervisedUser: {
+            id: string
+            name: string
+            displayName: string
+            pictureUrl: string
+        }
+    }[]
+    supervisorUsers?: {
+        supervisorUser: {
+            id: string
+            name: string
+            displayName: string
+            pictureUrl: string
+        }
+    }[]
+}

@@ -21,9 +21,9 @@ export function OrganizationMembers() {
     const [memberSelected, setMemberSelected] = useState<OrganizationMember>()
     const [loading, setLoading] = useState(true)
 
-    const lastOrgMemberId = useRef<string>()
+    const lastOrgMemberId = useRef<string>(undefined)
     const isEndReached = useRef(false)
-    const debounceTime = useRef<NodeJS.Timeout>()
+    const debounceTime = useRef<NodeJS.Timeout>(undefined)
 
     useEffect(() => {
         resetRequest()
