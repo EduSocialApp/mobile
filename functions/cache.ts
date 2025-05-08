@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-export type CacheKey = 'SAW_PRESENTATION' | 'AUTHENTICATED_USER'
+export type CacheKey = 'SAW_PRESENTATION' | 'AUTHENTICATED_USER' | 'CONVERSATION_CONTACT'
 
 interface CacheContent {
     type: string

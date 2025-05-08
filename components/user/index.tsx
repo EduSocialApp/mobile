@@ -16,7 +16,7 @@ import { placeholderImage } from '../../functions/placeholderImage'
 import { HeaderOptionsContext } from '../../hooks/headerOptions'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import Constants from 'expo-constants'
-import { BioBubble } from '../bioBubble'
+import { TextBubble } from '../textBubble'
 
 interface Params {
     id: string
@@ -138,7 +138,7 @@ function ProfileRender({ header }: Params) {
                             <Image source={pictureUrl} placeholder={placeholderImage} className="h-20 w-20 rounded-full border-2 border-stone-200" />
                         </Animated.View>
                         <View className="flex-1">
-                            <BioBubble text={biography} numberOfLines={3} />
+                            <TextBubble text={biography} numberOfLines={3} />
                         </View>
                     </View>
 

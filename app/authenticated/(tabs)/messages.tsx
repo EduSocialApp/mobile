@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
 import { ContactList } from '../../../components/messages/contactList'
 import { router } from 'expo-router'
+import { saveCache } from '../../../functions/cache'
 
 export default function Messages() {
     const [visibleModalContacts, setVisibleModalContacts] = useState(false)
@@ -14,9 +15,11 @@ export default function Messages() {
                 whenClose={() => {
                     setVisibleModalContacts(false)
                 }}
-                whenSelected={(contact) => {
+                whenSelected={async (contact) => {
+                    await saveCache('CONVERSATION_CONTACT', contact)
+
                     setVisibleModalContacts(false)
-                    router.push(`/authenticated/message/${contact.id}/${contact.type}`)
+                    router.push('/authenticated/conversation/novo')
                 }}
             />
 
@@ -26,7 +29,7 @@ export default function Messages() {
 
             <View className="relative mt-2 pb-2 h-10 items-center justify-center border-b border-stone-100">
                 <Text style={{ fontSize: 18 }} className="font-semibold">
-                    Mensagens
+                    Conversas
                 </Text>
             </View>
             <View className="flex-1"></View>

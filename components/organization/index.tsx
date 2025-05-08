@@ -19,7 +19,7 @@ import { HeaderOptionsContext } from '../../hooks/headerOptions'
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated'
 import { NewOrganizationPostModal } from '../posts/modals/newOrganizationPost'
 import OrganizationEvents from './events'
-import { BioBubble } from '../bioBubble'
+import { TextBubble } from '../textBubble'
 
 interface Params {
     id: string
@@ -131,7 +131,7 @@ function OrganizationRender() {
                             <Image source={pictureUrl} placeholder={placeholderImage} className="h-20 w-20 rounded-lg border border-stone-200" />
                         </Animated.View>
                         <View className="flex-1">
-                            <BioBubble text={biography} numberOfLines={3} />
+                            <TextBubble text={biography} numberOfLines={3} />
                         </View>
                     </View>
 
