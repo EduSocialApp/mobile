@@ -117,9 +117,10 @@ export default function Conversation() {
                 </View>
             </View>
 
-            <ScrollView className="flex-1 bg-stone-200" contentContainerStyle={{ padding: 12 }}>
+            <ScrollView className="flex-1 bg-stone-100" contentContainerStyle={{ padding: 12 }}>
                 {conversation?.messages && (conversation?.messages || []).length > 0 && (
                     <View style={{ gap: 12 }}>
+                        <MessageItem {...conversation.messages[0]} />
                         <MessageItem {...conversation.messages[0]} />
                         <MessageItem {...conversation.messages[0]} />
                         <MessageItem
