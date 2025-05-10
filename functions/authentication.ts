@@ -1,5 +1,5 @@
 import * as SecureStore from 'expo-secure-store'
-import { readCache, removeCache, saveCache } from './cache'
+import { readCache, removeCache, saveCache } from '../cache/asyncStorage'
 
 const SESSION_AUTH = 'SessionAuthStorage'
 

@@ -1,7 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router'
 import { useEffect, useRef, useState } from 'react'
 import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native'
-import { readCache } from '../../../functions/cache'
 import { Entypo, Ionicons } from '@expo/vector-icons'
 import { DataNotFound } from '../../../components/404'
 import { UserBasicView } from '../../../components/userBasicView'
@@ -12,6 +11,7 @@ import { apiNewConversation } from '../../../api/conversation/newConversation'
 import { apiGetConversation } from '../../../api/conversation/getConversation'
 import { FlashList } from '@shopify/flash-list'
 import { MessageItem } from '../../../components/messages/item'
+import { readCache } from '../../../cache/asyncStorage'
 
 interface Form {
     text: string

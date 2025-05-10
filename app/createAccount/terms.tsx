@@ -4,25 +4,24 @@ import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { TitleBlack } from '../../components/title'
-import { getRegisterCache, saveRegisterCache } from './functions/cache'
 
-import { Permissions } from './types'
 import { Button } from '../../components'
+import { readCache, saveCache } from '../../cache/asyncStorage'
 
 interface IPermission {
-    id: keyof Permissions
+    id: keyof UserPermissions
     title: string
     description: string
     link?: string
 }
 
 export default function CreateAccountTerms() {
-    const [permissions, setPermissions] = useState<Permissions>({
-        connectWithNeighbors: true,
-        privacyPolicy: true,
+    const [permissions, setPermissions] = useState<UserPermissions>({
         receiveEmails: true,
+        connectWithNeighbors: true,
         receiveNotifications: true,
         termsOfUse: true,
+        privacyPolicy: true,
     })
 
     useEffect(() => {
@@ -30,13 +29,13 @@ export default function CreateAccountTerms() {
     }, [])
 
     const getCacheValues = async () => {
-        const user = await getRegisterCache()
+        const user = (await readCache<RegisterUser>('REGISTER_USER')).value
         if (!user) return
 
         setPermissions({ ...user.permissions })
     }
 
-    const setPermissionStatus = (id: keyof Permissions, status: boolean) => {
+    const setPermissionStatus = (id: keyof UserPermissions, status: boolean) => {
         permissions[id] = status
         setPermissions({ ...permissions })
     }
@@ -105,7 +104,7 @@ export default function CreateAccountTerms() {
             <View className="p-2">
                 <Button
                     onPress={async () => {
-                        const user = await getRegisterCache()
+                        const user = (await readCache<RegisterUser>('REGISTER_USER')).value
                         if (!user) return
 
                         if (!permissions.termsOfUse) {
@@ -118,7 +117,7 @@ export default function CreateAccountTerms() {
                             return
                         }
 
-                        saveRegisterCache({ ...user, permissions })
+                        saveCache('REGISTER_USER', { ...user, permissions })
 
                         router.push('/createAccount/password')
                     }}

@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, TouchableOpacity, Platform, ScrollView } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
-import DateTimePickerModal from 'react-native-modal-datetime-picker'
 
 import { TextInput, TitleBlack, DateInput, Button } from '../../components'
-
-import { getRegisterCache, saveRegisterCache } from './functions/cache'
+import { readCache, saveCache } from '../../cache/asyncStorage'
 
 export default function CreateAccount() {
     const [name, setName] = useState<string>('')
     const [displayName, setDisplayName] = useState<string>('')
     const [email, setEmail] = useState<string>('')
-    const [birthdayDate, setBirthdayDate] = useState<Date>()
+    const [birthdayDate, setBirthdayDate] = useState<Date | null>()
     const [showErrors, setShowErrors] = useState(false)
 
     useEffect(() => {
@@ -20,7 +18,7 @@ export default function CreateAccount() {
     }, [])
 
     const getCacheValues = async () => {
-        const user = await getRegisterCache()
+        const user = (await readCache<RegisterUser>('REGISTER_USER')).value
         if (user) {
             setName(user.fullname)
             setDisplayName(user.displayName)
@@ -108,7 +106,7 @@ export default function CreateAccount() {
                             return setShowErrors(true)
                         }
 
-                        saveRegisterCache({
+                        saveCache('REGISTER_USER', {
                             fullname: name,
                             displayName: displayName,
                             email: email,

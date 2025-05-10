@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, TouchableOpacity, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
-import { destroyRegisterCache, getRegisterCache } from './functions/cache'
 import { TitleBlack, Button, PasswordInput } from '../../components'
 import { apiUserRegister } from '../../api/user/register'
 import { AxiosError } from 'axios'
 import { translateMessage } from '../../translate/translateMessage'
+import { readCache, removeCache } from '../../cache/asyncStorage'
 
 export default function CreateAccount() {
     const [password, setPassword] = useState<string>('')
@@ -18,7 +18,7 @@ export default function CreateAccount() {
     }, [])
 
     const getCacheValues = async () => {
-        const user = await getRegisterCache()
+        const user = (await readCache<RegisterUser>('REGISTER_USER')).value
         if (!user) return
 
         setUserName(user.displayName)
@@ -27,7 +27,7 @@ export default function CreateAccount() {
     const handleRegister = async () => {
         setLoading('register')
 
-        const user = await getRegisterCache()
+        const user = (await readCache<RegisterUser>('REGISTER_USER')).value
         if (!user) return
 
         try {
@@ -36,7 +36,7 @@ export default function CreateAccount() {
 
             if (requisicao.status === 201) {
                 router.replace('login')
-                destroyRegisterCache()
+                removeCache('REGISTER_USER')
             } else {
                 Alert.alert('Erro', 'Erro ao cadastrar usuário')
             }

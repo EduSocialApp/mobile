@@ -11,10 +11,9 @@ import imgNetwork from '../assets/apresentation/network.png'
 import imgClassroom from '../assets/apresentation/classroom.png'
 import imgSchool from '../assets/apresentation/school.png'
 
-import { saveCache } from '../functions/cache'
-
 import Title, { TitleBlack } from '../components/title'
 import { StatusBar } from 'expo-status-bar'
+import { saveCache } from '../cache/asyncStorage'
 
 interface IParamsSlide {
     key: string

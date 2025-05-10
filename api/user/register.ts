@@ -1,4 +1,3 @@
-import { RegisterUser } from '../../app/createAccount/types'
 import { api } from '../route'
 
 export function apiUserRegister({ fullname, displayName, date, email, password, permissions }: RegisterUser) {

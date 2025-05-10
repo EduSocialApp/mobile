@@ -97,3 +97,21 @@ interface ContactList {
         }
     }[]
 }
+
+interface RegisterUser {
+    fullname: string
+    displayName: string
+    email: string
+    date: Date
+    confirmationCode: string
+    password: string
+    permissions: UserPermissions
+}
+
+interface UserPermissions {
+    receiveEmails: boolean
+    connectWithNeighbors: boolean
+    receiveNotifications: boolean
+    termsOfUse: boolean
+    privacyPolicy: boolean
+}

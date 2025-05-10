@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
 import { ContactList } from '../../../components/messages/contactList'
 import { router } from 'expo-router'
-import { saveCache } from '../../../functions/cache'
+import { saveCache } from '../../../cache/asyncStorage'
 
 export default function Messages() {
     const [visibleModalContacts, setVisibleModalContacts] = useState(false)
