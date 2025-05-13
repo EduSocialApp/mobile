@@ -1,17 +1,22 @@
 import { router, Stack } from 'expo-router'
 import { useUserAuthenticated } from '../../../../hooks/authenticated'
+import { useEffect } from 'react'
 
 export default function Layout() {
     const session = useUserAuthenticated()
 
-    if (!session?.user) {
-        return router.replace('/login')
-    }
+    useEffect(() => {
+        if (!session) return
 
-    // Checa se o usuário é admin ou moderador
-    if (session.user.role !== 'ADMIN' && session.user.role !== 'MODERATOR') {
-        return router.replace('/authenticated/profile')
-    }
+        if (!session.user) {
+            router.replace('/login')
+            return
+        }
+
+        if (session.user.role !== 'ADMIN' && session.user.role !== 'MODERATOR') {
+            router.replace('/authenticated/profile')
+        }
+    }, [session])
 
     return (
         <Stack

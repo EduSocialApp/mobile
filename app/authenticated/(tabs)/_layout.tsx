@@ -39,13 +39,13 @@ export default function TabLayout() {
                     tabBarIcon: ({ color, focused }) => <Ionicons name={focused ? 'calendar' : 'calendar-outline'} size={26} color={color} />,
                 }}
             />
-            {/* <Tabs.Screen
+            <Tabs.Screen
                 name="messages"
                 options={{
                     title: 'Messages',
                     tabBarIcon: ({ color, focused }) => <Ionicons name={focused ? 'chatbubble' : 'chatbubble-outline'} size={26} color={color} />,
                 }}
-            /> */}
+            />
             <Tabs.Screen
                 name="account"
                 options={{

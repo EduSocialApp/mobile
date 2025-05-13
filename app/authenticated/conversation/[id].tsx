@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router'
 import { useEffect, useRef, useState } from 'react'
-import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native'
+import { View, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { Entypo, Ionicons } from '@expo/vector-icons'
 import { DataNotFound } from '../../../components/404'
 import { UserBasicView } from '../../../components/userBasicView'
@@ -12,14 +12,14 @@ import { apiGetConversation } from '../../../api/conversation/getConversation'
 import { FlashList } from '@shopify/flash-list'
 import { MessageItem } from '../../../components/messages/item'
 import { readCache } from '../../../cache/asyncStorage'
+import { apiNewMessage } from '../../../api/message/newMessage'
 
 interface Form {
     text: string
 }
 
 export default function Conversation() {
-    // const { id } = useLocalSearchParams()
-    const id = '0196ae84-51c8-744d-8f3a-d7da87713faf'
+    const { id } = useLocalSearchParams()
 
     const [sending, setSending] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -74,8 +74,9 @@ export default function Conversation() {
         }
 
         setSending(true)
+
+        // Inicia uma nova conversa, caso o id seja 'novo'
         if (idRef.current === 'novo') {
-            // Inicia uma nova conversa
             try {
                 const request = await apiNewConversation({
                     content: text,
@@ -93,6 +94,18 @@ export default function Conversation() {
                 setSending(false)
             }
             return
+        }
+
+        // Apenas envia uma nova mensagem na conversa
+        try {
+            await apiNewMessage(idRef.current, text)
+            setValue('text', '')
+
+            fetchConversation()
+        } catch {
+            alert('Erro ao enviar mensagem, tente novamente')
+        } finally {
+            setSending(false)
         }
     }
 
@@ -117,27 +130,16 @@ export default function Conversation() {
                 </View>
             </View>
 
-            <ScrollView className="flex-1 bg-stone-100" contentContainerStyle={{ padding: 12 }}>
+            <View className="flex-1 bg-stone-100 p-3">
                 {conversation?.messages && (conversation?.messages || []).length > 0 && (
-                    <View style={{ gap: 12 }}>
-                        <MessageItem {...conversation.messages[0]} />
-                        <MessageItem {...conversation.messages[0]} />
-                        <MessageItem {...conversation.messages[0]} />
-                        <MessageItem
-                            {...{
-                                ...conversation.messages[0],
-                                user: {
-                                    id: '123',
-                                    displayName: 'Lucas',
-                                    pictureUrl: 'https://i.pinimg.com/564x/4c/0f/8b/4c0f8b1a2d3e5a7d6e9f3a2b5e1f3c7b.jpg',
-                                    name: 'Lucas',
-                                },
-                            }}
-                        />
-                    </View>
+                    <FlashList
+                        data={conversation?.messages}
+                        estimatedItemSize={100}
+                        renderItem={({ item }) => <MessageItem {...item} />}
+                        ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
+                    />
                 )}
-                {/* <FlashList data={conversation?.messages} estimatedItemSize={100} renderItem={MessageItem} /> */}
-            </ScrollView>
+            </View>
 
             <View className="border-t border-stone-200 p-2 flex-row items-center" style={{ gap: 12 }}>
                 <View className="flex-1">

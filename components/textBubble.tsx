@@ -27,7 +27,9 @@ export function TextBubble({ text = 'Insira um texto', numberOfLines, theme = 'd
                 className={cn(
                     'relative bg-stone-100 px-4 py-2 rounded-lg  flex-row',
                     theme === 'white' && 'bg-white',
-                    theme === 'primary' && 'bg-tertiary'
+                    theme === 'primary' && 'bg-tertiary',
+                    direction === 'left' && 'rounded-br-none',
+                    direction === 'right' && 'rounded-br-none'
                 )}>
                 <Text className="text-stone-800 text-sm" numberOfLines={numberOfLines}>
                     {text}
