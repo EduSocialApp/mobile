@@ -3,9 +3,10 @@ import Axios from 'axios'
 import { getCredentialsFromSecureStore, saveCredentialsInSecureStore } from '../functions/authentication'
 import { router } from 'expo-router'
 import { notificationDevice } from '../functions/notification'
+import { apiUrl } from './url'
 
 export const api = Axios.create({
-    baseURL: process.env.EXPO_PUBLIC_API_URL,
+    baseURL: apiUrl,
 })
 
 function renewLogin({ deviceName, notificationToken, refreshToken }: { deviceName: string; notificationToken: string; refreshToken: string }) {

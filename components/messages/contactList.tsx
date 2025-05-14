@@ -3,7 +3,7 @@ import Modal from '../modals/base'
 import { useEffect, useRef, useState } from 'react'
 import { apiContacList } from '../../api/user/getContactList'
 import { FlashList } from '@shopify/flash-list'
-import { UserBasicView } from '../userBasicView'
+import { UserView } from '../userView'
 import { DataNotFound } from '../404'
 
 interface Params {
@@ -14,12 +14,12 @@ interface Params {
 
 export function ContactList({ visible = true, whenClose = () => {}, whenSelected = () => {} }: Params) {
     const [loading, setLoading] = useState(false)
-    const [contactList, setContactList] = useState<Contact[]>([])
+    const [contactList, setContactList] = useState<Contact[]>()
 
     const debounceFetch = useRef<NodeJS.Timeout>(undefined)
 
     useEffect(() => {
-        if (visible && contactList.length === 0) {
+        if (visible && (!contactList || contactList.length === 0)) {
             fetchContactList()
         }
     }, [visible])
@@ -36,14 +36,14 @@ export function ContactList({ visible = true, whenClose = () => {}, whenSelected
                 .finally(() => {
                     setLoading(false)
                 })
-        }, 500)
+        }, 150)
     }
 
     const renderContact = ({ item }: { item: Contact }) => {
         const { name, displayName, pictureUrl, verified, type } = item
         return (
             <TouchableOpacity className="p-2" onPress={() => whenSelected(item)}>
-                <UserBasicView title={displayName || name} urlPicture={pictureUrl} verified={verified} type={type} />
+                <UserView title={displayName || name} urlPicture={pictureUrl} verified={verified} type={type} />
             </TouchableOpacity>
         )
     }
@@ -56,11 +56,13 @@ export function ContactList({ visible = true, whenClose = () => {}, whenSelected
                 estimatedItemSize={100}
                 refreshing={loading}
                 onRefresh={fetchContactList}
-                ListEmptyComponent={() => (
-                    <View className="p-5">
-                        <DataNotFound text="Nenhum contato na lista" backButton={false} />
-                    </View>
-                )}
+                ListEmptyComponent={() =>
+                    typeof contactList !== 'undefined' && (
+                        <View className="p-5">
+                            <DataNotFound text="Nenhum contato disponível" backButton={false} />
+                        </View>
+                    )
+                }
                 ItemSeparatorComponent={() => <View className="h-[1] bg-stone-100" />}
             />
         </Modal>

@@ -7,7 +7,7 @@ import { FlashList } from '@shopify/flash-list'
 import { Image } from 'expo-image'
 import { router } from 'expo-router'
 import { VerifiedBadge } from '../../../components/verifiedBadge'
-import { UserBasicView } from '../../../components/userBasicView'
+import { UserView } from '../../../components/userView'
 import { placeholderImage } from '../../../functions/placeholderImage'
 
 function ContentCell({ item: { title, type, id, info, urlPicture, verified } }: { item: FindItem }) {
@@ -36,7 +36,7 @@ function ContentCell({ item: { title, type, id, info, urlPicture, verified } }: 
 
     return (
         <TouchableOpacity className="p-2" onPress={() => router.push('/authenticated/profile/' + id)}>
-            <UserBasicView title={title} urlPicture={urlPicture} info={info} />
+            <UserView title={title} urlPicture={urlPicture} info={info} />
         </TouchableOpacity>
     )
 }

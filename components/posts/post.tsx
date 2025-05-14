@@ -5,7 +5,7 @@ import { SafeAreaView, Text, TouchableOpacity, View, ScrollView, FlatList, Activ
 import { Post } from '../../api/user/getUserFeed'
 import { apiGetPostById } from '../../api/post/getPostById'
 import MediaViewer, { ImageDisplay, MediaViewerRef } from '../modals/mediaViewer'
-import { textTimeSincePost } from '../../functions/textTimeSincePost'
+import { textTimeSincePost } from '../../functions/textTimeSince'
 import { Image } from 'expo-image'
 import { cn } from '../../functions/utils'
 import { VerifiedBadge } from '../verifiedBadge'

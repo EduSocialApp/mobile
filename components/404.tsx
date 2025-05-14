@@ -4,17 +4,24 @@ import { MaterialIcons } from '@expo/vector-icons'
 
 interface DataNotFoundProps {
     text?: string
+    description?: string
     backButton?: boolean
+    Icon?: React.ReactNode
 }
 
-export function DataNotFound({ text = 'Nenhum dado encontrado', backButton = true }: DataNotFoundProps) {
+export function DataNotFound({
+    text = 'Nenhum dado encontrado',
+    backButton,
+    description,
+    Icon = <MaterialIcons name="search-off" size={64} color="#dcdcdc" />,
+}: DataNotFoundProps) {
     return (
-        <View className="flex-1 items-center justify-center px-6" style={{ gap: 20 }}>
-            <View className="items-center">
-                <MaterialIcons name="search-off" size={64} color="#a3a3a3" />
-                <Text className="text-stone-600 text-center mt-4" style={{ fontSize: 18 }}>
-                    {text}
-                </Text>
+        <View className="flex-1 items-center justify-center p-5" style={{ gap: 18 }}>
+            {Icon}
+
+            <View style={{ gap: 4 }}>
+                <Text className="text-stone-500 text-center font-bold">{text}</Text>
+                {description && <Text className="text-stone-500 text-center">{description}</Text>}
             </View>
 
             {backButton && (

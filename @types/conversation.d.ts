@@ -8,6 +8,7 @@ interface ConversationUser {
 interface ConversationOrganization {
     id: string
     name: string
+    displayName: string
     pictureUrl: string
     verified: boolean
 }
@@ -28,6 +29,8 @@ interface Message {
     id: string
     content: string
     createdAt: string
+    conversationId: string
+    messageClientId?: string
     user: ConversationUser
     media?: MessageMedia[]
 }
@@ -44,6 +47,7 @@ interface Conversation {
     createdAt: string
     updatedAt: string
     status: string
+    unresolvedReason: string | null
     messages?: Message[]
     participants?: ConversationParticipant[]
 }

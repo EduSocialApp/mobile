@@ -10,7 +10,7 @@ import { cn } from '../../functions/utils'
 import { useHeaderOptions } from '../../hooks/headerOptions'
 import { EmptyList } from '../emptyList'
 import { VerifiedBadge } from '../verifiedBadge'
-import { textTimeSincePost } from '../../functions/textTimeSincePost'
+import { textTimeSincePost } from '../../functions/textTimeSince'
 import { LikeButton } from './likeButton'
 
 interface Params {

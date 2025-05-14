@@ -11,7 +11,7 @@ import { apiLinkSupervisorToUser } from '../../../api/user/supervised/linkSuperv
 import { AxiosError } from 'axios'
 import { translateMessage } from '../../../translate/translateMessage'
 import { apiGetSupervisedUsers, LinkSupervisedUser } from '../../../api/user/supervised/getSupervisedUsers'
-import { UserBasicView } from '../../../components/userBasicView'
+import { UserView } from '../../../components/userView'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { FamilyMemberOptions } from '../../../components/supervisedUsers/FamilyMemberOptions'
 
@@ -107,7 +107,7 @@ export default function Family() {
                                     onPress={() => setMemberSelected(supervisedMember)}
                                     className="flex-row items-center"
                                     style={{ gap: 4 }}>
-                                    <UserBasicView title={displayName} urlPicture={pictureUrl} info={biography} />
+                                    <UserView title={displayName} urlPicture={pictureUrl} info={biography} />
                                     <MaterialCommunityIcons name="chevron-right" size={28} color={'#c2c2c2'} />
                                 </TouchableOpacity>
                             )

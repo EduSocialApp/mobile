@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import { useUser } from '../../../hooks/user'
-import { UserBasicView } from '../../userBasicView'
+import { UserView } from '../../userView'
 import { router } from 'expo-router'
 import { useHeaderOptions } from '../../../hooks/headerOptions'
 
@@ -57,12 +57,7 @@ export function ProfileFamily() {
                 {list.map(({ biography, displayName, id, pictureUrl, isSupervisor }, index) => {
                     return (
                         <TouchableOpacity className="flex-1" key={index} onPress={() => router.push(`/authenticated/profile/${id}`)}>
-                            <UserBasicView
-                                title={displayName}
-                                urlPicture={pictureUrl}
-                                info={biography}
-                                badge={isSupervisor ? 'Supervisor' : undefined}
-                            />
+                            <UserView title={displayName} urlPicture={pictureUrl} info={biography} badge={isSupervisor ? 'Supervisor' : undefined} />
                         </TouchableOpacity>
                     )
                 })}

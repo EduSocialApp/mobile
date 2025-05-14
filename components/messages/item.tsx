@@ -2,6 +2,7 @@ import { View } from 'react-native'
 import { TextBubble } from '../textBubble'
 import { useUserAuthenticated } from '../../hooks/authenticated'
 import { cn } from '../../functions/utils'
+import { textTimeSinceMessage } from '../../functions/textTimeSince'
 
 export function MessageItem(message: Message) {
     const { user } = useUserAuthenticated()
@@ -29,6 +30,7 @@ export function MessageItem(message: Message) {
                     theme={loggedIsSender ? 'primary' : 'white'}
                     direction={loggedIsSender ? 'right' : 'left'}
                     contact={contact}
+                    info={textTimeSinceMessage(message.createdAt)}
                 />
             </View>
         </View>

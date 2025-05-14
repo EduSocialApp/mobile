@@ -1,9 +1,9 @@
 import { router, useLocalSearchParams } from 'expo-router'
 import { useEffect, useRef, useState } from 'react'
-import { View, TouchableOpacity, ActivityIndicator } from 'react-native'
-import { Entypo, Ionicons } from '@expo/vector-icons'
+import { View, TouchableOpacity, ActivityIndicator, Text } from 'react-native'
+import { Entypo, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { DataNotFound } from '../../../components/404'
-import { UserBasicView } from '../../../components/userBasicView'
+import { UserView } from '../../../components/userView'
 import { TextInput } from '../../../components'
 import SafeView from '../../../components/safeView'
 import { Controller, useForm } from 'react-hook-form'
@@ -13,6 +13,9 @@ import { FlashList } from '@shopify/flash-list'
 import { MessageItem } from '../../../components/messages/item'
 import { readCache } from '../../../cache/asyncStorage'
 import { apiNewMessage } from '../../../api/message/newMessage'
+import { socketConnect, socketDisconnect } from '../../../api/socketConnect'
+import { randomId } from '../../../functions/randomId'
+import { useUserAuthenticated } from '../../../hooks/authenticated'
 
 interface Form {
     text: string
@@ -20,11 +23,12 @@ interface Form {
 
 export default function Conversation() {
     const { id } = useLocalSearchParams()
+    const { user: authenticatedUser } = useUserAuthenticated()
 
     const [sending, setSending] = useState(false)
-    const [loading, setLoading] = useState(false)
+    const [refreshing, setRefreshing] = useState(false)
     const [recipient, setRecipient] = useState<Contact>()
-    const [conversation, setConversation] = useState<Conversation | null>(null)
+    const [messages, setMessages] = useState<Message[]>()
 
     const { control, getValues, setValue } = useForm<Form>({
         defaultValues: {
@@ -35,11 +39,52 @@ export default function Conversation() {
     const debounceRecipient = useRef<NodeJS.Timeout>(undefined)
     const debounceConversation = useRef<NodeJS.Timeout>(undefined)
     const idRef = useRef<string>(id as string)
+    const flashListRef = useRef<FlashList<any>>(null)
+    const messagesRef = useRef<Message[]>([])
 
     useEffect(() => {
         fetchRecipient()
-        fetchConversation()
+        fetchMessages()
+
+        configSocket()
+        return () => {
+            socketDisconnect()
+        }
     }, [id])
+
+    // Para cada nova mensagem, desce o scroll
+    useEffect(() => {
+        if (messages?.length) {
+            flashListRef.current?.scrollToEnd({ animated: false })
+            messagesRef.current = messages // Salva espelho das mensagens para ser checado no socket
+        }
+    }, [messages?.length])
+
+    const configSocket = async () => {
+        const socket = await socketConnect()
+
+        socket.on('newMessage', (data: Message) => {
+            try {
+                // Verifica se a mensagem é dessa conversa
+                if (data.conversationId !== idRef.current) return
+
+                // Pesquisa se a mensagem já está inserida
+                if (messagesRef.current) {
+                    const messageExists = messagesRef.current.find(
+                        (message) =>
+                            (message.id && message.id === data.id) || (message.messageClientId && message.messageClientId === data.messageClientId)
+                    )
+
+                    if (messageExists) return
+                }
+
+                // Caso não exista, adiciona na lista
+                setMessages([...messagesRef.current, data])
+            } catch {
+                // nao faz nada
+            }
+        })
+    }
 
     const fetchRecipient = async () => {
         clearTimeout(debounceRecipient.current)
@@ -50,19 +95,20 @@ export default function Conversation() {
         }, 100)
     }
 
-    const fetchConversation = async () => {
+    const fetchMessages = async () => {
         if (!idRef.current || idRef.current === 'novo') {
+            setMessages([])
             return
         }
 
         clearTimeout(debounceConversation.current)
-        setLoading(true)
+        setRefreshing(true)
 
         debounceConversation.current = setTimeout(async () => {
             const conversation = await apiGetConversation(idRef.current, true, true)
-            setConversation(conversation)
+            setMessages(conversation?.messages || [])
 
-            setLoading(false)
+            setRefreshing(false)
         }, 100)
     }
 
@@ -87,7 +133,7 @@ export default function Conversation() {
                 setValue('text', '')
                 idRef.current = request.data.conversationId
 
-                fetchConversation()
+                fetchMessages()
             } catch {
                 alert('Erro ao iniciar conversa, tente novamente')
             } finally {
@@ -98,10 +144,34 @@ export default function Conversation() {
 
         // Apenas envia uma nova mensagem na conversa
         try {
-            await apiNewMessage(idRef.current, text)
-            setValue('text', '')
+            const clientId = randomId()
 
-            fetchConversation()
+            if (messages) {
+                apiNewMessage(idRef.current, text, clientId)
+
+                // Adiciona a nova mensagem na conversa localmente
+                setMessages((prev) => [
+                    ...(prev || []),
+                    {
+                        id: '',
+                        messageClientId: clientId,
+                        content: text,
+                        createdAt: new Date().toISOString(),
+                        conversationId: idRef.current,
+                        user: {
+                            id: authenticatedUser?.id || '',
+                            displayName: authenticatedUser?.name || '',
+                            pictureUrl: authenticatedUser?.pictureUrl || '',
+                            name: authenticatedUser?.name || '',
+                        },
+                    },
+                ])
+            } else {
+                await apiNewMessage(idRef.current, text)
+                fetchMessages()
+            }
+
+            setValue('text', '')
         } catch {
             alert('Erro ao enviar mensagem, tente novamente')
         } finally {
@@ -120,7 +190,7 @@ export default function Conversation() {
                     <Entypo name="chevron-left" size={24} color="black" />
                 </TouchableOpacity>
                 <View className="flex-1">
-                    <UserBasicView
+                    <UserView
                         title={recipient.displayName || recipient.name}
                         urlPicture={recipient.pictureUrl}
                         type={recipient.type}
@@ -129,16 +199,26 @@ export default function Conversation() {
                     />
                 </View>
             </View>
-
-            <View className="flex-1 bg-stone-100 p-3">
-                {conversation?.messages && (conversation?.messages || []).length > 0 && (
-                    <FlashList
-                        data={conversation?.messages}
-                        estimatedItemSize={100}
-                        renderItem={({ item }) => <MessageItem {...item} />}
-                        ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
-                    />
-                )}
+            <View className="flex-1 bg-stone-100">
+                <FlashList
+                    ref={flashListRef}
+                    data={messages}
+                    refreshing={refreshing}
+                    onRefresh={fetchMessages}
+                    ListEmptyComponent={() =>
+                        typeof messages !== 'undefined' && (
+                            <DataNotFound
+                                Icon={<MaterialCommunityIcons name="chat-outline" size={64} color="#dcdcdc" />}
+                                text="Nova conversa"
+                                description="Envie a primeira mensagem para iniciar a conversa."
+                            />
+                        )
+                    }
+                    estimatedItemSize={100}
+                    renderItem={({ item }) => <MessageItem {...item} />}
+                    ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
+                    contentContainerStyle={{ padding: 12 }}
+                />
             </View>
 
             <View className="border-t border-stone-200 p-2 flex-row items-center" style={{ gap: 12 }}>
