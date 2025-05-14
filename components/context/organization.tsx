@@ -64,7 +64,7 @@ export function OrganizationProvider({ id, children }: Params) {
     }
 
     if (!organization) {
-        return <DataNotFound text="Organização não encontrada" />
+        return <DataNotFound text="Organização não encontrada" backButton />
     }
 
     return (

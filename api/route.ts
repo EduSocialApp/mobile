@@ -55,7 +55,7 @@ export async function apiAuthenticated() {
     }
 
     return Axios.create({
-        baseURL: process.env.EXPO_PUBLIC_API_URL,
+        baseURL: apiUrl,
         headers: {
             Authorization: `Bearer ${credentials?.accessToken}`,
         },

@@ -62,7 +62,7 @@ export function OrganizationMembers() {
 
     const Header = (
         <ScrollView horizontal className="pt-2 pb-4 mb-2 border-b border-stone-100">
-            <View className="flex-row flex-1" style={{ gap: 10 }}>
+            <View className="flex-row flex-1 px-2" style={{ gap: 10 }}>
                 {(org.isMemberModerator || user.isModerator) && (
                     <Button
                         onPress={() => router.push(`/authenticated/organization/adm/${id}/manageMembers`)}

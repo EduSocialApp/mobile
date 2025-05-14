@@ -30,7 +30,7 @@ export function TextBubble({ text = 'Insira um texto', numberOfLines, theme = 'd
                     theme === 'white' && 'bg-white',
                     theme === 'primary' && 'bg-tertiary',
                     direction === 'left' && 'rounded-br-none',
-                    direction === 'right' && 'rounded-br-none'
+                    direction === 'right' && 'rounded-bl-none'
                 )}>
                 <Text className="text-stone-800 text-sm" numberOfLines={numberOfLines}>
                     {text}

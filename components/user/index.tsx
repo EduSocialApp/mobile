@@ -138,7 +138,7 @@ function ProfileRender({ header }: Params) {
                             <Image source={pictureUrl} placeholder={placeholderImage} className="h-20 w-20 rounded-full border-2 border-stone-200" />
                         </Animated.View>
                         <View className="flex-1">
-                            <TextBubble text={biography} numberOfLines={3} />
+                            <TextBubble text={biography} numberOfLines={3} direction="right" />
                         </View>
                     </View>
 

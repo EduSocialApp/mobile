@@ -1,7 +1,7 @@
 import { Text, View, ScrollView } from 'react-native'
 import { Header } from '../../../components/header'
 import { Button } from '../../../components'
-import { expo } from '../../../app.json'
+import { expo } from '../../../app.config'
 import { useUserAuthenticated } from '../../../hooks/authenticated'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { router } from 'expo-router'

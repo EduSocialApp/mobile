@@ -11,6 +11,7 @@ import { VerifiedBadge } from '../../verifiedBadge'
 import { useUserAuthenticated } from '../../../hooks/authenticated'
 import { placeholderImage } from '../../../functions/placeholderImage'
 import { useHeaderOptions } from '../../../hooks/headerOptions'
+import { ItemSeparator } from '../../itemSeparator'
 
 export function ProfileOrganizations() {
     const { setHeaderHeight } = useHeaderOptions()
@@ -69,7 +70,7 @@ export function ProfileOrganizations() {
         item: UserOrganization
     }) => {
         return (
-            <TouchableOpacity key={id} onPress={() => router.push('/authenticated/organization/' + id)}>
+            <TouchableOpacity key={id} onPress={() => router.push('/authenticated/organization/' + id)} className="py-2">
                 <View className="flex-row items-center">
                     <Image placeholder={placeholderImage} source={{ uri: pictureUrl }} className="h-10 w-10 rounded-lg" />
                     <View className="flex-1 ml-2">
@@ -100,7 +101,7 @@ export function ProfileOrganizations() {
                 estimatedItemSize={100}
                 refreshing={loading === 'loading'}
                 onRefresh={handleOrganizations}
-                ItemSeparatorComponent={() => <View className="h-[1] bg-stone-100" />}
+                ItemSeparatorComponent={() => <ItemSeparator />}
                 onScroll={({
                     nativeEvent: {
                         contentOffset: { y },
