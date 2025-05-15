@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react'
-import debounce from 'lodash/debounce'
-import { ActivityIndicator, View, Text } from 'react-native'
+import { useCallback, useRef, useState } from 'react'
 import { useUserAuthenticated } from '../../hooks/authenticated'
 import { apiGetUserById } from '../../api/user/get'
 import { UserContext } from '../../hooks/user'
 import { LoadingScreen } from '../loading'
 import { DataNotFound } from '../404'
+import { useFocusEffect } from 'expo-router'
 
 interface Params {
     id: string
@@ -19,14 +18,27 @@ export function UserProvider({ id, children }: Params) {
     const [loading, setLoading] = useState<string | undefined>('user')
     const [user, setUser] = useState<User>()
 
-    useEffect(() => {
-        handleUser()
+    const debounce = useRef<NodeJS.Timeout>(undefined)
+
+    const handleUser = useCallback(() => {
+        setLoading('user')
+
+        clearTimeout(debounce.current)
+
+        debounce.current = setTimeout(() => {
+            fetchUser()
+        }, 100)
     }, [])
 
-    const handleUser = () => {
-        setLoading('user')
-        debounce(fetchUser, 100)()
-    }
+    useFocusEffect(
+        useCallback(() => {
+            handleUser()
+
+            return () => {
+                clearTimeout(debounce.current)
+            }
+        }, [handleUser])
+    )
 
     const fetchUser = async () => {
         setLoading('user')

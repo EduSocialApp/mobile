@@ -1,12 +1,9 @@
 import { Text, View, ScrollView, Alert, RefreshControl, TouchableOpacity } from 'react-native'
-import { Image } from 'expo-image'
 import { Header } from '../../../components/header'
 import { Button } from '../../../components'
 import { SettingContainer } from '../../../components/settingContainer'
-import imgFamily from '../../../assets/others/elephant family-rafiki.png'
-import { router } from 'expo-router'
 import { ScanQrCode } from '../../../components/modals/scanQrcode'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { apiLinkSupervisorToUser } from '../../../api/user/supervised/linkSupervisorToUser'
 import { AxiosError } from 'axios'
 import { translateMessage } from '../../../translate/translateMessage'
@@ -22,6 +19,8 @@ export default function Family() {
     const [loadingList, setLoadingList] = useState(false)
     const [supervisedUsers, setSupervisedUsers] = useState<LinkSupervisedUser[]>([])
     const [memberSelected, setMemberSelected] = useState<LinkSupervisedUser>()
+
+    const proccessingQrCode = useRef(false)
 
     useEffect(() => {
         findSupervisedUsers()
@@ -40,6 +39,9 @@ export default function Family() {
     }
 
     const onScanUserQrCode = async (data: string) => {
+        if (proccessingQrCode.current) return
+
+        proccessingQrCode.current = true
         setOpenQrCodeScanner(false)
 
         if (data.includes('userLinkId')) {
@@ -48,19 +50,20 @@ export default function Family() {
                 const requisicao = await apiLinkSupervisorToUser({ sharedUserCode: data.substring(11) })
 
                 if (requisicao.status === 201) {
-                    return findSupervisedUsers()
+                    await findSupervisedUsers()
                 }
             } catch (e) {
                 if (e instanceof AxiosError) {
                     Alert.alert('Erro', translateMessage(e.response?.data?.message))
-                    return
                 }
             } finally {
                 setLoadingLinkingUser(false)
             }
+        } else {
+            Alert.alert('Erro', 'QR code inválido')
         }
 
-        Alert.alert('Erro', 'QR code inválido')
+        proccessingQrCode.current = false
     }
 
     return (

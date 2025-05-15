@@ -57,7 +57,7 @@ export function ProfileFamily() {
                 {list.map(({ biography, displayName, id, pictureUrl, isSupervisor }, index) => {
                     return (
                         <TouchableOpacity className="flex-1" key={index} onPress={() => router.push(`/authenticated/profile/${id}`)}>
-                            <UserView title={displayName} urlPicture={pictureUrl} info={biography} badge={isSupervisor ? 'Supervisor' : undefined} />
+                            <UserView title={displayName} urlPicture={pictureUrl} info={biography} />
                         </TouchableOpacity>
                     )
                 })}

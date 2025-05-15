@@ -15,7 +15,6 @@ import { ModalEditProfile } from './modals/editProfile'
 import { placeholderImage } from '../../functions/placeholderImage'
 import { HeaderOptionsContext } from '../../hooks/headerOptions'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
-import Constants from 'expo-constants'
 import { TextBubble } from '../textBubble'
 import SafeView from '../safeView'
 

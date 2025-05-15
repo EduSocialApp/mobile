@@ -7,6 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import { SettingContainer } from '../../../components/settingContainer'
 import SafeView from '../../../components/safeView'
+import { LINK_PRIVACY, LINK_TERMS } from '../../../functions/links'
 
 export default function Settings() {
     const { logout } = useUserAuthenticated()
@@ -47,11 +48,11 @@ export default function Settings() {
                 </SettingContainer>
 
                 <SettingContainer>
-                    <Button variant="link">
+                    <Button variant="link" onPress={() => Linking.openURL(LINK_TERMS)}>
                         <MaterialCommunityIcons name="file-account" size={20} />
                         <Text className="flex-1">Termos de uso</Text>
                     </Button>
-                    <Button variant="link" onPress={() => Linking.openURL('https://www.edusocial.com.br/termos-de-uso')}>
+                    <Button variant="link" onPress={() => Linking.openURL(LINK_PRIVACY)}>
                         <MaterialCommunityIcons name="shield-account" size={20} />
                         <Text className="flex-1">Políticas de privacidade</Text>
                     </Button>

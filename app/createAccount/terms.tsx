@@ -8,6 +8,7 @@ import { TitleBlack } from '../../components/title'
 
 import { Button } from '../../components'
 import { readCache, saveCache } from '../../cache/asyncStorage'
+import { LINK_PRIVACY, LINK_TERMS } from '../../functions/links'
 
 interface IPermission {
     id: keyof UserPermissions
@@ -96,7 +97,7 @@ export default function CreateAccountTerms() {
                         <TouchableOpacity
                             className="mx-1"
                             onPress={() => {
-                                Linking.openURL('https://edusocial.mintlify.app/documentos/termos-uso')
+                                Linking.openURL(LINK_TERMS)
                             }}>
                             <Text className="text-sm text-headline font-semibold">Leia os termos de uso</Text>
                         </TouchableOpacity>
@@ -109,7 +110,7 @@ export default function CreateAccountTerms() {
                         <TouchableOpacity
                             className="mx-1"
                             onPress={() => {
-                                Linking.openURL('https://edusocial.mintlify.app/documentos/politica-privacidade')
+                                Linking.openURL(LINK_PRIVACY)
                             }}>
                             <Text className="text-sm text-headline font-semibold">Leia a política de privacidade</Text>
                         </TouchableOpacity>
