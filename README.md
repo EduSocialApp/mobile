@@ -10,7 +10,7 @@ A aplicação foi desenvolvida com base nos princípios do ***Lean Software Deve
 
 ## Instalação do Aplicativo (APK Android)
 
-[Clique aqui para baixar o EduSocial.apk](http://# "Clique aqui para baixar o EduSocial.apk")
+[Clique aqui para baixar o EduSocial.apk](https://expo.dev/artifacts/eas/ijz8BwJgHa3gnESDoBsMW7.apk)
 
 1. No seu dispositivo Android, acesse o link acima.
 2. Toque em “Fazer download” e aguarde a conclusão.
