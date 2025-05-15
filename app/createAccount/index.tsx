@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, ScrollView } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
 
 import { TextInput, TitleBlack, DateInput, Button } from '../../components'
 import { readCache, saveCache } from '../../cache/asyncStorage'
+import SafeView from '../../components/safeView'
 
 export default function CreateAccount() {
     const [name, setName] = useState<string>('')
@@ -40,7 +40,7 @@ export default function CreateAccount() {
     }
 
     return (
-        <SafeAreaView className="flex-1 bg-background">
+        <SafeView className="flex-1 bg-background">
             <View className="mt-3">
                 <View className="absolute h-full justify-center left-3 z-10">
                     <Button text="cancelar" onPress={() => router.back()} variant="link" />
@@ -84,7 +84,6 @@ export default function CreateAccount() {
                             placeholder="Seu e-mail principal"
                             autoCapitalize="none"
                             textContentType="emailAddress"
-                            keyboardType="email-address"
                             error={errorMessage('Precisamos do seu email para termos nosso primeiro contato', !!email)}
                         />
 
@@ -126,6 +125,6 @@ export default function CreateAccount() {
                     }}
                 />
             </View>
-        </SafeAreaView>
+        </SafeView>
     )
 }

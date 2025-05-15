@@ -1,4 +1,4 @@
-import { Text, View, SafeAreaView, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { Text, View, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { TextInput } from '../../../components'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { useEffect, useRef, useState } from 'react'
@@ -9,6 +9,7 @@ import { router } from 'expo-router'
 import { VerifiedBadge } from '../../../components/verifiedBadge'
 import { UserView } from '../../../components/userView'
 import { placeholderImage } from '../../../functions/placeholderImage'
+import SafeView from '../../../components/safeView'
 
 function ContentCell({ item: { title, type, id, info, urlPicture, verified } }: { item: FindItem }) {
     if (type === 'ORG') {
@@ -96,7 +97,7 @@ export default function Search() {
     ) : null
 
     return (
-        <SafeAreaView className="bg-white flex-1">
+        <SafeView className="bg-white flex-1" edges={['top']}>
             <View className="p-2 border-b border-stone-100">
                 <TextInput
                     value={search}
@@ -125,6 +126,6 @@ export default function Search() {
                 onEndReachedThreshold={0.5}
                 ListFooterComponent={loading ? <ActivityIndicator color="#a5a5a5" /> : null}
             />
-        </SafeAreaView>
+        </SafeView>
     )
 }

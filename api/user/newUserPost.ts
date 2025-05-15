@@ -1,4 +1,6 @@
+import { Platform } from 'react-native'
 import { apiAuthenticated } from '../route'
+import { AxiosRequestConfig } from 'axios'
 
 interface Params {
     content: string
@@ -22,5 +24,15 @@ export async function apiNewUserPost({ content, images }: Params) {
         })
     })
 
-    return (await apiAuthenticated()).post(`/user/posts`, formData)
+    return (await apiAuthenticated()).post(
+        `/user/posts`,
+        formData,
+        Platform.OS === 'android'
+            ? {
+                  headers: {
+                      'Content-Type': 'multipart/form-data',
+                  },
+              }
+            : undefined
+    )
 }

@@ -1,3 +1,4 @@
+import { Platform } from 'react-native'
 import { apiAuthenticated } from '../route'
 
 interface Params {
@@ -19,7 +20,19 @@ export async function apiUpdatePictureProfile({ id, uri, mimeType }: Params) {
             type: mimeType,
         })
 
-        const result = await (await apiAuthenticated()).patch(`/user/${id}/profilePicture`, formData)
+        const result = await (
+            await apiAuthenticated()
+        ).patch(
+            `/user/${id}/profilePicture`,
+            formData,
+            Platform.OS === 'android'
+                ? {
+                      headers: {
+                          'Content-Type': 'multipart/form-data',
+                      },
+                  }
+                : undefined
+        )
 
         if (!result) throw new Error('No result')
 

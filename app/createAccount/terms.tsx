@@ -1,7 +1,8 @@
 import { router } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import SafeView from '../../components/safeView'
+import * as Linking from 'expo-linking'
 
 import { TitleBlack } from '../../components/title'
 
@@ -43,7 +44,7 @@ export default function CreateAccountTerms() {
     const Permission = ({ id, title, description }: IPermission) => (
         <TouchableOpacity
             onPress={() => setPermissionStatus(id, !permissions[id])}
-            className="my-1 flex-row bg-white p-2 rounded-lg border border-stone-200">
+            className="my-1 flex-1 flex-row bg-white p-2 rounded-lg border border-stone-200">
             <View
                 className="h-full w-2 rounded-full"
                 style={{
@@ -58,7 +59,7 @@ export default function CreateAccountTerms() {
     )
 
     return (
-        <SafeAreaView className="flex-1 bg-background">
+        <SafeView className="flex-1 bg-background">
             <View className="mt-3">
                 <View className="absolute h-full justify-center left-3 z-10">
                     <Button text="voltar" onPress={() => router.back()} variant="link" />
@@ -92,12 +93,26 @@ export default function CreateAccountTerms() {
                             link="#"
                             description="Enviaremos notificações de notícias, avisos e novidades"
                         />
+                        <TouchableOpacity
+                            className="mx-1"
+                            onPress={() => {
+                                Linking.openURL('https://edusocial.mintlify.app/documentos/termos-uso')
+                            }}>
+                            <Text className="text-sm text-blue-800">Leia os termos de uso</Text>
+                        </TouchableOpacity>
                         <Permission
                             id="privacyPolicy"
                             title="Política de privacidade"
                             link="#"
                             description="Enviaremos notificações de notícias, avisos e novidades"
                         />
+                        <TouchableOpacity
+                            className="mx-1"
+                            onPress={() => {
+                                Linking.openURL('https://edusocial.mintlify.app/documentos/politica-privacidade')
+                            }}>
+                            <Text className="text-sm text-blue-800">Leia a política de privacidade</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </ScrollView>
@@ -124,6 +139,6 @@ export default function CreateAccountTerms() {
                     text="Confirmar conta"
                 />
             </View>
-        </SafeAreaView>
+        </SafeView>
     )
 }

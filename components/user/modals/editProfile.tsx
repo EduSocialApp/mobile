@@ -1,4 +1,4 @@
-import { SafeAreaView, Text, View, ScrollView, KeyboardAvoidingView, TouchableOpacity, Alert } from 'react-native'
+import { Text, View, ScrollView, KeyboardAvoidingView, TouchableOpacity, Alert } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import Modal from '../../modals/base'
 import { useEffect, useState } from 'react'
@@ -11,6 +11,7 @@ import { apiUpdatePictureProfile } from '../../../api/user/updatePictureProfile'
 import { handleErrorWithAlert } from '../../../functions/handleError'
 import { apiUpdateProfileInformations } from '../../../api/user/updateProfileInformations'
 import { placeholderImage } from '../../../functions/placeholderImage'
+import SafeView from '../../safeView'
 
 interface Form {
     name: string
@@ -97,63 +98,47 @@ export function ModalEditProfile({ onClose, editing }: Params) {
 
     return (
         <Modal title="Editar perfil" close={onClose} isVisible={editing}>
-            <SafeAreaView className="flex-1">
-                <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={150}>
-                    <ScrollView>
-                        <View className="m-4" style={{ gap: 20 }}>
-                            <TouchableOpacity onPress={pickImage} className="items-center justify-center" style={{ gap: 10 }}>
-                                <Image placeholder={placeholderImage} source={{ uri: watchPictureUrl }} className="h-28 w-28 rounded-full" />
-                                <Text>Alterar foto de perfil</Text>
-                            </TouchableOpacity>
+            <ScrollView>
+                <View className="m-4" style={{ gap: 20 }}>
+                    <TouchableOpacity onPress={pickImage} className="items-center justify-center" style={{ gap: 10 }}>
+                        <Image placeholder={placeholderImage} source={{ uri: watchPictureUrl }} className="h-28 w-28 rounded-full" />
+                        <Text>Alterar foto de perfil</Text>
+                    </TouchableOpacity>
 
-                            <View style={{ height: 1 }} className="bg-stone-100"></View>
+                    <View style={{ height: 1 }} className="bg-stone-100"></View>
 
-                            <Controller
-                                control={control}
-                                name="name"
-                                render={({ field: { value, onChange } }) => (
-                                    <TextInput
-                                        title="Nome completo"
-                                        onChangeText={onChange}
-                                        value={value}
-                                        autoCapitalize="words"
-                                        textContentType="name"
-                                    />
-                                )}
+                    <Controller
+                        control={control}
+                        name="name"
+                        render={({ field: { value, onChange } }) => (
+                            <TextInput title="Nome completo" onChangeText={onChange} value={value} autoCapitalize="words" textContentType="name" />
+                        )}
+                    />
+                    <Controller
+                        control={control}
+                        name="displayName"
+                        render={({ field: { value, onChange } }) => (
+                            <TextInput title="Nome visível" onChangeText={onChange} value={value} autoCapitalize="words" textContentType="name" />
+                        )}
+                    />
+                    <Controller
+                        control={control}
+                        name="biography"
+                        render={({ field: { value, onChange } }) => (
+                            <TextInput
+                                title="Biografia"
+                                onChangeText={onChange}
+                                value={value}
+                                textContentType="name"
+                                placeholder="Escreva algo sobre você"
                             />
-                            <Controller
-                                control={control}
-                                name="displayName"
-                                render={({ field: { value, onChange } }) => (
-                                    <TextInput
-                                        title="Nome visível"
-                                        onChangeText={onChange}
-                                        value={value}
-                                        autoCapitalize="words"
-                                        textContentType="name"
-                                    />
-                                )}
-                            />
-                            <Controller
-                                control={control}
-                                name="biography"
-                                render={({ field: { value, onChange } }) => (
-                                    <TextInput
-                                        title="Biografia"
-                                        onChangeText={onChange}
-                                        value={value}
-                                        textContentType="name"
-                                        placeholder="Escreva algo sobre você"
-                                    />
-                                )}
-                            />
-                        </View>
-                    </ScrollView>
-                </KeyboardAvoidingView>
-                <View className="mx-4">
-                    <Button onPress={saveProfile} loading={loading} text="Salvar alterações" />
+                        )}
+                    />
                 </View>
-            </SafeAreaView>
+            </ScrollView>
+            <View className="mx-4">
+                <Button onPress={saveProfile} loading={loading} text="Salvar alterações" />
+            </View>
         </Modal>
     )
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Platform } from 'react-native'
 import { Image } from 'expo-image'
 import { Button } from '../button'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
@@ -17,6 +17,7 @@ import { HeaderOptionsContext } from '../../hooks/headerOptions'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import Constants from 'expo-constants'
 import { TextBubble } from '../textBubble'
+import SafeView from '../safeView'
 
 interface Params {
     id: string
@@ -26,7 +27,7 @@ interface Params {
 
 const Tab = createMaterialTopTabNavigator()
 
-const TOPBAR_HEIGHT = Constants.statusBarHeight + 4
+const TOPBAR_HEIGHT = 0 // Platform Constants.statusBarHeight + 4
 const HEADER_HEIGHT = 160
 
 function ShareProfileButton() {
@@ -178,7 +179,9 @@ function ProfileRender({ header }: Params) {
 export function Profile(params: Params) {
     return (
         <UserProvider id={params.id}>
-            <ProfileRender {...params} />
+            <SafeView className="flex-1 bg-white">
+                <ProfileRender {...params} />
+            </SafeView>
         </UserProvider>
     )
 }

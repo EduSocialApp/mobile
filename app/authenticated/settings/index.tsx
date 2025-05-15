@@ -6,15 +6,16 @@ import { useUserAuthenticated } from '../../../hooks/authenticated'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import { SettingContainer } from '../../../components/settingContainer'
+import SafeView from '../../../components/safeView'
 
 export default function Settings() {
     const { logout } = useUserAuthenticated()
 
     return (
-        <View className="flex-1 bg-stone-100">
+        <SafeView className="bg-white">
             <Header title="Configurações" backButton />
 
-            <ScrollView contentContainerStyle={{ paddingVertical: 20, gap: 10 }}>
+            <ScrollView className="bg-stone-100" contentContainerStyle={{ paddingVertical: 20, gap: 10 }}>
                 <SettingContainer>
                     <View className="flex-row items-center">
                         <View className="flex-1 relative" style={{ gap: 2 }}>
@@ -64,6 +65,6 @@ export default function Settings() {
                     <Text className="text-stone-500">Versão {expo.version}</Text>
                 </View>
             </ScrollView>
-        </View>
+        </SafeView>
     )
 }

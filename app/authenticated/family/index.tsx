@@ -14,6 +14,7 @@ import { apiGetSupervisedUsers, LinkSupervisedUser } from '../../../api/user/sup
 import { UserView } from '../../../components/userView'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { FamilyMemberOptions } from '../../../components/supervisedUsers/FamilyMemberOptions'
+import SafeView from '../../../components/safeView'
 
 export default function Family() {
     const [openQrCodeScanner, setOpenQrCodeScanner] = useState(false)
@@ -63,7 +64,7 @@ export default function Family() {
     }
 
     return (
-        <View className="flex-1 bg-stone-100">
+        <SafeView className="bg-white">
             <FamilyMemberOptions
                 member={memberSelected}
                 close={() => setMemberSelected(undefined)}
@@ -83,6 +84,7 @@ export default function Family() {
             <Header title="Família" backButton />
 
             <ScrollView
+                className="bg-stone-100"
                 contentContainerStyle={{ paddingVertical: 20, gap: 10 }}
                 refreshControl={<RefreshControl refreshing={loadingList} onRefresh={findSupervisedUsers} />}>
                 <SettingContainer>
@@ -115,6 +117,6 @@ export default function Family() {
                     </SettingContainer>
                 )}
             </ScrollView>
-        </View>
+        </SafeView>
     )
 }

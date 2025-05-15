@@ -59,7 +59,7 @@ export function DateInput({ onChange, error, value, placeholder = 'Selecione uma
             <DateTimePickerModal
                 isVisible={isDatePickerVisible}
                 mode={mode}
-                date={value ? value : undefined}
+                date={value instanceof Date ? value : new Date()}
                 onConfirm={(date) => {
                     onChange(date)
                     setDatePickerVisibility(false)

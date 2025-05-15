@@ -24,7 +24,7 @@ module.exports = {
         "ios": {
             "supportsTablet": true,
             "bundleIdentifier": "com.felipesobral.edusocial",
-            "googleServicesFile": process.env.GOOGLESERVICE_INFO_PLIST ?? "./GoogleService-Info.plist",
+            "googleServicesFile": process.env.GOOGLESERVICE_INFO_PLIST,
             "buildNumber": "1",
             "infoPlist": {
                 "NSCameraUsageDescription": "O recurso câmera deste aplicativo é utilizado para escanear códigos de barras, códigos QR e para capturar imagens.",
@@ -35,7 +35,7 @@ module.exports = {
         },
         "android": {
             "package": "com.felipesobral.edusocial",
-            "googleServicesFile": process.env.GOOGLESERVICE_JSON ?? "./google-services.json",
+            "googleServicesFile": process.env.GOOGLESERVICE_JSON,
             "versionCode": 1,
             "adaptiveIcon": {
                 "foregroundImage": "./assets/adaptive-icon.png",

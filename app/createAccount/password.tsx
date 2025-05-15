@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, TouchableOpacity, Alert } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { View, Text, Alert } from 'react-native'
 import { router } from 'expo-router'
 import { TitleBlack, Button, PasswordInput } from '../../components'
 import { apiUserRegister } from '../../api/user/register'
 import { AxiosError } from 'axios'
 import { translateMessage } from '../../translate/translateMessage'
 import { readCache, removeCache } from '../../cache/asyncStorage'
+import SafeView from '../../components/safeView'
 
 export default function CreateAccount() {
     const [password, setPassword] = useState<string>('')
@@ -50,7 +50,7 @@ export default function CreateAccount() {
     }
 
     return (
-        <SafeAreaView className="flex-1 bg-background">
+        <SafeView className="flex-1 bg-background">
             <View className="mt-3">
                 <View className="absolute h-full justify-center left-3 z-10">
                     <Button text="voltar" onPress={() => router.back()} variant="link" />
@@ -78,6 +78,6 @@ export default function CreateAccount() {
             <View className="p-2">
                 <Button text="Completar cadastro" onPress={handleRegister} variant="primary" loading={loading === 'register'} />
             </View>
-        </SafeAreaView>
+        </SafeView>
     )
 }

@@ -18,7 +18,7 @@ export function ProfilePosts() {
     const [loading, setLoading] = useState<boolean>(true)
     const [posts, setPosts] = useState<Post[]>([])
 
-    const lastPostId = useRef<string>()
+    const lastPostId = useRef<string>(undefined)
     const isEndReached = useRef(false)
 
     // Executa a função fetchOrganizations sempre que a tela é focada

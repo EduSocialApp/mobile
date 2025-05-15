@@ -1,7 +1,7 @@
 import { Entypo, Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import React, { useEffect, useRef, useState } from 'react'
-import { SafeAreaView, Text, TouchableOpacity, View, ScrollView, FlatList, ActivityIndicator } from 'react-native'
+import { Text, TouchableOpacity, View, ScrollView } from 'react-native'
 import { Post } from '../../api/user/getUserFeed'
 import { apiGetPostById } from '../../api/post/getPostById'
 import MediaViewer, { ImageDisplay, MediaViewerRef } from '../modals/mediaViewer'
@@ -16,6 +16,7 @@ import { translateMessage } from '../../translate/translateMessage'
 import { dateTimeShort } from '../../functions/date/dateFormat'
 import { LoadingScreen } from '../loading'
 import { DataNotFound } from '../404'
+import SafeView from '../safeView'
 
 interface Params {
     id: string
@@ -81,7 +82,7 @@ export function PostPage({ id }: Params) {
     }
 
     return (
-        <SafeAreaView className="flex-1 bg-white">
+        <SafeView className="flex-1 bg-white">
             <MediaViewer ref={mediaViewerRef} imagesList={galleryMedias} />
 
             <View className="flex-row relative items-center h-10 border-b px-2 border-stone-100">
@@ -180,6 +181,6 @@ export function PostPage({ id }: Params) {
                     )}
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </SafeView>
     )
 }

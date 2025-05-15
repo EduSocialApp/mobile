@@ -1,3 +1,4 @@
+import { Platform } from 'react-native'
 import { apiAuthenticated } from '../route'
 
 //content, startDate, endDate, level, notifiedUsers, title
@@ -43,5 +44,15 @@ export async function apiNewOrganizationPost({ organizationId, content, images, 
         })
     })
 
-    return (await apiAuthenticated()).post(`/org/${organizationId}/posts`, formData)
+    return (await apiAuthenticated()).post(
+        `/org/${organizationId}/posts`,
+        formData,
+        Platform.OS === 'android'
+            ? {
+                  headers: {
+                      'Content-Type': 'multipart/form-data',
+                  },
+              }
+            : undefined
+    )
 }

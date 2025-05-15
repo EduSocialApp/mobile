@@ -1,4 +1,4 @@
-import { Text, View, SafeAreaView } from 'react-native'
+import { View } from 'react-native'
 import { ListEvents } from '../../../components/posts/events/ListEvents'
 import { useEffect, useRef, useState } from 'react'
 import { apiGetOrganizationEvents } from '../../../api/organization/getOrganizationEvents'

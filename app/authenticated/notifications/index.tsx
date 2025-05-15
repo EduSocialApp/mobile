@@ -1,6 +1,7 @@
 import { View, ScrollView } from 'react-native'
 import { Header } from '../../../components/header'
 import { useEffect } from 'react'
+import SafeView from '../../../components/safeView'
 
 import { PendingOrganizations } from '../../../components/notifications/pendingOrganization'
 
@@ -12,7 +13,7 @@ export default function Notifications() {
     const loadNotifications = () => {}
 
     return (
-        <View className="flex-1 bg-white">
+        <SafeView className="flex-1 bg-white">
             <Header title="Notificações" backButton />
 
             <ScrollView>
@@ -20,6 +21,6 @@ export default function Notifications() {
                     <PendingOrganizations />
                 </View>
             </ScrollView>
-        </View>
+        </SafeView>
     )
 }

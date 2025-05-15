@@ -9,6 +9,7 @@ import { apiMemberAcceptOrganization } from '../../api/organization/memberAccept
 import { apiMemberRejectOrganization } from '../../api/organization/memberReject'
 import { VerifiedBadge } from '../verifiedBadge'
 import { placeholderImage } from '../../functions/placeholderImage'
+import SafeView from '../safeView'
 
 function OrganizationCell({ id, organization: { id: organizationId, displayName, biography, pictureUrl, verified } }: PendingOrganization) {
     const [status, setStatus] = useState<number>(0)
@@ -74,7 +75,7 @@ export function PendingOrganizations() {
     if (pendingOrganizations.length === 0) return null
 
     return (
-        <View>
+        <SafeView>
             <View>
                 <Text className="text-lg font-semibold">Instituições</Text>
                 <Text className="text-stone-500">Instituições que te enviaram convite para participar</Text>
@@ -84,6 +85,6 @@ export function PendingOrganizations() {
                     <OrganizationCell {...item} key={item.id} />
                 ))}
             </View>
-        </View>
+        </SafeView>
     )
 }

@@ -1,7 +1,7 @@
 import { Text, View, ScrollView, KeyboardAvoidingView, Alert } from 'react-native'
 import { Header } from '../../../../components/header'
 import { Button, TextInput } from '../../../../components'
-import { Controller, set, useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { maskCep, maskCnpj } from '../../../../functions/masks'
 import { cnpjScan } from '../../../../api/thirdParties/cnpjScan'
 import { ModalLoading } from '../../../../components/modals/loading'
@@ -10,6 +10,7 @@ import { cepScan } from '../../../../api/thirdParties/cepScan'
 import { apiOrganizationRegister } from '../../../../api/organization/register'
 import { router } from 'expo-router'
 import { handleErrorWithAlert } from '../../../../functions/handleError'
+import SafeView from '../../../../components/safeView'
 
 const gap = 18
 
@@ -129,7 +130,7 @@ export default function CreateOrganization() {
     }[loading || '']
 
     return (
-        <KeyboardAvoidingView behavior="padding" className="flex-1 bg-white">
+        <SafeView className="bg-white">
             <ModalLoading open={!!loadingText} text={loadingText} />
             <Header title="Nova instituição" backButton />
 
@@ -248,9 +249,9 @@ export default function CreateOrganization() {
                 </View>
             </ScrollView>
 
-            <View className="p-4 mb-4 border-t border-stone-100">
+            <View className="p-4 border-t border-stone-100">
                 <Button onPress={handleFormSubmit} text="Enviar para análise" variant="primary" loading={loading === 'form'} />
             </View>
-        </KeyboardAvoidingView>
+        </SafeView>
     )
 }

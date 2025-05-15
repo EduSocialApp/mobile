@@ -1,8 +1,8 @@
-import { CameraView, CameraType, useCameraPermissions } from 'expo-camera'
-import { Alert, View, Text, ActivityIndicator, SafeAreaView } from 'react-native'
+import { CameraView, useCameraPermissions } from 'expo-camera'
+import { View, Text, ActivityIndicator } from 'react-native'
 import Modal from './base'
-import React, { useEffect, useState } from 'react'
 import { Button } from '../button'
+import SafeView from '../safeView'
 
 interface Params {
     visible: boolean
@@ -18,7 +18,7 @@ export function ScanQrCode({ visible, description = 'Escaneie o QR', onClose, on
 
     return (
         <Modal isVisible={visible} close={onClose} title="Escanear QR code">
-            <SafeAreaView className="flex-1" style={{ gap: 20 }}>
+            <SafeView style={{ gap: 20 }}>
                 {visible && (
                     <View className="flex-1">
                         {!permission && <ActivityIndicator size="large" />}
@@ -44,7 +44,7 @@ export function ScanQrCode({ visible, description = 'Escaneie o QR', onClose, on
                 <View>
                     <Text className="text-center text-base m-2 p-2">{description}</Text>
                 </View>
-            </SafeAreaView>
+            </SafeView>
         </Modal>
     )
 }

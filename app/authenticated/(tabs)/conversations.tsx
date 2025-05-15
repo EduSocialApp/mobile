@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
+import { useCallback, useRef, useState } from 'react'
+import { Text, TouchableOpacity, View } from 'react-native'
 import { ContactList } from '../../../components/messages/contactList'
 import { router, useFocusEffect } from 'expo-router'
 import { saveCache } from '../../../cache/asyncStorage'
@@ -10,6 +10,7 @@ import { useUserAuthenticated } from '../../../hooks/authenticated'
 import { UserView, UserViewProps } from '../../../components/userView'
 import { ItemSeparator } from '../../../components/itemSeparator'
 import { textTimeSincePost } from '../../../functions/textTimeSince'
+import SafeView from '../../../components/safeView'
 
 export default function Messages() {
     const { user: authenticatedUser } = useUserAuthenticated()
@@ -43,7 +44,7 @@ export default function Messages() {
     )
 
     return (
-        <SafeAreaView className="relative flex-1 bg-white">
+        <SafeView className="relative flex-1 bg-white" edges={['top']}>
             <ContactList
                 visible={visibleModalContacts}
                 whenClose={() => {
@@ -128,6 +129,6 @@ export default function Messages() {
                     }}
                 />
             </View>
-        </SafeAreaView>
+        </SafeView>
     )
 }

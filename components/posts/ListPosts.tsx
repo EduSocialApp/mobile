@@ -60,7 +60,7 @@ function Post({
     const timeSincePost = textTimeSincePost(dateStr)
 
     return (
-        <TouchableOpacity className="flex-row p-2" style={{ gap: 8 }} onPress={() => router.push(`/authenticated/post/${id}`)}>
+        <TouchableOpacity className="flex-row p-2 py-3" style={{ gap: 8 }} onPress={() => router.push(`/authenticated/post/${id}`)}>
             <TouchableOpacity onPress={onProfileClick}>
                 <Image source={pictureUrl} placeholder={placeholderImage} className={cn('h-12 w-12 rounded-full', isOrganization && 'rounded-lg')} />
             </TouchableOpacity>

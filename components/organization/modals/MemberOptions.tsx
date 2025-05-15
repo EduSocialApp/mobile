@@ -1,4 +1,4 @@
-import { Modal, Text, View } from 'react-native'
+import { Modal, Text, TouchableOpacity, View } from 'react-native'
 import { Button } from '../../button'
 import { OrganizationMember } from '../../../api/organization/members'
 import { Image } from 'expo-image'
@@ -56,7 +56,7 @@ export function MemberOptions({ member, close, onConfirmEvent }: Params) {
     return (
         <Modal visible={Boolean(member)} animationType="slide" transparent>
             <View className="flex-1 relative justify-end">
-                <View className="flex-1 bg-black/70" />
+                <TouchableOpacity className="flex-1 bg-black/70" onPress={close} activeOpacity={0.9} />
                 <View className="py-10 px-4 absolute w-full" style={{ gap: 30 }}>
                     <View className="bg-white rounded-lg p-4">
                         <MenuRender />

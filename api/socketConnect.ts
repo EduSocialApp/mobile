@@ -9,6 +9,7 @@ export async function socketConnect() {
     if (!socket) {
         const credentials = await getCredentialsFromSecureStore()
 
+        console.log('Socket connect', apiUrl, credentials?.accessToken)
         socket = io(apiUrl, {
             transports: ['websocket'],
             auth: {

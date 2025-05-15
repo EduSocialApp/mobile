@@ -3,6 +3,7 @@ import { useOrganization } from '../../../../../hooks/organization'
 import { Header } from '../../../../../components/header'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import OrganizationAddMembers from '../../../../../components/organization/administration/addMembers'
+import SafeView from '../../../../../components/safeView'
 
 const Tab = createMaterialTopTabNavigator()
 
@@ -11,7 +12,7 @@ export default function ManageMembers() {
     if (!org) return <Text>nao entrou aqui</Text>
 
     return (
-        <View className="flex-1 bg-white">
+        <SafeView className="flex-1 bg-white">
             <Header title="Gerenciar membros" backButton />
             <Tab.Navigator
                 screenOptions={{
@@ -22,6 +23,6 @@ export default function ManageMembers() {
                 }}>
                 <Tab.Screen name="add" component={OrganizationAddMembers} options={{ tabBarLabel: 'Adicionar' }} />
             </Tab.Navigator>
-        </View>
+        </SafeView>
     )
 }

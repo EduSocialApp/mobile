@@ -1,8 +1,6 @@
-import { View, Text, ScrollView, TouchableOpacity, Dimensions } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { View, Text, TouchableOpacity } from 'react-native'
 import { Image } from 'expo-image'
 import { Button } from '../button'
-import { Counter } from '../counter'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { OrganizationPosts } from './posts'
 import { OrganizationMembers } from './members'
@@ -16,10 +14,11 @@ import { useState } from 'react'
 import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import { HeaderOptionsContext } from '../../hooks/headerOptions'
-import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated'
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import { NewOrganizationPostModal } from '../posts/modals/newOrganizationPost'
 import OrganizationEvents from './events'
 import { TextBubble } from '../textBubble'
+import SafeView from '../safeView'
 
 interface Params {
     id: string
@@ -165,9 +164,9 @@ function OrganizationRender() {
 export function Organization({ id, header }: Params) {
     return (
         <OrganizationProvider id={id}>
-            <SafeAreaView className="flex-1 bg-white">
+            <SafeView className="flex-1 bg-white">
                 <OrganizationRender />
-            </SafeAreaView>
+            </SafeView>
         </OrganizationProvider>
     )
 }
