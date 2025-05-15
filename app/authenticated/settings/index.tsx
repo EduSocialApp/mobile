@@ -1,4 +1,4 @@
-import { Text, View, ScrollView } from 'react-native'
+import { Text, View, ScrollView, Linking } from 'react-native'
 import { Header } from '../../../components/header'
 import { Button } from '../../../components'
 import { expo } from '../../../app.config'
@@ -51,7 +51,7 @@ export default function Settings() {
                         <MaterialCommunityIcons name="file-account" size={20} />
                         <Text className="flex-1">Termos de uso</Text>
                     </Button>
-                    <Button variant="link">
+                    <Button variant="link" onPress={() => Linking.openURL('https://www.edusocial.com.br/termos-de-uso')}>
                         <MaterialCommunityIcons name="shield-account" size={20} />
                         <Text className="flex-1">Políticas de privacidade</Text>
                     </Button>

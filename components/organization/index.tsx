@@ -52,7 +52,8 @@ function OrganizationRender() {
 
     const [visibleNewPostModal, setVisibleNewPostModal] = useState(false)
 
-    const headerHeightBase = org.isOwner || user.isAdmin ? HEADER_HEIGHT : HEADER_HEIGHT - 65 // Remove tamanho dos botoes de edicao de perfil
+    // org.isOwner || user.isAdmin ? HEADER_HEIGHT :
+    const headerHeightBase = HEADER_HEIGHT - 65 // Remove tamanho dos botoes de edicao de perfil
 
     const headerHeight = useSharedValue(headerHeightBase)
 
@@ -134,13 +135,13 @@ function OrganizationRender() {
                         </View>
                     </View>
 
-                    {(org.isOwner || user.isAdmin) && (
+                    {/* {(org.isOwner || user.isAdmin) && (
                         <View className="flex-row" style={{ gap: 14 }}>
                             <View className="flex-1">
                                 <Button onPress={() => {}} text="Editar perfil" variant="outline" className="flex-1" size="sm" />
                             </View>
                         </View>
-                    )}
+                    )} */}
                 </Animated.View>
 
                 <Tab.Navigator

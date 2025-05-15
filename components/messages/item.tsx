@@ -28,7 +28,7 @@ export function MessageItem(message: Message) {
                 <TextBubble
                     text={message.content}
                     theme={loggedIsSender ? 'primary' : 'white'}
-                    direction={loggedIsSender ? 'left' : 'right'}
+                    direction={loggedIsSender ? 'left' : 'right-top'}
                     contact={contact}
                     info={textTimeSinceMessage(message.createdAt)}
                 />

@@ -6,7 +6,7 @@ interface Params {
     text?: string
     numberOfLines?: number
     theme?: 'white' | 'primary' | 'default'
-    direction?: 'top' | 'bottom' | 'left' | 'right'
+    direction?: 'top' | 'bottom' | 'left' | 'right' | 'right-top' | 'left-top' | 'right-bottom' | 'left-bottom'
     contact?: Contact
     info?: string
 }
@@ -30,7 +30,9 @@ export function TextBubble({ text = 'Insira um texto', numberOfLines, theme = 'd
                     theme === 'white' && 'bg-white',
                     theme === 'primary' && 'bg-tertiary',
                     direction === 'left' && 'rounded-br-none',
-                    direction === 'right' && 'rounded-bl-none'
+                    direction === 'right' && 'rounded-bl-none',
+                    direction === 'left-top' && 'rounded-tr-none',
+                    direction === 'right-top' && 'rounded-tl-none'
                 )}>
                 <Text className="text-stone-800 text-sm" numberOfLines={numberOfLines}>
                     {text}

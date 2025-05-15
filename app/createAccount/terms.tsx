@@ -98,7 +98,7 @@ export default function CreateAccountTerms() {
                             onPress={() => {
                                 Linking.openURL('https://edusocial.mintlify.app/documentos/termos-uso')
                             }}>
-                            <Text className="text-sm text-blue-800">Leia os termos de uso</Text>
+                            <Text className="text-sm text-headline font-semibold">Leia os termos de uso</Text>
                         </TouchableOpacity>
                         <Permission
                             id="privacyPolicy"
@@ -111,7 +111,7 @@ export default function CreateAccountTerms() {
                             onPress={() => {
                                 Linking.openURL('https://edusocial.mintlify.app/documentos/politica-privacidade')
                             }}>
-                            <Text className="text-sm text-blue-800">Leia a política de privacidade</Text>
+                            <Text className="text-sm text-headline font-semibold">Leia a política de privacidade</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

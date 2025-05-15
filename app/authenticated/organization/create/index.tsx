@@ -250,7 +250,7 @@ export default function CreateOrganization() {
             </ScrollView>
 
             <View className="p-4 border-t border-stone-100">
-                <Button onPress={handleFormSubmit} text="Enviar para análise" variant="primary" loading={loading === 'form'} />
+                <Button onPress={handleFormSubmit} text="Criar instituição" variant="primary" loading={loading === 'form'} />
             </View>
         </SafeView>
     )
